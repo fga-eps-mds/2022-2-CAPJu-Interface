@@ -1,9 +1,6 @@
-FROM node:latest
+FROM node:14.21.1-bullseye-slim
 
 WORKDIR /app
-
-ENV REACT_APP_DEV=true
-ENV JWT_SECRET=sad4as84dVFGGRG8asd1a56d1asd1fadfdasfASD
 
 COPY . .
 RUN yarn cache clean
