@@ -1,7 +1,8 @@
-import PropTypes from 'prop-types';
 import React from 'react';
-import { Container } from './styles';
+import PropTypes from 'prop-types';
 import ReactFlow, { MarkerType } from 'react-flow-renderer';
+
+import { Container } from './styles';
 import { isLate, getStageDate } from 'components/IsLate/index.js';
 
 function FlowViewer(props) {

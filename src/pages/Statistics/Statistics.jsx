@@ -1,8 +1,9 @@
-import api from '../../services/api';
 import React from 'react';
 import { useEffect, useState } from 'react';
-import { Container, StagesArea, StageItem } from './styles';
 import { Link, useLocation } from 'react-router-dom';
+
+import api from 'services/api';
+import { Container, StagesArea, StageItem } from './styles';
 
 function Statistics() {
   const [stages, setStages] = useState([]);

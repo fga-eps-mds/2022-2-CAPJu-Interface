@@ -1,5 +1,10 @@
 import React from 'react';
+import toast from 'react-hot-toast';
 import { useEffect, useState } from 'react';
+import Tooltip from '@mui/material/Tooltip';
+import { Check } from '@styled-icons/entypo/Check';
+import { Delete } from '@styled-icons/typicons/Delete';
+
 import {
   Container,
   Table,
@@ -8,13 +13,9 @@ import {
   Content,
   ContentHeader
 } from './styles';
-import Button from 'components/Button';
-import api from '../../services/user';
+import api from 'services/user';
 import authConfig from 'services/config.js';
-import { Delete } from '@styled-icons/typicons/Delete';
-import { Check } from '@styled-icons/entypo/Check';
-import Tooltip from '@mui/material/Tooltip';
-import toast from 'react-hot-toast';
+import Button from 'components/Button/Button';
 
 function SolicitacoesCadastro() {
   const [users, setUsers] = useState([]);

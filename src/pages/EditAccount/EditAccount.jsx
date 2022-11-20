@@ -7,7 +7,8 @@ import {
   ContainerTitle,
   NameTitle
 } from './styles';
-import Button from '../../components/Button';
+
+import Button from 'components/Button/Button';
 
 function EditAccount() {
   const user = JSON.parse(localStorage.getItem('user'));

@@ -1,18 +1,19 @@
-import { useEffect, useState } from 'react';
-import { Container, InputSearch, AddProcess } from './styles';
-import { Link, useLocation } from 'react-router-dom';
 import React from 'react';
-import api from '../../services/api';
-import EditIcon from '@mui/icons-material/Edit';
-import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
-import Visibility from '@mui/icons-material/Visibility';
 import Modal from 'react-modal';
-import Button from 'components/Button';
-import ModalHeader from 'components/ModalHeader';
-import ModalBody from 'components/ModalBody';
-import TextInput from 'components/TextInput';
 import toast from 'react-hot-toast';
 import Dropdown from 'react-dropdown';
+import { useEffect, useState } from 'react';
+import EditIcon from '@mui/icons-material/Edit';
+import { Link, useLocation } from 'react-router-dom';
+import Visibility from '@mui/icons-material/Visibility';
+import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
+
+import api from 'services/api';
+import Button from 'components/Button/Button';
+import ModalBody from 'components/ModalBody/ModalBody';
+import TextInput from 'components/TextInput/TextInput';
+import ModalHeader from 'components/ModalHeader/ModalHeader';
+import { Container, InputSearch, AddProcess } from './styles';
 
 function Processes() {
   const [searchTerm, setSearchTerm] = useState('');

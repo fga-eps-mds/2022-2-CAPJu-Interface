@@ -1,6 +1,7 @@
-import { Container, Xbutton, Title } from './styles.js';
-import PropTypes from 'prop-types';
 import React from 'react';
+import PropTypes from 'prop-types';
+
+import { Container, Xbutton, Title } from './styles.js';
 
 function ModalHeader(props) {
   return (

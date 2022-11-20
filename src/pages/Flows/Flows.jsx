@@ -1,11 +1,19 @@
-import api from '../../services/api';
-import Button from 'components/Button';
-import TextInput from 'components/TextInput';
-import { StagesInFlow } from 'components/StagesInFlow';
-import { AddStageInFlow } from 'components/AddStageInFlow';
 import React from 'react';
-import { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
+import { Link } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import Tooltip from '@mui/material/Tooltip';
+import EditIcon from '@mui/icons-material/Edit';
+import { DeleteForever } from '@mui/icons-material';
+import InsertChartIcon from '@mui/icons-material/InsertChart';
+import DescriptionIcon from '@mui/icons-material/Description';
+
+import api from 'services/api';
+import Button from 'components/Button/Button';
+import TextInput from 'components/TextInput/TextInput';
+import StagesInFlow from 'components/StagesInFlow/StagesInFlow';
+import AddStageInFlow from 'components/AddStageInFlow/AddStageInFlow';
+import AddSequenceInFlow from 'components/AddSequenceInFlow/AddSequenceInFlow';
 import {
   Container,
   AddFlowButton,
@@ -20,14 +28,7 @@ import {
   CloseModalGeneral,
   Table
 } from './styles';
-import FlowViewer from 'components/FlowViewer';
-import DescriptionIcon from '@mui/icons-material/Description';
-import EditIcon from '@mui/icons-material/Edit';
-import { Link } from 'react-router-dom';
-import { DeleteForever } from '@mui/icons-material';
-import Tooltip from '@mui/material/Tooltip';
-import { AddSequenceInFlow } from 'components/AddSequenceInFlow';
-import InsertChartIcon from '@mui/icons-material/InsertChart';
+import FlowViewer from 'components/FlowViewer/FlowViewer';
 
 function Flows() {
   const [flows, setFlows] = useState([]);

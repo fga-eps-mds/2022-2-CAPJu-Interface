@@ -1,7 +1,16 @@
-import Button from 'components/Button';
 import React from 'react';
 import { useEffect, useState } from 'react';
-import api from '../../services/user';
+import { useNavigate } from 'react-router-dom';
+import { FlowCascade } from '@styled-icons/entypo';
+import { GroupWork } from '@styled-icons/material/';
+import { UserCircle } from '@styled-icons/boxicons-regular/';
+import { Flow } from '@styled-icons/fluentui-system-regular';
+import { PersonFill } from '@styled-icons/bootstrap/PersonFill';
+import { UserPlus } from '@styled-icons/boxicons-regular/UserPlus';
+import { ClipboardTaskListLtr } from '@styled-icons/fluentui-system-regular/ClipboardTaskListLtr';
+
+import api from 'services/user';
+import Button from 'components/Button/Button';
 import authConfig from 'services/config';
 import {
   Container,
@@ -10,14 +19,6 @@ import {
   LogoutButton,
   Notification
 } from './styles';
-import { Flow } from '@styled-icons/fluentui-system-regular';
-import { FlowCascade } from '@styled-icons/entypo';
-import { ClipboardTaskListLtr } from '@styled-icons/fluentui-system-regular/ClipboardTaskListLtr';
-import { PersonFill } from '@styled-icons/bootstrap/PersonFill';
-import { UserPlus } from '@styled-icons/boxicons-regular/UserPlus';
-import { useNavigate } from 'react-router-dom';
-import { UserCircle } from '@styled-icons/boxicons-regular/';
-import { GroupWork } from '@styled-icons/material/';
 
 function SideBar() {
   const [users, setUsers] = useState([]);
@@ -104,7 +105,7 @@ function SideBar() {
           <hr />
         </Menu>
       </Menu>
-      {userLogout ? (
+      {userLogout && (
         <LogoutButton>
           <Button
             background="red"
@@ -116,8 +117,6 @@ function SideBar() {
             Sair
           </Button>
         </LogoutButton>
-      ) : (
-        ''
       )}
     </Container>
   );

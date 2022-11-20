@@ -1,24 +1,25 @@
-import './styles.js';
-import SideBar from './components/SideBar';
-import Login from './pages/Login';
-import ShowProcess from 'pages/ShowProcess/index.js';
-import Processes from 'pages/Processes/index.js';
-import { Routes, Route, useLocation, useNavigate } from 'react-router-dom';
-import { Container, Content } from './styles';
-import GlobalStyle from './globalStyles';
 import { Toaster } from 'react-hot-toast';
 import React, { useEffect, useState } from 'react';
-import Stages from 'pages/Stages/index.js';
-import Flows from 'pages/Flows/index.js';
-import AccessProfile from 'pages/AccessProfile/index.js';
-import Statistics from 'pages/Statistics/index.js';
-import Recovery from 'pages/Recovery/index.js';
-import StatisticsProcesses from 'pages/StatisticsProcesses/index.js';
-import EditAccount from 'pages/EditAccount/index.js';
-import EditAccountEmail from 'pages/EditAccountEmail/index.js';
-import EditAccountPassword from 'pages/EditAccountPassword/index.js';
-import SolicitacoesCadastro from 'pages/SolicitacoesCadastro/index.js';
-import Unidades from 'pages/Unidades/index.js';
+import { Routes, Route, useLocation, useNavigate } from 'react-router-dom';
+
+import './styles.js';
+import Flows from 'pages/Flows/Flows';
+import Login from 'pages/Login/Login';
+import GlobalStyle from './globalStyles';
+import Stages from 'pages/Stages/Stages';
+import Recovery from 'pages/Recovery/Login';
+import { Container, Content } from './styles';
+import Unidades from 'pages/Unidades/Unidades';
+import Processes from 'pages/Processes/Processes';
+import Statistics from 'pages/Statistics/Statistics';
+import SideBar from 'components/SideBar/ModalHeader';
+import ShowProcess from 'pages/ShowProcess/ShowProcess';
+import EditAccount from 'pages/EditAccount/EditAccount';
+import AccessProfile from 'pages/AccessProfile/AccessProfile';
+import StatisticsProcesses from 'pages/StatisticsProcesses/Processes';
+import EditAccountEmail from 'pages/EditAccountEmail/EditAccountEmail';
+import EditAccountPassword from 'pages/EditAccountPassword/EditAccountPassword';
+import SolicitacoesCadastro from 'pages/SolicitacoesCadastro/SolicitacoesCadastro';
 
 function App() {
   const location = useLocation();

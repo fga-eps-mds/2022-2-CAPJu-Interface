@@ -1,16 +1,17 @@
-import { useEffect, useState } from 'react';
-import api from '../../services/api';
-import { Container, FlowWrapper } from './styles';
-import Button from '../../components/Button';
-import { useLocation, Link } from 'react-router-dom';
 import React from 'react';
-import SkipNextIcon from '@mui/icons-material/SkipNext';
+import api from 'services/api';
 import Modal from 'react-modal';
 import toast from 'react-hot-toast';
-import FlowViewer from 'components/FlowViewer';
-import ModalHeader from 'components/ModalHeader';
-import ModalBody from 'components/ModalBody';
+import { useEffect, useState } from 'react';
 import { Ring } from 'react-awesome-spinners';
+import { useLocation, Link } from 'react-router-dom';
+import SkipNextIcon from '@mui/icons-material/SkipNext';
+
+import { Container, FlowWrapper } from './styles';
+import Button from 'components/Button/Button';
+import FlowViewer from 'components/FlowViewer/FlowViewer';
+import ModalHeader from 'components/ModalHeader/ModalHeader';
+import ModalBody from 'components/ModalBody/ModalBody';
 
 Modal.setAppElement('body');
 

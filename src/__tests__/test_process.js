@@ -1,16 +1,15 @@
-/* eslint-disable react/prop-types */
-/* eslint-disable react/display-name */
-import { render, waitFor, screen, fireEvent } from '@testing-library/react';
-import '@testing-library/jest-dom';
-import TextInput from '../components/TextInput';
+import React from 'react';
 import nock from 'nock';
 import axios from 'axios';
-import { baseURL } from '../services/api';
-import Processes from '../pages/Processes';
-import ShowProcess from '../pages/ShowProcess';
-import { isLate } from 'components/IsLate/index.js';
-import React from 'react';
+import '@testing-library/jest-dom';
 import { MemoryRouter, Route, Routes } from 'react-router-dom';
+import { render, waitFor, screen, fireEvent } from '@testing-library/react';
+
+import { baseURL } from 'services/api';
+import Processes from 'pages/Processes/Processes';
+import { isLate } from 'components/IsLate/index.js';
+import TextInput from 'components/TextInput/TextInput';
+import ShowProcess from 'pages/ShowProcess/ShowProcess';
 import {
   flowsResponse,
   processResponse,

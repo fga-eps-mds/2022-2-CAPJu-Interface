@@ -1,14 +1,13 @@
-/* eslint-disable react/prop-types */
-/* eslint-disable react/display-name */
 import React from 'react';
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
-import '@testing-library/jest-dom';
-import nock from 'nock';
 import axios from 'axios';
-import { baseURL } from '../services/api';
-import Flows from '../pages/Flows';
+import nock from 'nock';
+import '@testing-library/jest-dom';
 import { MemoryRouter, Route, Routes } from 'react-router-dom';
-import { flowsResponse, stagesResponse } from '../testConstants';
+import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+
+import Flows from 'pages/Flows/Flows';
+import { baseURL } from 'services/api';
+import { flowsResponse, stagesResponse } from 'testConstants';
 
 axios.defaults.adapter = require('axios/lib/adapters/http');
 

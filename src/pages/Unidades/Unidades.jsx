@@ -1,10 +1,12 @@
-import api from '../../services/api';
-import userApi from '../../services/user';
-import Button from 'components/Button';
-import TextInput from 'components/TextInput';
 import React from 'react';
-import { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
+import { Eye } from '@styled-icons/entypo';
+import Tooltip from '@mui/material/Tooltip';
+import { useEffect, useState } from 'react';
+import { UserPlus } from '@styled-icons/fa-solid';
+import AxiosError from 'axios/lib/core/AxiosError';
+import { DeleteForever } from '@styled-icons/material';
+
 import {
   Container,
   AddUnityButton,
@@ -14,11 +16,10 @@ import {
   Table,
   ContentHeader
 } from './styles';
-import { DeleteForever } from '@styled-icons/material';
-import AxiosError from 'axios/lib/core/AxiosError';
-import Tooltip from '@mui/material/Tooltip';
-import { UserPlus } from '@styled-icons/fa-solid';
-import { Eye } from '@styled-icons/entypo';
+import api from 'services/api';
+import userApi from 'services/user';
+import Button from 'components/Button/Button';
+import TextInput from 'components/TextInput/TextInput';
 
 function Unidades() {
   const [Unitys, setUnitys] = useState([{ name: '', time: '', _id: '' }]);

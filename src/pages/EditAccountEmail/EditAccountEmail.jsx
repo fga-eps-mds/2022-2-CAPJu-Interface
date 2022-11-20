@@ -1,4 +1,7 @@
 import React from 'react';
+import { useState } from 'react';
+import toast from 'react-hot-toast';
+
 import {
   Container,
   ContainerMenu,
@@ -6,11 +9,9 @@ import {
   ContainerTitle,
   Criterios
 } from './styles';
-import TextInput from '../../components/TextInput';
-import Button from '../../components/Button';
-import { useState } from 'react';
-import toast from 'react-hot-toast';
 import user from 'services/user';
+import Button from 'components/Button/Button';
+import TextInput from 'components/TextInput/TextInput';
 
 function EditAccountEmail() {
   const [newEmail, setNewEmail] = useState('');

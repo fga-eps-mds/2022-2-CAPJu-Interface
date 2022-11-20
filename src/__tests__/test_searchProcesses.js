@@ -1,12 +1,14 @@
 import React from 'react';
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
-import '@testing-library/jest-dom';
 import nock from 'nock';
 import axios from 'axios';
-import { baseURL } from '../services/api';
-import Processes from '../pages/Processes';
+import '@testing-library/jest-dom';
 import { MemoryRouter, Route, Routes } from 'react-router-dom';
-import { flowsResponse, processResponse } from '../testConstants';
+import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+
+import { baseURL } from 'services/api';
+import Processes from 'pages/Processes/Processes';
+import { flowsResponse, processResponse } from 'testConstants';
+
 axios.defaults.adapter = require('axios/lib/adapters/http');
 
 const mockFlowsResponse = flowsResponse;

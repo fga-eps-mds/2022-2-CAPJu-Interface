@@ -1,13 +1,13 @@
-// @ts-nocheck
 import React from 'react';
-import { Container, Modal } from './styles';
 import { useState } from 'react';
-import TextInput from 'components/TextInput';
-import Button from 'components/Button';
-import { Content } from 'pages/Stages/styles';
-import { useNavigate, useParams } from 'react-router-dom';
 import toast from 'react-hot-toast';
+import { useNavigate, useParams } from 'react-router-dom';
+
 import user from 'services/user';
+import { Container, Modal } from './styles';
+import Button from 'components/Button/Button';
+import { Content } from 'pages/Stages/styles';
+import TextInput from 'components/TextInput/TextInput';
 
 function Login() {
   const [isModalOpen, setModalOpen] = useState(false);
@@ -92,4 +92,5 @@ function Login() {
     </Container>
   );
 }
+
 export default Login;

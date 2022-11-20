@@ -1,8 +1,8 @@
-import PropTypes from 'prop-types';
 import React from 'react';
+import PropTypes from 'prop-types';
 import Dropdown from 'react-dropdown';
 
-export function AddSequenceInFlow(props) {
+function AddSequenceInFlow(props) {
   const { value, setValue, options } = props;
   return (
     <Dropdown
@@ -26,3 +26,5 @@ AddSequenceInFlow.propTypes = {
   options: PropTypes.array,
   setValue: PropTypes.func
 };
+
+export default AddSequenceInFlow;

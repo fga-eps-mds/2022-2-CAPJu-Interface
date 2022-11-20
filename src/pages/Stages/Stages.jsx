@@ -1,9 +1,10 @@
-import api from '../../services/api';
-import Button from 'components/Button';
-import TextInput from 'components/TextInput';
 import React from 'react';
-import { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
+import Tooltip from '@mui/material/Tooltip';
+import { useEffect, useState } from 'react';
+import AxiosError from 'axios/lib/core/AxiosError';
+import { DeleteForever } from '@styled-icons/material';
+
 import {
   Container,
   AddStageButton,
@@ -13,9 +14,9 @@ import {
   Table,
   ContentHeader
 } from './styles';
-import { DeleteForever } from '@styled-icons/material';
-import AxiosError from 'axios/lib/core/AxiosError';
-import Tooltip from '@mui/material/Tooltip';
+import api from 'services/api';
+import Button from 'components/Button/Button';
+import TextInput from 'components/TextInput/TextInput';
 
 function Stages() {
   const [stages, setStages] = useState([{ name: '', time: '', _id: '' }]);

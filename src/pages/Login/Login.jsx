@@ -1,5 +1,11 @@
-// @ts-nocheck
 import React from 'react';
+import toast from 'react-hot-toast';
+import Dropdown from 'react-dropdown';
+import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+
+import api from 'services/api';
+import user from 'services/user';
 import {
   Container,
   Menu,
@@ -9,15 +15,9 @@ import {
   Criterios,
   EditDrop
 } from './styles';
-import { useEffect, useState } from 'react';
-import TextInput from 'components/TextInput';
-import Button from 'components/Button';
 import { Content } from 'pages/Stages/styles';
-import { useNavigate } from 'react-router-dom';
-import toast from 'react-hot-toast';
-import user from 'services/user';
-import Dropdown from 'react-dropdown';
-import api from '../../services/api';
+import Button from 'components/Button/Button';
+import TextInput from 'components/TextInput/TextInput';
 
 function Login() {
   const [isModalOpen, setModalOpen] = useState(false);
@@ -283,4 +283,5 @@ function Login() {
     </Container>
   );
 }
+
 export default Login;

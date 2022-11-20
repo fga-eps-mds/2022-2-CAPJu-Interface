@@ -1,12 +1,11 @@
-/* eslint-disable react/prop-types */
-/* eslint-disable react/display-name */
 import React from 'react';
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
-import '@testing-library/jest-dom';
 import nock from 'nock';
-import { userURL } from '../services/user.js';
-import SolicitacoesCadastro from '../pages/SolicitacoesCadastro';
+import '@testing-library/jest-dom';
 import { MemoryRouter, Route, Routes } from 'react-router-dom';
+import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+
+import { userURL } from 'services/user.js';
+import SolicitacoesCadastro from 'pages/SolicitacoesCadastro/SolicitacoesCadastro';
 
 const user = {
   user: [

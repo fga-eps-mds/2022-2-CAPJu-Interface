@@ -1,5 +1,13 @@
 import React from 'react';
+import toast from 'react-hot-toast';
 import { useEffect, useState } from 'react';
+import Dropdown from 'react-dropdown';
+import Tooltip from '@mui/material/Tooltip';
+import Button from 'components/Button/Button';
+import EditIcon from '@mui/icons-material/Edit';
+import { DeleteForever } from '@mui/icons-material';
+
+import api from 'services/user';
 import {
   Container,
   Table,
@@ -8,14 +16,7 @@ import {
   Content,
   ContentHeader
 } from './sytles.js';
-import api from '../../services/user';
 import authConfig from 'services/config';
-import toast from 'react-hot-toast';
-import EditIcon from '@mui/icons-material/Edit';
-import { DeleteForever } from '@mui/icons-material';
-import Tooltip from '@mui/material/Tooltip';
-import Button from 'components/Button';
-import Dropdown from 'react-dropdown';
 
 function AccessProfile() {
   const [users, setUsers] = useState([]);
@@ -281,4 +282,5 @@ function AccessProfile() {
     </Container>
   );
 }
+
 export default AccessProfile;

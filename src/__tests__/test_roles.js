@@ -1,12 +1,14 @@
 import React from 'react';
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
-import '@testing-library/jest-dom';
 import nock from 'nock';
 import axios from 'axios';
-import { userURL } from '../services/user';
-import AccessProfile from '../pages/AccessProfile';
+import '@testing-library/jest-dom';
 import { MemoryRouter, Route, Routes } from 'react-router-dom';
-import { usersResponse } from '../testConstants';
+import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+
+import { userURL } from 'services/user';
+import { usersResponse } from 'testConstants';
+import AccessProfile from 'pages/AccessProfile/AccessProfile';
+
 axios.defaults.adapter = require('axios/lib/adapters/http');
 
 const mockNavigate = jest.fn();
