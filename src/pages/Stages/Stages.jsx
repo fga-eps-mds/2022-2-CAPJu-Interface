@@ -100,7 +100,7 @@ function Stages() {
               <tr>
                 <th>Nome</th>
                 <th>Duração</th>
-                <th></th>
+                <th>Deletar</th>
               </tr>
             </thead>
             <tbody>
