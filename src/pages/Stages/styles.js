@@ -97,7 +97,7 @@ export const Content = styled.div`
   gap: 10px;
   font-size: 20px;
   border-radius: 10px;
-  overflow-x: scroll;
+  overflow-x: hidden;
 `;
 
 export const Table = styled.table`
