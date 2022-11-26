@@ -11,17 +11,18 @@ import {
   AddUnityButton,
   Area,
   Modal,
-  Content,
   Table,
+  Content,
   ContentHeader
 } from './styles';
+import TableComponent from 'components/Tables/Table';
 import api from 'services/api';
 import userApi from 'services/user';
 import Button from 'components/Button/Button';
 import TextInput from 'components/TextInput/TextInput';
 
 function Unidades() {
-  const [Unitys, setUnitys] = useState([{ name: '', time: '', _id: '' }]);
+  const [unitList, setUnitList] = useState([{ name: '', time: '', _id: '' }]);
   const [UnityName, setUnityName] = useState('');
   const [adminSearchName, setAdminSearchName] = useState('');
   const [currentUnity, setCurrentUnity] = useState({
@@ -54,7 +55,6 @@ function Unidades() {
   }
 
   async function updateUnityAdmins() {
-    console.log(currentUnity._id);
     const response = await api.get('unityAdmins/' + currentUnity._id);
     let existingUnity = { ...currentUnity };
     existingUnity.admins = response.data.admins || [];
@@ -73,8 +73,7 @@ function Unidades() {
 
   async function updateUnitys() {
     const response = await api.get('/unitys');
-    console.log(response.data.Unitys);
-    setUnitys(response.data.Unitys);
+    setUnitList(response.data.Unitys);
   }
 
   async function addUnity() {
@@ -103,52 +102,53 @@ function Unidades() {
     }
   }
 
+  function listAdmins(unit) {
+    setCurrentUnity({ ...unit, admins: [] });
+    updateUnityAdmins();
+  }
+
+  function renderActions(unit) {
+    return (
+      <>
+        <Tooltip title="Visualizar Admins">
+          <Eye
+            onClick={() => {
+              setSeeAdminsModalOpen(true);
+              listAdmins(unit);
+            }}
+          />
+        </Tooltip>
+        <Tooltip title="Adicionar Admins">
+          <UserPlus
+            onClick={() => {
+              setAddAdminsModalOpen(true);
+              listAdmins(unit);
+            }}
+          />
+        </Tooltip>
+      </>
+    );
+  }
+
+  function getListAttributes(unit) {
+    return [unit.name];
+  }
+
+  const unitColumns = ['Nome', 'Ações'];
+  // const adminDeleteColumns = ['Nome', 'Remover'];
+  // const adminAddColumns = ['Nome', 'Adicionar'];
+
   return (
     <>
       <Container>
         <h1>Unidades</h1>
         <Area>
-          <Table>
-            <thead>
-              <tr>
-                <th>Nome</th>
-                <th>Ações</th>
-              </tr>
-            </thead>
-            <tbody>
-              {Unitys.map((unity, index) => {
-                return (
-                  <tr key={index}>
-                    <td>{unity.name}</td>
-                    <td>
-                      <Tooltip title="Visualizar Admins">
-                        <Eye
-                          className="delete-icon"
-                          size={30}
-                          onClick={() => {
-                            setSeeAdminsModalOpen(true);
-                            setCurrentUnity({ ...unity, admins: [] });
-                            updateUnityAdmins();
-                          }}
-                        />
-                      </Tooltip>
-                      <Tooltip title="Adicionar Admins">
-                        <UserPlus
-                          className="delete-icon"
-                          size={30}
-                          onClick={() => {
-                            setAddAdminsModalOpen(true);
-                            setCurrentUnity({ ...unity, admins: [] });
-                            updateUnityAdmins();
-                          }}
-                        />
-                      </Tooltip>
-                    </td>
-                  </tr>
-                );
-              })}
-            </tbody>
-          </Table>
+          <TableComponent
+            itemList={unitList}
+            actions={renderActions}
+            columnList={unitColumns}
+            attributeList={(unit) => getListAttributes(unit)}
+          />
         </Area>
         <AddUnityButton
           onClick={() => {
