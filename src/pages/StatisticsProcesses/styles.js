@@ -1,3 +1,4 @@
+import Button from 'components/Button/Button';
 import styled from 'styled-components';
 
 export const Container = styled.div`
@@ -99,4 +100,13 @@ export const InputSearch = styled.input`
     outline: none;
     background-color: rgba(0, 0, 0, 0);
   }
+`;
+
+export const BackButton = styled(Button).attrs((props) => ({
+  background: props.background,
+  className: props.classname
+}))`
+  position: absolute;
+  top: 30px;
+  left: 50px;
 `;

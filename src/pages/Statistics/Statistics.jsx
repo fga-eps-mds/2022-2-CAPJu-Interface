@@ -1,14 +1,15 @@
 import React, { useEffect, useState } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 
 import api from 'services/api';
-import { Container, StagesArea, StageItem } from './styles';
+import { Container, StagesArea, StageItem, BackButton } from './styles';
 
 function Statistics() {
   const [stages, setStages] = useState([]);
   const [processes, setProcesses] = useState([]);
   const location = useLocation();
   const flow = location.state;
+  const navigate = useNavigate();
 
   function deleteStages(stagesResponse, stagesFlow, targetStages) {
     for (let stage of stagesResponse) {
@@ -57,6 +58,9 @@ function Statistics() {
   return (
     <>
       <Container>
+        <BackButton onClick={() => navigate(-1)}>
+          <span>Voltar</span>
+        </BackButton>
         Estatística de fluxo
         <StagesArea>
           {stages.map((stage, index) => {

@@ -3,7 +3,7 @@ import Dropdown from 'react-dropdown';
 import Tooltip from '@mui/material/Tooltip';
 import EditIcon from '@mui/icons-material/Edit';
 import React, { useEffect, useState } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import Visibility from '@mui/icons-material/Visibility';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 
@@ -14,7 +14,8 @@ import {
   Table,
   Content,
   ContentHeader,
-  Modal
+  Modal,
+  BackButton
 } from './styles';
 import api from 'services/api';
 import Button from 'components/Button/Button';
@@ -35,6 +36,7 @@ function Processes() {
   const [flows, setFlows] = useState([]);
   const [flowId, setFlowId] = useState(flow ? flow._id : '');
   const [stages, setStages] = useState([]);
+  const navigate = useNavigate();
 
   useEffect(() => {
     updateProcesses();
@@ -186,6 +188,9 @@ function Processes() {
 
   return (
     <Container>
+      <BackButton onClick={() => navigate(-1)}>
+        <span>Voltar</span>
+      </BackButton>
       <div className="processes">
         <h1>Processos {flow ? '- ' + flow.name : ''}</h1>
         <div className="processSearch">

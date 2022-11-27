@@ -1,3 +1,4 @@
+import Button from 'components/Button/Button';
 import styled from 'styled-components';
 
 export const Container = styled.div`
@@ -77,4 +78,13 @@ export const Modal = styled.div`
   height: 300%;
   border: solid 1px;
   border-radius: 20px;
+`;
+
+export const BackButton = styled(Button).attrs((props) => ({
+  background: props.background,
+  className: props.classname
+}))`
+  position: absolute;
+  top: 30px;
+  left: 50px;
 `;

@@ -3,7 +3,7 @@ import toast from 'react-hot-toast';
 import Dropdown from 'react-dropdown';
 import EditIcon from '@mui/icons-material/Edit';
 import React, { useEffect, useState } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import Visibility from '@mui/icons-material/Visibility';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 
@@ -12,7 +12,7 @@ import Button from 'components/Button/Button';
 import ModalBody from 'components/ModalBody/ModalBody';
 import TextInput from 'components/TextInput/TextInput';
 import ModalHeader from 'components/ModalHeader/ModalHeader';
-import { Container, InputSearch, AddProcess } from './styles';
+import { Container, InputSearch, AddProcess, BackButton } from './styles';
 
 function Processes() {
   const [searchTerm, setSearchTerm] = useState('');
@@ -30,6 +30,7 @@ function Processes() {
   const [stages, setStages] = useState([]);
   const [processes, setProcesses] = useState([]);
   const [currentStage, setCurrentStage] = useState('');
+  const navigate = useNavigate();
 
   const customStyles = {
     content: {
@@ -180,6 +181,9 @@ function Processes() {
 
   return (
     <Container>
+      <BackButton onClick={() => navigate(-1)}>
+        <span>Voltar</span>
+      </BackButton>
       <div className="processes">
         <h1>Processos na etapa {currentStage ? '- ' + currentStage : ''}</h1>
         <div className="processSearch">
