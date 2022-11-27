@@ -117,9 +117,3 @@ Certifique-se de ler o [Guia de Contribuição](https://github.com/fga-eps-mds/2
 ## Licença
 
 O CAPJu está sob as regras aplicadas na licença [MIT](https://github.com/fga-eps-mds/2022-1-CAPJu-Doc/blob/main/LICENSE)
-
-## Contribuidores
-
-<a href="https://github.com/fga-eps-mds/2022-1-CAPJu-Interface/graphs/contributors">
-  <img src="https://contrib.rocks/image?repo=fga-eps-mds/2022-1-CAPJu-Interface" />
-</a>
