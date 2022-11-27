@@ -227,7 +227,7 @@ function Processes() {
                     (el) => el._id === proc.etapaAtual
                   );
                   FinalStage = stages.find(
-                    (el) => el._id === flow.sequences.at(-1).to
+                    (el) => el._id === flow.sequences[flow.sequences.length - 1]
                   );
 
                   CurrentStagePos = stages.indexOf(CurrentStage) + 1;
