@@ -353,7 +353,7 @@ function Flows() {
                           addSequence();
                         }}
                       >
-                        <span>Adicionar</span>
+                        <button className="add-button-flow">Adicionar</button>
                       </div>
                     </SelectorWrapper>
                     <Button
@@ -447,7 +447,7 @@ function Flows() {
                       addSequence();
                     }}
                   >
-                    <span>Adicionar</span>
+                    <button className="add-button-flow">Adicionar</button>
                   </div>
                 </SelectorWrapper>
                 <SequencesWrapper>
