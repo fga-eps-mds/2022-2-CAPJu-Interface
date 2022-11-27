@@ -26,8 +26,6 @@ function App() {
   const navigate = useNavigate();
   const [user, setUser] = useState(null);
 
-  console.log(location.pathname);
-
   useEffect(() => {
     if (
       !localStorage.getItem('user') &&

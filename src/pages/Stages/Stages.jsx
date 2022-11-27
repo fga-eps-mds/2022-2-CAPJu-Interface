@@ -31,7 +31,6 @@ function Stages() {
 
   async function updateStages() {
     const response = await api.get('/stages');
-    console.log(response.data.Stages);
     function compara(a, b) {
       if (a.time > b.time) return a.name > b.name ? 1 : 0;
       return -1;
@@ -41,7 +40,6 @@ function Stages() {
   }
 
   async function addStage() {
-    console.log(stageTime);
     try {
       const response = await api.post('/newStage', {
         name: stageName,
@@ -61,7 +59,6 @@ function Stages() {
           duration: 3000
         });
       } else {
-        console.log(e);
         toast.error('Erro ao adicionar a etapa');
       }
       if (e instanceof AxiosError) toast.error('Etapa já existe');
@@ -78,7 +75,6 @@ function Stages() {
         updateStages();
       }
     } catch (e) {
-      console.log(e);
       if (e.response.status == 401) {
         toast(e.response.data.message, {
           icon: '⚠️',

@@ -40,12 +40,10 @@ function Login() {
   async function register() {
     const re = /^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/;
     const pass = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z$*&@#]{6,}$/;
-    console.log(newEmail, re.test(newEmail));
     if (!re.test(newEmail)) {
       toast.error('E-mail Inválido');
       return;
     }
-    console.log(newPassword, pass.test(newPassword));
     if (!pass.test(newPassword)) {
       toast.error('Senha não cumpre os criterios');
       return;
@@ -210,7 +208,6 @@ function Login() {
             <Dropdown
               options={OptionsRoles}
               onChange={(e) => {
-                console.log('value', e.value);
                 setNewRole(e.value);
               }}
               value={roles[newRole]}

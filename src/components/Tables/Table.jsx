@@ -20,7 +20,7 @@ function Table({ itemList, actions, columnList, attributeList }) {
               {attributeList(item).map((attribute, index) => (
                 <td key={index}>{attribute}</td>
               ))}
-              <td>{actions(item)}</td>
+              <td className="actions-column">{actions(item)}</td>
             </tr>
           );
         })}

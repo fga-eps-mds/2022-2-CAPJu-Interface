@@ -3,8 +3,7 @@ import styled from 'styled-components';
 export const DefaultTable = styled.table`
   margin-top: 20px;
   background-color: white;
-  width: 70%;
-  max-width: 80%;
+  min-width: 35vw;
   font-size: 20px;
   border-radius: 5px;
   text-align: left;
@@ -20,13 +19,17 @@ export const DefaultTable = styled.table`
   }
 
   th {
+    border-radius: 5px;
     background-color: #7a7b4f;
-    padding: 15px;
+    padding: 20px 0px 20px 10px;
     border: 1px solid #ddd;
   }
 
-  th:nth-child(2) {
-    width: 15px;
+  .actions-column {
+    min-width: fit-content;
+    width: 1%;
+    white-space: nowrap;
+    padding-right: 10px;
   }
 
   tr:nth-child(even) {
@@ -36,7 +39,7 @@ export const DefaultTable = styled.table`
   td {
     border-radius: 5px;
     color: #333;
-    padding: 10px;
+    padding: 10px 0px 10px 10px;
     border: 1px solid #ddd;
   }
 `;

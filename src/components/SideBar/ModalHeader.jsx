@@ -37,8 +37,6 @@ function SideBar() {
   }
 
   const userLogout = JSON.parse(localStorage.getItem('user'));
-  console.log('sono', userLogout);
-
   return (
     <Container>
       <a href={'/'}>

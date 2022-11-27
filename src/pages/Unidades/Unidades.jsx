@@ -94,7 +94,6 @@ function Unidades() {
           duration: 3000
         });
       } else {
-        console.log(e);
         toast.error('Erro ao adicionar a unidade');
       }
       if (e instanceof AxiosError) toast.error('Unidade já existe');

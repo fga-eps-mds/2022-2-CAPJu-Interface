@@ -64,7 +64,6 @@ function SolicitacoesCadastro() {
         toast.error('Erro ao aceitar solicitação!', { duration: 3000 });
       }
     } catch (error) {
-      console.log(error);
       if (error.response.status == 401) {
         toast(error.response.data.message, {
           icon: '⚠️',
@@ -87,7 +86,6 @@ function SolicitacoesCadastro() {
         toast.error('Erro ao recusar solicitação!', { duration: 3000 });
       }
     } catch (error) {
-      console.log(error);
       if (error.response.status == 401) {
         toast(error.response.data.message, {
           icon: '⚠️',

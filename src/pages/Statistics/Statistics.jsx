@@ -51,7 +51,6 @@ function Statistics() {
       setStages(targetStages);
     }
     updateStats();
-    console.log(stages);
   }, [stages, flow, processes]);
 
   return (

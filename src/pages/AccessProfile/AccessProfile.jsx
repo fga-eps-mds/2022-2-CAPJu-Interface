@@ -56,7 +56,6 @@ function AccessProfile() {
         toast.error('Erro ao alterar o perfil');
       }
     } catch (error) {
-      console.log(error);
       if (error.response.status == 401) {
         toast(error.response.data.message, {
           icon: '⚠️',
@@ -77,7 +76,6 @@ function AccessProfile() {
         toast.success('Usuário deletado com sucesso!', { duration: 3000 });
       }
     } catch (error) {
-      console.log(error);
       if (error.response.status == 401) {
         toast(error.response.data.message, {
           icon: '⚠️',
