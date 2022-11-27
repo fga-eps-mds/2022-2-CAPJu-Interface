@@ -11,11 +11,10 @@ import {
   AddUnityButton,
   Area,
   Modal,
-  Table,
   Content,
   ContentHeader
 } from './styles';
-import TableComponent from 'components/Tables/Table';
+import Table from 'components/Tables/Table';
 import api from 'services/api';
 import userApi from 'services/user';
 import Button from 'components/Button/Button';
@@ -130,24 +129,41 @@ function Unidades() {
     );
   }
 
-  function getListAttributes(unit) {
-    return [unit.name];
+  function removeAdmins(admin) {
+    return (
+      <Tooltip title="Remover Admin">
+        <DeleteForever onClick={() => removeAdmin(admin._id)} />
+      </Tooltip>
+    );
   }
 
-  const unitColumns = ['Nome', 'Ações'];
-  // const adminDeleteColumns = ['Nome', 'Remover'];
-  // const adminAddColumns = ['Nome', 'Adicionar'];
+  function newAdmin(user) {
+    return (
+      <Tooltip title="Adicionar como Admin">
+        <UserPlus
+          onClick={() => {
+            setAddAdminsModalOpen(true);
+            setAdmin(user._id);
+          }}
+        />
+      </Tooltip>
+    );
+  }
+
+  const unitTableColumns = ['Nome', 'Ações'];
+  const deleteAdminTableColumns = ['Nome', 'Remover'];
+  const addAdminTableColumns = ['Nome', 'Adicionar'];
 
   return (
     <>
       <Container>
         <h1>Unidades</h1>
         <Area>
-          <TableComponent
+          <Table
             itemList={unitList}
             actions={renderActions}
-            columnList={unitColumns}
-            attributeList={(unit) => getListAttributes(unit)}
+            columnList={unitTableColumns}
+            attributeList={(unit) => [unit.name]}
           />
         </Area>
         <AddUnityButton
@@ -203,35 +219,12 @@ function Unidades() {
                 <span>Visualizar Admins</span>
               </ContentHeader>
               <h3>Administradores - {currentUnity.name}</h3>
-              <Table>
-                <thead>
-                  <tr>
-                    <th>Nome</th>
-                    <th>Remover</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {currentUnity.admins.map((admin, index) => {
-                    return (
-                      <tr key={index}>
-                        <td>{admin.name}</td>
-                        <td>
-                          <Tooltip title="Adicionar Admins">
-                            <DeleteForever
-                              className="delete-icon"
-                              size={30}
-                              onClick={() => {
-                                setSeeAdminsModalOpen(false);
-                                removeAdmin(admin._id);
-                              }}
-                            />
-                          </Tooltip>
-                        </td>
-                      </tr>
-                    );
-                  })}
-                </tbody>
-              </Table>
+              <Table
+                itemList={currentUnity.admins}
+                columnList={deleteAdminTableColumns}
+                attributeList={(admin) => [admin.name]}
+                actions={(admin) => removeAdmins(admin)}
+              />
             </div>
 
             <div>
@@ -260,36 +253,12 @@ function Unidades() {
                 value={adminSearchName}
                 placeholder="Nome do usuário"
               ></TextInput>
-
-              <Table>
-                <thead>
-                  <tr>
-                    <th>Nome</th>
-                    <th>Adicionar</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {foundUsers.map((user, index) => {
-                    return (
-                      <tr key={index}>
-                        <td>{user.name}</td>
-                        <td>
-                          <Tooltip title="Adicionar como Admin">
-                            <UserPlus
-                              className="delete-icon"
-                              size={30}
-                              onClick={() => {
-                                setAddAdminsModalOpen(true);
-                                setAdmin(user._id);
-                              }}
-                            />
-                          </Tooltip>
-                        </td>
-                      </tr>
-                    );
-                  })}
-                </tbody>
-              </Table>
+              <Table
+                itemList={foundUsers}
+                columnList={addAdminTableColumns}
+                attributeList={(admin) => [admin.name]}
+                actions={(user) => newAdmin(user)}
+              />
             </div>
 
             <div>
