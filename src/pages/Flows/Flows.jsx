@@ -28,6 +28,7 @@ import {
   Table
 } from './styles';
 import FlowViewer from 'components/FlowViewer/FlowViewer';
+import ButtonAdd from 'components/ButtonAdd/ButtonAdd';
 
 function Flows() {
   const [flows, setFlows] = useState([]);
@@ -347,14 +348,7 @@ function Flows() {
                         setValue={setTo}
                         options={selectedOptions}
                       />
-                      <div
-                        className="addStage"
-                        onClick={() => {
-                          addSequence();
-                        }}
-                      >
-                        <button className="add-button-flow">Adicionar</button>
-                      </div>
+                      <ButtonAdd onClickProps={() => addSequence()} />
                     </SelectorWrapper>
                     <Button
                       background="#de5353"
