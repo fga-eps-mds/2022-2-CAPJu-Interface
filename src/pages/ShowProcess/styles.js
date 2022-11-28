@@ -1,3 +1,4 @@
+import Button from 'components/Button/Button';
 import styled from 'styled-components';
 
 export const Container = styled.div`
@@ -43,15 +44,18 @@ export const Container = styled.div`
     background-color: red;
     color: #f1f1f1;
   }
-
-  .voltarButton {
-    position: absolute;
-    top: 30px;
-    left: 50px;
-  }
 `;
 
 export const FlowWrapper = styled.div`
   max-width: 500px;
   max-height: 500px;
+`;
+
+export const BackButton = styled(Button).attrs((props) => ({
+  background: props.background,
+  className: props.classname
+}))`
+  position: relative;
+  top: 2%;
+  right: 43%;
 `;

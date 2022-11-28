@@ -3,10 +3,10 @@ import Modal from 'react-modal';
 import toast from 'react-hot-toast';
 import { Ring } from 'react-awesome-spinners';
 import React, { useEffect, useState } from 'react';
-import { useLocation, Link } from 'react-router-dom';
+import { useLocation, Link, useNavigate } from 'react-router-dom';
 import SkipNextIcon from '@mui/icons-material/SkipNext';
 
-import { Container, FlowWrapper } from './styles';
+import { BackButton, Container, FlowWrapper } from './styles';
 import Button from 'components/Button/Button';
 import FlowViewer from 'components/FlowViewer/FlowViewer';
 import ModalHeader from 'components/ModalHeader/ModalHeader';
@@ -51,6 +51,7 @@ function ShowProcess() {
   const [stages, setStages] = useState([]);
   const { proc } = location.state;
   const [flow, setFlow] = useState(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     fetchFlow();
@@ -124,9 +125,9 @@ function ShowProcess() {
   return (
     <>
       <Container>
-        <Link to="../processes" state={flow} className="voltarButton">
+        <BackButton onClick={() => navigate(-1)}>
           <span>Voltar</span>
-        </Link>
+        </BackButton>
         <div className="processInfo">
           <h1>
             {proc.apelido.length > 0
