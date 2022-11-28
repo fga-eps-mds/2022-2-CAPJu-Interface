@@ -201,19 +201,19 @@ function Processes() {
                     ? `${proc.registro} - ${proc.apelido}`
                     : `${proc.registro}`}
                   {
-                    <Tooltip title="Vizualizar">
+                    <Tooltip title="Vizualizar processo">
                       <Link to="showProcess" state={{ proc, stages }}>
                         <Visibility className="see-process"></Visibility>
                       </Link>
                     </Tooltip>
                   }
-                  <Tooltip title="Editar">
+                  <Tooltip title="Editar Processo">
                     <EditIcon
                       className="edit-process"
                       onClick={() => openEditModal(proc)}
                     />
                   </Tooltip>
-                  <Tooltip title="Deletar">
+                  <Tooltip title="Deletar Processo">
                     <DeleteForeverIcon
                       className="delete-process"
                       onClick={() => openModal()}
