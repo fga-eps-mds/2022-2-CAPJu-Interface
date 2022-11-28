@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import { StagesWrapper, StageName, XButton } from './styles.js';
 
 function StagesInFlow(props) {
-  const { flow, stages, setNewFlow } = props;
+  const { flow, stageList, setNewFlow } = props;
 
   function removeStage(id) {
     const index = flow.stages.indexOf(id);
@@ -21,17 +21,11 @@ function StagesInFlow(props) {
           <div key={index}>
             <StageName>
               {
-                stages.find((stage) => {
+                stageList.find((stage) => {
                   return flowStage == stage._id;
                 }).name
               }
-              <XButton
-                onClick={() => {
-                  removeStage(flowStage);
-                }}
-              >
-                X
-              </XButton>
+              <XButton onClick={() => removeStage(flowStage)}> X </XButton>
             </StageName>
           </div>
         );
@@ -42,7 +36,7 @@ function StagesInFlow(props) {
 
 StagesInFlow.propTypes = {
   flow: PropTypes.object,
-  stages: PropTypes.array,
+  stageList: PropTypes.array,
   setNewFlow: PropTypes.func
 };
 
