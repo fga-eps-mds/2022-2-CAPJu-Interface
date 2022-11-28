@@ -20,12 +20,14 @@ export const Container = styled.div`
 `;
 
 export const Xbutton = styled.button`
+  cursor: pointer;
   color: #f1f1f1;
   background-color: transparent;
   border: none;
   font-weight: bold;
   font-size: 1em;
   align-self: self-end;
+  text-shadow: 2px 2px 1px black;
 `;
 
 export const Title = styled.strong`
