@@ -237,7 +237,7 @@ function AccessProfile() {
                     onClick={() => {
                       setRoleModal(false);
                     }}
-                    background="red"
+                    background="#DE5353"
                   >
                     Cancelar
                   </Button>
@@ -269,7 +269,7 @@ function AccessProfile() {
                     onClick={() => {
                       setDeleteModal(false);
                     }}
-                    background="red"
+                    background="#DE5353"
                   >
                     Cancelar
                   </Button>

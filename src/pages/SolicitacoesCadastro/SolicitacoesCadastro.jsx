@@ -166,7 +166,7 @@ function SolicitacoesCadastro() {
                   onClick={() => {
                     setAcceptModal(false);
                   }}
-                  background="red"
+                  background="#DE5353"
                 >
                   Cancelar
                 </Button>
@@ -199,7 +199,7 @@ function SolicitacoesCadastro() {
                   onClick={() => {
                     setDeleteModal(false);
                   }}
-                  background="red"
+                  background="#DE5353"
                 >
                   Cancelar
                 </Button>

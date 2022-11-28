@@ -108,7 +108,7 @@ function SideBar() {
       {userLogout && (
         <LogoutButton>
           <Button
-            background="red"
+            background="rgb(222, 83, 83)"
             onClick={() => {
               localStorage.removeItem('user');
               navigate('Login');

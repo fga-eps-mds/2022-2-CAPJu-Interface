@@ -65,7 +65,7 @@ export const Container = styled.div`
   }
 
   div.currentStage-red {
-    background-color: red;
+    background-color: rgb(222, 83, 83);
     color: white;
   }
 
@@ -155,14 +155,12 @@ export const Table = styled.table`
 
   tr.currentStage-red {
     td {
-      background-color: red;
-      color: white;
+      background-color: #f7baba;
     }
   }
   tr.currentStage-green {
     td {
-      background-color: #1b9454;
-      color: white;
+      background-color: #a3d4b9;
     }
   }
 

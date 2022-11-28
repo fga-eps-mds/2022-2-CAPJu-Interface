@@ -283,7 +283,7 @@ function Flows() {
                     onClick={() => {
                       setDeleteModal(false);
                     }}
-                    background="red"
+                    background="#DE5353"
                   >
                     Cancelar
                   </Button>
@@ -382,7 +382,7 @@ function Flows() {
                   onClick={() => {
                     setShowFlow(-1);
                   }}
-                  background="red"
+                  background="#DE5353"
                 >
                   Cancelar
                 </Button>
@@ -492,7 +492,7 @@ function Flows() {
                 onClick={() => {
                   setModalOpen(false);
                 }}
-                background="red"
+                background="#DE5353"
               >
                 Cancelar
               </Button>

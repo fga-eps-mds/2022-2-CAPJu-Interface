@@ -273,7 +273,7 @@ function Login() {
               onClick={() => {
                 setModalOpen(false);
               }}
-              background="#de5353"
+              background="#DE5353"
             >
               Cancelar
             </Button>

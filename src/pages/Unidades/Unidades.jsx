@@ -188,7 +188,7 @@ function Unidades() {
                 onClick={() => {
                   setModalOpen(false);
                 }}
-                background="red"
+                background="#DE5353"
               >
                 Cancelar
               </Button>

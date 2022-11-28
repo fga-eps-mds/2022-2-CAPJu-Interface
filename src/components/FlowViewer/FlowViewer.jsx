@@ -35,7 +35,7 @@ function FlowViewer(props) {
           props.highlight === stage._id
             ? {
                 backgroundColor: isLate(stage, props.proc, props.flow)
-                  ? 'red'
+                  ? 'rgb(222, 83, 83)'
                   : '#1b9454',
                 color: '#f1f1f1'
               }
