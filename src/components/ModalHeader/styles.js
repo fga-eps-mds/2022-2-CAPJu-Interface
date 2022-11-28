@@ -27,7 +27,7 @@ export const Xbutton = styled.button`
   font-weight: bold;
   font-size: 1em;
   align-self: self-end;
-  text-shadow: 2px 2px 1px black;
+  text-shadow: 2px 1px 1px black;
 `;
 
 export const Title = styled.strong`
