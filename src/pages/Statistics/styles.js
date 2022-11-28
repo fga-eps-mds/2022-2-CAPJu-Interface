@@ -84,7 +84,7 @@ export const BackButton = styled(Button).attrs((props) => ({
   background: props.background,
   className: props.classname
 }))`
-  position: absolute;
-  top: 30px;
-  left: 50px;
+  position: relative;
+  top: 2%;
+  right: 50%;
 `;

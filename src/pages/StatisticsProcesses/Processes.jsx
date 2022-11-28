@@ -181,10 +181,10 @@ function Processes() {
 
   return (
     <Container>
-      <BackButton onClick={() => navigate(-1)}>
-        <span>Voltar</span>
-      </BackButton>
       <div className="processes">
+        <BackButton onClick={() => navigate(-1)}>
+          <span>Voltar</span>
+        </BackButton>
         <h1>Processos na etapa {currentStage ? '- ' + currentStage : ''}</h1>
         <div className="processSearch">
           <InputSearch
