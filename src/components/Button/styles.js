@@ -14,6 +14,7 @@ export const Container = styled.button.attrs((props) => ({
 
   :hover {
     background-color: rgba(255, 255, 255, 0.8);
+    cursor: pointer;
     color: black;
     transition: 0.4s;
     border: solid black 2px;
