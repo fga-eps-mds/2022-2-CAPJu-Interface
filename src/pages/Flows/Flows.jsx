@@ -342,7 +342,7 @@ function Flows() {
                         setValue={setFrom}
                         options={selectedOptions}
                       />
-                      <ArrowRight size={25} /> {/* aqui */}
+                      <ArrowRight size={25} />
                       <AddSequenceInFlow
                         value={to}
                         setValue={setTo}
