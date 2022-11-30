@@ -6,6 +6,7 @@ import React, { useEffect, useState } from 'react';
 import { DeleteForever } from '@mui/icons-material';
 import InsertChartIcon from '@mui/icons-material/InsertChart';
 import DescriptionIcon from '@mui/icons-material/Description';
+import { ArrowRight } from '@styled-icons/bootstrap/ArrowRight';
 
 import api from 'services/api';
 import Button from 'components/Button/Button';
@@ -342,7 +343,7 @@ function Flows() {
                         setValue={setFrom}
                         options={selectedOptions}
                       />
-                      {'=>'}
+                      <ArrowRight size={25} />
                       <AddSequenceInFlow
                         value={to}
                         setValue={setTo}
@@ -429,7 +430,7 @@ function Flows() {
                     setValue={setFrom}
                     options={selectedOptions}
                   />
-                  {'=>'}
+                  <ArrowRight size={25} />
                   <AddSequenceInFlow
                     value={to}
                     setValue={setTo}
