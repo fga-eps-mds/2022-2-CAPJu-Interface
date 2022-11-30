@@ -1,9 +1,8 @@
-import React from 'react';
 import toast from 'react-hot-toast';
 import { Link } from 'react-router-dom';
-import { useEffect, useState } from 'react';
 import Tooltip from '@mui/material/Tooltip';
 import EditIcon from '@mui/icons-material/Edit';
+import React, { useEffect, useState } from 'react';
 import { DeleteForever } from '@mui/icons-material';
 import InsertChartIcon from '@mui/icons-material/InsertChart';
 import DescriptionIcon from '@mui/icons-material/Description';
@@ -29,6 +28,7 @@ import {
   Table
 } from './styles';
 import FlowViewer from 'components/FlowViewer/FlowViewer';
+import ButtonAdd from 'components/ButtonAdd/ButtonAdd';
 
 function Flows() {
   const [flows, setFlows] = useState([]);
@@ -122,20 +122,17 @@ function Flows() {
       let editedFlow = { ...newFlow };
 
       let newSequences = editedFlow.sequences.filter((sequence) => {
-        if (
-          editedFlow.stages.includes(sequence.from) &&
+        return editedFlow.stages.includes(sequence.from) &&
           editedFlow.stages.includes(sequence.to)
-        ) {
-          return true;
-        }
-
-        return false;
+          ? true
+          : false;
       });
 
       editedFlow.sequences = newSequences;
       delete editedFlow.createdAt;
       delete editedFlow.updatedAt;
       delete editedFlow.__v;
+      delete editedFlow.unity;
 
       console.log('edited', editedFlow);
 
@@ -330,8 +327,8 @@ function Flows() {
                 <StagesInFlow
                   flow={newFlow}
                   stages={stages}
-                  setNewFlow={() => {
-                    setNewFlow(newFlow);
+                  setNewFlow={(flow) => {
+                    setNewFlow(flow);
                     updateFlows();
                   }}
                 />
@@ -351,14 +348,7 @@ function Flows() {
                         setValue={setTo}
                         options={selectedOptions}
                       />
-                      <div
-                        className="addStage"
-                        onClick={() => {
-                          addSequence();
-                        }}
-                      >
-                        <span>Adicionar</span>
-                      </div>
+                      <ButtonAdd onClickProps={() => addSequence()} />
                     </SelectorWrapper>
                     <Button
                       background="#de5353"
@@ -425,8 +415,8 @@ function Flows() {
             <StagesInFlow
               flow={newFlow}
               stages={stages}
-              setNewFlow={() => {
-                setNewFlow(newFlow);
+              setNewFlow={(flow) => {
+                setNewFlow(flow);
                 updateFlows();
               }}
             />
@@ -451,7 +441,7 @@ function Flows() {
                       addSequence();
                     }}
                   >
-                    <span>Adicionar</span>
+                    <ButtonAdd />
                   </div>
                 </SelectorWrapper>
                 <SequencesWrapper>

@@ -46,7 +46,6 @@ function App() {
       new Date(JSON.parse(localStorage.getItem('user'))?.expiresIn) <
         currentDate
     ) {
-      // localStorage.setItem('user', null);
       navigate('Login');
       return;
     }

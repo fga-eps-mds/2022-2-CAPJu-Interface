@@ -1,8 +1,7 @@
-import React from 'react';
 import toast from 'react-hot-toast';
-import { useEffect, useState } from 'react';
 import Tooltip from '@mui/material/Tooltip';
 import { Check } from '@styled-icons/entypo/Check';
+import React, { useEffect, useState } from 'react';
 import { Delete } from '@styled-icons/typicons/Delete';
 
 import {
@@ -51,7 +50,7 @@ function SolicitacoesCadastro() {
         targetUsers.push(users);
       }
     }
-    setUsers(pendingUsers);
+    setUsers(targetUsers);
   }
 
   async function acceptRequest(userId) {

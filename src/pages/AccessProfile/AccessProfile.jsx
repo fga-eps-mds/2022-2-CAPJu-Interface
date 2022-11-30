@@ -1,6 +1,5 @@
-import React from 'react';
 import toast from 'react-hot-toast';
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Dropdown from 'react-dropdown';
 import Tooltip from '@mui/material/Tooltip';
 import Button from 'components/Button/Button';
@@ -97,16 +96,12 @@ function AccessProfile() {
   const filterUser = (arr) => {
     const user = JSON.parse(localStorage.getItem('user'));
     return arr.filter((users) => {
-      if (searchUser === '' && users.email !== user.email) {
-        return users;
-      } else if (
-        (users.name.toLowerCase().includes(searchUser) ||
-          users.name.toUpperCase().includes(searchUser) ||
+      if (
+        (users.name.toLowerCase().includes(searchUser.toLocaleLowerCase()) ||
           users.name.includes(searchUser)) &&
         users.email !== user.email
-      ) {
+      )
         return users;
-      }
     });
   };
 

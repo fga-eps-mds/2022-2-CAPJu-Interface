@@ -1,5 +1,4 @@
-import React from 'react';
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 
 import api from 'services/api';
@@ -11,38 +10,44 @@ function Statistics() {
   const location = useLocation();
   const flow = location.state;
 
+  function deleteStages(stagesResponse, stagesFlow, targetStages) {
+    for (let stage of stagesResponse) {
+      delete stage.createdAt;
+      delete stage.__v;
+      delete stage.updatedAt;
+      delete stage.deleted;
+      for (let stageFlow of stagesFlow) {
+        if (stage._id === stageFlow) {
+          stage.processesQtt = 0;
+          stage.processesList = [];
+          targetStages.push(stage);
+        }
+      }
+    }
+  }
+
+  function deleteProcesses(processesResponse, targetProcesses) {
+    for (let process of processesResponse) {
+      for (let stage of targetProcesses) {
+        if (process.etapaAtual === stage._id) {
+          stage.processesQtt += 1;
+          stage.processesList.push(process);
+        }
+      }
+    }
+  }
+
   useEffect(() => {
     async function updateStats() {
       const stagesFlow = flow.stages;
 
       const response = await api.get('/stages');
-      const flowprocess = await api.get(`/processes/${flow ? flow._id : ''}`);
+      const flowprocess = await api.get(`/processes/${flow && flow._id}`);
       setProcesses(flowprocess.data.processes);
       const stagesResponse = response.data.Stages;
       const targetStages = [];
-      for (let stage of await stagesResponse) {
-        delete stage.createdAt;
-        delete stage.__v;
-        delete stage.updatedAt;
-        delete stage.deleted;
-        for (let stageFlow of stagesFlow) {
-          if (stage._id === stageFlow) {
-            stage.processesQtt = 0;
-            stage.processesList = [];
-            targetStages.push(stage);
-            continue;
-          }
-        }
-      }
-      for (let process of processes) {
-        for (let stage of targetStages) {
-          if (process.etapaAtual === stage._id) {
-            stage.processesQtt += 1;
-            stage.processesList.push(process);
-            continue;
-          }
-        }
-      }
+      deleteStages(stagesResponse, stagesFlow, targetStages);
+      deleteProcesses(processes, targetStages);
       setStages(targetStages);
     }
     updateStats();

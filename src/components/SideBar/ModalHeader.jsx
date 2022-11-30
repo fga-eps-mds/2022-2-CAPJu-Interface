@@ -1,5 +1,4 @@
-import React from 'react';
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { FlowCascade } from '@styled-icons/entypo';
 import { GroupWork } from '@styled-icons/material/';

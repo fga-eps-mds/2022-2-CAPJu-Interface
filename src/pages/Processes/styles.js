@@ -121,6 +121,7 @@ export const Content = styled.div`
 `;
 
 export const AddProcess = styled.button`
+  cursor: pointer;
   bottom: 30px;
   left: 30px;
   position: absolute;

@@ -17,6 +17,7 @@ export const Container = styled.div`
 `;
 
 export const AddStageButton = styled.button`
+  cursor: pointer;
   bottom: 30px;
   left: 30px;
   position: absolute;
@@ -97,7 +98,7 @@ export const Content = styled.div`
   gap: 10px;
   font-size: 20px;
   border-radius: 10px;
-  overflow-x: scroll;
+  overflow-x: hidden;
 `;
 
 export const Table = styled.table`

@@ -1,9 +1,8 @@
-import React from 'react';
 import api from 'services/api';
 import Modal from 'react-modal';
 import toast from 'react-hot-toast';
-import { useEffect, useState } from 'react';
 import { Ring } from 'react-awesome-spinners';
+import React, { useEffect, useState } from 'react';
 import { useLocation, Link } from 'react-router-dom';
 import SkipNextIcon from '@mui/icons-material/SkipNext';
 

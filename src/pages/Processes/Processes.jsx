@@ -1,9 +1,8 @@
-import React from 'react';
 import toast from 'react-hot-toast';
 import Dropdown from 'react-dropdown';
 import Tooltip from '@mui/material/Tooltip';
-import { useEffect, useState } from 'react';
 import EditIcon from '@mui/icons-material/Edit';
+import React, { useEffect, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import Visibility from '@mui/icons-material/Visibility';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
@@ -57,15 +56,13 @@ function Processes() {
   };
 
   //Filter processes by register and nickname
-  const filterProcesses = (arr) => {
-    return arr.filter((processes) => {
-      if (searchTerm == '') {
-        return processes;
-      } else if (
-        processes.registro.toLowerCase().includes(searchTerm) ||
-        processes.apelido.toLowerCase().includes(searchTerm)
+  const filterProcesses = (processList) => {
+    return processList.filter((process) => {
+      if (
+        process.registro.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        process.apelido.toLowerCase().includes(searchTerm.toLowerCase())
       ) {
-        return processes;
+        return process;
       }
     });
   };

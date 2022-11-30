@@ -1,11 +1,11 @@
-import React from 'react';
 import Modal from 'react-modal';
 import toast from 'react-hot-toast';
 import Dropdown from 'react-dropdown';
-import { useEffect, useState } from 'react';
 import EditIcon from '@mui/icons-material/Edit';
+import React, { useEffect, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import Visibility from '@mui/icons-material/Visibility';
+import Tooltip from '@mui/material/Tooltip';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 
 import api from 'services/api';
@@ -73,15 +73,13 @@ function Processes() {
   };
 
   //Filter processes by register and nickname
-  const filterProcesses = (arr) => {
-    return arr.filter((processes) => {
-      if (searchTerm == '') {
-        return processes;
-      } else if (
-        processes.registro.toLowerCase().includes(searchTerm) ||
-        processes.apelido.toLowerCase().includes(searchTerm)
+  const filterProcesses = (processList) => {
+    return processList.filter((process) => {
+      if (
+        process.registro.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        process.apelido.toLowerCase().includes(searchTerm.toLowerCase())
       ) {
-        return processes;
+        return process;
       }
     });
   };
@@ -203,18 +201,24 @@ function Processes() {
                     ? `${proc.registro} - ${proc.apelido}`
                     : `${proc.registro}`}
                   {
-                    <Link to="showProcess" state={{ proc, stages }}>
-                      <Visibility className="see-process"></Visibility>
-                    </Link>
+                    <Tooltip title="Vizualizar processo">
+                      <Link to="showProcess" state={{ proc, stages }}>
+                        <Visibility className="see-process"></Visibility>
+                      </Link>
+                    </Tooltip>
                   }
-                  <EditIcon
-                    className="edit-process"
-                    onClick={() => openEditModal(proc)}
-                  />
-                  <DeleteForeverIcon
-                    className="delete-process"
-                    onClick={() => openModal()}
-                  />
+                  <Tooltip title="Editar Processo">
+                    <EditIcon
+                      className="edit-process"
+                      onClick={() => openEditModal(proc)}
+                    />
+                  </Tooltip>
+                  <Tooltip title="Deletar Processo">
+                    <DeleteForeverIcon
+                      className="delete-process"
+                      onClick={() => openModal()}
+                    />
+                  </Tooltip>
                   <Modal
                     isOpen={modalIsOpen}
                     onRequestClose={closeModal}
