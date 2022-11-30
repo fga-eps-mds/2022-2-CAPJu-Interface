@@ -239,7 +239,7 @@ function Unidades() {
                 onClick={() => {
                   setSeeAdminsModalOpen(false);
                 }}
-                background="red"
+                background="rgb(222,83,83)"
               >
                 Voltar
               </Button>
@@ -307,7 +307,7 @@ function Unidades() {
                   onClick={() => {
                     setAddAdminsModalOpen(false);
                   }}
-                  background="red"
+                  background="rgb(222,83,83)"
                 >
                   Voltar
                 </Button>
