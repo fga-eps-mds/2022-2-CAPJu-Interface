@@ -96,7 +96,7 @@ function Stages() {
               <tr>
                 <th>Nome</th>
                 <th>Duração</th>
-                <th></th>
+                <th>Ações</th>
               </tr>
             </thead>
             <tbody>
@@ -167,7 +167,7 @@ function Stages() {
                 onClick={() => {
                   setModalOpen(false);
                 }}
-                background="red"
+                background="#DE5353"
               >
                 Cancelar
               </Button>
@@ -196,7 +196,7 @@ function Stages() {
                 onClick={() => {
                   setModalConfDelete(false);
                 }}
-                background="red"
+                background="#DE5353"
               >
                 Cancelar
               </Button>

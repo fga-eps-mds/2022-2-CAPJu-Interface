@@ -51,7 +51,7 @@ export const Table = styled.table`
   }
   tr.currentStage-red {
     td {
-      background-color: #f7baba;
+      background-color: rgb(222, 83, 83);
     }
   }
   tr.currentStage-green {

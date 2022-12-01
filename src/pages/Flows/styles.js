@@ -21,6 +21,7 @@ export const Container = styled.div`
 `;
 
 export const AddFlowButton = styled.button`
+  cursor: pointer;
   bottom: 30px;
   left: 30px;
   position: absolute;

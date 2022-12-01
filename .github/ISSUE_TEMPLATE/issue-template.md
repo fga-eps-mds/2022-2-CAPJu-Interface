@@ -1,18 +1,19 @@
----
-name: Issue Template
-about: Template para criação de issues genéricas
-title: ''
-labels: ''
-assignees: ''
+# Titulo
 
----
+## Descrição.
 
-## Descrição
+Como <nome da persona ou do responsavel>,
 
-## Tarefas
-- [ ] Tarefa1
-- [ ] Tarefa2
+eu quero <descricao da historia>,
+  
+para que <!--um benefício valor-->
 
-## Critérios de Aceitação
+<!--  ### Issue relacionada com [US <Numero>](link) <Se tiver> -->
 
-## Informação Adicional (se aplicável)
+## Como solucionar <Nao necessario>
+  
+## Critérios de aceitação
+
+- [ ] Critério 1
+- [ ] Critério 2
+- [ ] Critério 3

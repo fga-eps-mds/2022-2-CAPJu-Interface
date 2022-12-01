@@ -6,6 +6,7 @@ import React, { useEffect, useState } from 'react';
 import { DeleteForever } from '@mui/icons-material';
 import InsertChartIcon from '@mui/icons-material/InsertChart';
 import DescriptionIcon from '@mui/icons-material/Description';
+import { ArrowRight } from '@styled-icons/bootstrap/ArrowRight';
 
 import api from 'services/api';
 import Button from 'components/Button/Button';
@@ -28,6 +29,7 @@ import {
 } from './styles';
 import FlowViewer from 'components/FlowViewer/FlowViewer';
 import Table from 'components/Tables/Table';
+import ButtonAdd from 'components/ButtonAdd/ButtonAdd';
 
 function Flows() {
   const [flows, setFlows] = useState([]);
@@ -267,7 +269,7 @@ function Flows() {
                     onClick={() => {
                       setDeleteModal(false);
                     }}
-                    background="red"
+                    background="#DE5353"
                   >
                     Cancelar
                   </Button>
@@ -325,25 +327,18 @@ function Flows() {
                       setValue={setFrom}
                       options={selectedOptions}
                     />
-                    {'=>'}
+                    <ArrowRight size={25} />
                     <AddSequenceInFlow
                       value={to}
                       setValue={setTo}
                       options={selectedOptions}
                     />
-                    <div
-                      className="addStage"
-                      onClick={() => {
-                        addSequence();
-                      }}
-                    >
-                      <span>Adicionar</span>
-                    </div>
+                    <ButtonAdd onClickProps={() => addSequence()} />
                   </SelectorWrapper>
                   <Button
                     background="#de5353"
                     onClick={() => {
-                      removeSequence();
+                      addSequence();
                     }}
                   >
                     <span>Retroceder</span>
@@ -362,7 +357,7 @@ function Flows() {
                 onClick={() => {
                   setShowFlow(-1);
                 }}
-                background="red"
+                background="#DE5353"
               >
                 Cancelar
               </Button>
@@ -415,7 +410,7 @@ function Flows() {
                     setValue={setFrom}
                     options={selectedOptions}
                   />
-                  {'=>'}
+                  <ArrowRight size={25} />
                   <AddSequenceInFlow
                     value={to}
                     setValue={setTo}
@@ -427,7 +422,7 @@ function Flows() {
                       addSequence();
                     }}
                   >
-                    <span>Adicionar</span>
+                    <ButtonAdd />
                   </div>
                 </SelectorWrapper>
                 <SequencesWrapper>
@@ -468,7 +463,7 @@ function Flows() {
                 onClick={() => {
                   setModalOpen(false);
                 }}
-                background="red"
+                background="#DE5353"
               >
                 Cancelar
               </Button>

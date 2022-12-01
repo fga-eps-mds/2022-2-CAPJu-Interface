@@ -65,7 +65,7 @@ export const Container = styled.div`
   }
 
   div.currentStage-red {
-    background-color: #de5353;
+    background-color: rgb(222, 83, 83);
     color: white;
   }
 
@@ -121,6 +121,7 @@ export const Content = styled.div`
 `;
 
 export const AddProcess = styled.button`
+  cursor: pointer;
   bottom: 30px;
   left: 30px;
   position: absolute;
@@ -155,12 +156,14 @@ export const Table = styled.table`
 
   tr.currentStage-red {
     td {
-      background-color: #f7baba;
+      background-color: rgb(222, 83, 83);
+      color: white;
     }
   }
   tr.currentStage-green {
     td {
-      background-color: #a3d4b9;
+      background-color: rgb(27, 148, 84);
+      color: white;
     }
   }
 

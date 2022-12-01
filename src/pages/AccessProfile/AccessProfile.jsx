@@ -192,52 +192,70 @@ function AccessProfile() {
                     await updateUser();
                     setRoleModal(false);
                   }}
+                  value={
+                    roles.find(
+                      ({ value }) => value === users[selectedUser].role
+                    ).label
+                  }
+                  placeholder="Selecione o perfil"
+                  className="dropdown"
+                  controlClassName="dropdown-control"
+                  placeholderClassName="dropdown-placeholder"
+                  menuClassName="dropdown-menu"
+                  arrowClassName="dropdown-arrow"
+                />
+                <div>
+                  <Button
+                    onClick={async () => {
+                      await editRole();
+                      await updateUser();
+                      setRoleModal(false);
+                    }}
+                  >
+                    Salvar
+                  </Button>
+                  <Button
+                    onClick={() => {
+                      setRoleModal(false);
+                    }}
+                    background="#DE5353"
+                  >
+                    Cancelar
+                  </Button>
+                </div>
+              </div>
+            </Content>
+          </Modal>
+        )}
+        {deleteModal && (
+          <Modal>
+            <Content>
+              <ContentHeader>
+                <span>Excluir Usuário</span>
+              </ContentHeader>
+              <span>Deseja realmente excluir Usuário?</span>
+              {getSelectedUser().name}
+              <div>
+                <Button
+                  onClick={async () => {
+                    await deleteUser(getSelectedUser()._id);
+                    await updateUser();
+                    setDeleteModal(false);
+                  }}
                 >
-                  Salvar
+                  Confirmar
                 </Button>
                 <Button
                   onClick={() => {
-                    setRoleModal(false);
+                    setDeleteModal(false);
                   }}
-                  background="red"
+                  background="#DE5353"
                 >
                   Cancelar
                 </Button>
               </div>
             </Content>
           </Modal>
-        )}
-        {deleteModal && (
-          <>
-            <Modal>
-              <Content>
-                <ContentHeader>
-                  <span>Excluir Usuário</span>
-                </ContentHeader>
-                <span>Deseja realmente excluir Usuário?</span>
-                {getSelectedUser().name}
-                <div>
-                  <Button
-                    onClick={async () => {
-                      await deleteUser(getSelectedUser()._id);
-                      await updateUser();
-                      setDeleteModal(false);
-                    }}
-                  >
-                    Confirmar
-                  </Button>
-                  <Button
-                    onClick={() => {
-                      setDeleteModal(false);
-                    }}
-                    background="red"
-                  >
-                    Cancelar
-                  </Button>
-                </div>
-              </Content>
-            </Modal>
-          </>
         )}
       </div>
     </Container>

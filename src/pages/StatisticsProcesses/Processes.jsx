@@ -5,6 +5,7 @@ import EditIcon from '@mui/icons-material/Edit';
 import React, { useEffect, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import Visibility from '@mui/icons-material/Visibility';
+import Tooltip from '@mui/material/Tooltip';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 
 import api from 'services/api';
@@ -200,18 +201,24 @@ function Processes() {
                     ? `${proc.registro} - ${proc.apelido}`
                     : `${proc.registro}`}
                   {
-                    <Link to="showProcess" state={{ proc, stages }}>
-                      <Visibility className="see-process"></Visibility>
-                    </Link>
+                    <Tooltip title="Vizualizar processo">
+                      <Link to="showProcess" state={{ proc, stages }}>
+                        <Visibility className="see-process"></Visibility>
+                      </Link>
+                    </Tooltip>
                   }
-                  <EditIcon
-                    className="edit-process"
-                    onClick={() => openEditModal(proc)}
-                  />
-                  <DeleteForeverIcon
-                    className="delete-process"
-                    onClick={() => openModal()}
-                  />
+                  <Tooltip title="Editar Processo">
+                    <EditIcon
+                      className="edit-process"
+                      onClick={() => openEditModal(proc)}
+                    />
+                  </Tooltip>
+                  <Tooltip title="Deletar Processo">
+                    <DeleteForeverIcon
+                      className="delete-process"
+                      onClick={() => openModal()}
+                    />
+                  </Tooltip>
                   <Modal
                     isOpen={modalIsOpen}
                     onRequestClose={closeModal}
@@ -233,7 +240,7 @@ function Processes() {
                       >
                         Confirmar
                       </Button>
-                      <Button onClick={closeModal} background="red">
+                      <Button onClick={closeModal} background="#DE5353">
                         Cancelar
                       </Button>
                     </ModalBody>
@@ -284,7 +291,7 @@ function Processes() {
             >
               Confirmar
             </Button>
-            <Button onClick={closeModal} background="red">
+            <Button onClick={closeModal} background="#DE5353">
               Cancelar
             </Button>
           </ModalBody>
