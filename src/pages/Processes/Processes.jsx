@@ -333,7 +333,7 @@ function Processes() {
                 >
                   Confirmar
                 </Button>
-                <Button onClick={closeModal} background="red">
+                <Button onClick={closeModal} background="#DE5353">
                   Cancelar
                 </Button>
               </div>
@@ -364,7 +364,7 @@ function Processes() {
                   onClick={() => {
                     setDeleteProcessModal(-1);
                   }}
-                  background="red"
+                  background="#DE5353"
                 >
                   Cancelar
                 </Button>

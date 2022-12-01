@@ -240,7 +240,7 @@ function Processes() {
                       >
                         Confirmar
                       </Button>
-                      <Button onClick={closeModal} background="red">
+                      <Button onClick={closeModal} background="#DE5353">
                         Cancelar
                       </Button>
                     </ModalBody>
@@ -291,7 +291,7 @@ function Processes() {
             >
               Confirmar
             </Button>
-            <Button onClick={closeModal} background="red">
+            <Button onClick={closeModal} background="#DE5353">
               Cancelar
             </Button>
           </ModalBody>

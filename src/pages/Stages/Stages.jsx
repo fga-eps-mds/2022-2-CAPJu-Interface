@@ -171,7 +171,7 @@ function Stages() {
                 onClick={() => {
                   setModalOpen(false);
                 }}
-                background="red"
+                background="#DE5353"
               >
                 Cancelar
               </Button>
@@ -200,7 +200,7 @@ function Stages() {
                 onClick={() => {
                   setModalConfDelete(false);
                 }}
-                background="red"
+                background="#DE5353"
               >
                 Cancelar
               </Button>
