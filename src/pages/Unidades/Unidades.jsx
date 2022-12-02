@@ -149,10 +149,6 @@ function Unidades() {
     );
   }
 
-  const unitTableColumns = ['Nome', 'Ações'];
-  const deleteAdminTableColumns = ['Nome', 'Remover'];
-  const addAdminTableColumns = ['Nome', 'Adicionar'];
-
   return (
     <>
       <Container>
@@ -161,7 +157,7 @@ function Unidades() {
           <Table
             itemList={unitList}
             actions={renderActions}
-            columnList={unitTableColumns}
+            columnList={['Nome']}
             attributeList={(unit) => [unit.name]}
           />
         </Area>
@@ -220,7 +216,7 @@ function Unidades() {
               <h3>Administradores - {currentUnity.name}</h3>
               <Table
                 itemList={currentUnity.admins}
-                columnList={deleteAdminTableColumns}
+                columnList={['Nome']}
                 attributeList={(admin) => [admin.name]}
                 actions={removeAdmins}
               />
@@ -254,7 +250,7 @@ function Unidades() {
               ></TextInput>
               <Table
                 itemList={foundUsers}
-                columnList={addAdminTableColumns}
+                columnList={['Nome']}
                 attributeList={(admin) => [admin.name]}
                 actions={newAdmin}
               />

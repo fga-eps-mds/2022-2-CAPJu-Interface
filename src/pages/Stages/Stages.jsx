@@ -101,7 +101,7 @@ function Stages() {
     );
   }
 
-  const columnHeaders = ['Nome', 'Duração', 'Ações'];
+  const columnHeaders = ['Nome', 'Duração'];
   return (
     <>
       <Container>

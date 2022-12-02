@@ -149,7 +149,7 @@ function AccessProfile() {
     ];
   }
 
-  const columnHeaders = ['Nome', 'Perfil', 'Status', 'Ações'];
+  const columnHeaders = ['Nome', 'Perfil', 'Status'];
   return (
     <Container>
       <div className="userstyle ">

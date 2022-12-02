@@ -118,13 +118,12 @@ function SolicitacoesCadastro() {
     );
   }
 
-  const columnHeaders = ['Nome', 'Ações'];
   return (
     <Container>
       <h1>Solicitações de Cadastro</h1>
       <Area>
         <Table
-          columnList={columnHeaders}
+          columnList={['Nome']}
           itemList={users}
           actions={renderActions}
           attributeList={(user) => [user.name]}

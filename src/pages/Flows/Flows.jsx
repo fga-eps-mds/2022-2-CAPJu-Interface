@@ -229,17 +229,16 @@ function Flows() {
     );
   }
 
-  const columnHeaders = ['Nome', 'Ações'];
   return (
     <>
       <Container>
         <h1>Fluxos</h1>
         <Area>
           <Table
-            columnList={columnHeaders}
+            columnList={['Nome']}
             itemList={flows}
             attributeList={(flow) => [flow.name]}
-            actions={(flow) => renderActions(flow)}
+            actions={renderActions}
           />
         </Area>
         <AddFlowButton onClick={() => setModalOpen(true)}>

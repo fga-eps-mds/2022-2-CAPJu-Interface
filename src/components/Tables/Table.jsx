@@ -11,6 +11,7 @@ function Table({ itemList, actions, columnList, attributeList }) {
           {columnList.map((column, index) => (
             <th key={index}>{column}</th>
           ))}
+          <th className="actions-column">Ações</th>
         </tr>
       </thead>
       <tbody>
