@@ -193,12 +193,3 @@ export const InputSearch = styled.input`
     background-color: rgba(0, 0, 0, 0);
   }
 `;
-
-export const BackButton = styled(Button).attrs((props) => ({
-  background: props.background,
-  className: props.classname
-}))`
-  position: relative;
-  top: 2%;
-  right: 43%;
-`;

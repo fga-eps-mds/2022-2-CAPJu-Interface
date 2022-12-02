@@ -79,12 +79,3 @@ export const Modal = styled.div`
   border: solid 1px;
   border-radius: 20px;
 `;
-
-export const BackButton = styled(Button).attrs((props) => ({
-  background: props.background,
-  className: props.classname
-}))`
-  position: relative;
-  top: 2%;
-  right: 50%;
-`;
