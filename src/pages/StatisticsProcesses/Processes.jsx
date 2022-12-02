@@ -14,6 +14,7 @@ import ModalBody from 'components/ModalBody/ModalBody';
 import TextInput from 'components/TextInput/TextInput';
 import ModalHeader from 'components/ModalHeader/ModalHeader';
 import { Container, InputSearch, AddProcess } from './styles';
+import BackButton from 'components/BackButton/BackButton';
 
 function Processes() {
   const [searchTerm, setSearchTerm] = useState('');
@@ -182,6 +183,7 @@ function Processes() {
   return (
     <Container>
       <div className="processes">
+        <BackButton />
         <h1>Processos na etapa {currentStage ? '- ' + currentStage : ''}</h1>
         <div className="processSearch">
           <InputSearch

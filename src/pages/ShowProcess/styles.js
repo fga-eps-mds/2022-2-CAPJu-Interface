@@ -43,12 +43,6 @@ export const Container = styled.div`
     background-color: red;
     color: #f1f1f1;
   }
-
-  .voltarButton {
-    position: absolute;
-    top: 30px;
-    left: 50px;
-  }
 `;
 
 export const FlowWrapper = styled.div`
