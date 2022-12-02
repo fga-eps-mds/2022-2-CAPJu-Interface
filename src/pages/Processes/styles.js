@@ -1,4 +1,3 @@
-import Button from 'components/Button/Button';
 import styled from 'styled-components';
 
 export const Container = styled.div`
