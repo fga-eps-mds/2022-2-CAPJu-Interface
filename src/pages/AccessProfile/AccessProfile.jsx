@@ -193,9 +193,8 @@ function AccessProfile() {
                     setRoleModal(false);
                   }}
                   value={
-                    roles.find(
-                      ({ value }) => value === users[selectedUser].role
-                    ).label
+                    roles.find(({ value }) => value === getSelectedUser().role)
+                      .label
                   }
                   placeholder="Selecione o perfil"
                   className="dropdown"
