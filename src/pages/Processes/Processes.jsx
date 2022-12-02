@@ -189,12 +189,10 @@ function Processes() {
   return (
     <Container>
       <div className="processes">
-        {flow ? (
+        {flow && (
           <BackButton onClick={() => navigate(-1)}>
             <span>Voltar</span>
           </BackButton>
-        ) : (
-          ''
         )}
         <h1>Processos {flow ? '- ' + flow.name : ''}</h1>
         <div className="processSearch">
