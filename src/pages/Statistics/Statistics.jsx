@@ -3,6 +3,7 @@ import { Link, useLocation } from 'react-router-dom';
 
 import api from 'services/api';
 import { Container, StagesArea, StageItem } from './styles';
+import BackButton from 'components/BackButton/BackButton';
 
 function Statistics() {
   const [stages, setStages] = useState([]);
@@ -56,6 +57,7 @@ function Statistics() {
   return (
     <>
       <Container>
+        <BackButton />
         Estatística de fluxo
         <StagesArea>
           {stages.map((stage, index) => {

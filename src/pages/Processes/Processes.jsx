@@ -16,6 +16,7 @@ import {
   ContentHeader,
   Modal
 } from './styles';
+import BackButton from 'components/BackButton/BackButton';
 import api from 'services/api';
 import Button from 'components/Button/Button';
 import TextInput from 'components/TextInput/TextInput';
@@ -179,6 +180,7 @@ function Processes() {
   return (
     <Container>
       <div className="processes">
+        {flow && <BackButton />}
         <h1>Processos {flow ? '- ' + flow.name : ''}</h1>
         <div className="processSearch">
           <InputSearch

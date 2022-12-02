@@ -1,31 +1,30 @@
-name: Interface-CI
-on: [push]
+name: CAPJu Interface CI
+on:
+  workflow_dispatch:
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04
     steps:
       - uses: actions/checkout@v3
-      - name: Install Dependencies
-        run: yarn
+      - name: Download dependencies
+        run: cd src && yarn && cd ..
       - name: Check code style
-        run: yarn prettier --check src
-      - name: Lint analysis
-        run: yarn eslint src
-      - name: Run test suite
-        run: yarn testGActions
-      - name: Build
-        run: yarn build
+        run: cd src && yarn prettier --check . && cd ..
+      - name: Lint Analysis
+        run: cd src && yarn eslint . && cd ..
+      - name: Tests
+        run: cd src && yarn test && cd ../
   sonarcloud:
     name: SonarCloud
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04
     steps:
       - uses: actions/checkout@v2
         with:
           fetch-depth: 0 # Shallow clones should be disabled for a better relevancy of analysis
       - name: Install dependencies
-        run: cd src && yarn
+        run: yarn
       - name: Test and coverage
-        run: cd src && yarn testGActions
+        run: yarn test
       - name: SonarCloud Scan
         uses: SonarSource/sonarcloud-github-action@master
         env:
