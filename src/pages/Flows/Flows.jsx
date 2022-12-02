@@ -337,7 +337,7 @@ function Flows() {
                   <Button
                     background="#de5353"
                     onClick={() => {
-                      addSequence();
+                      removeSequence();
                     }}
                   >
                     <span>Retroceder</span>
