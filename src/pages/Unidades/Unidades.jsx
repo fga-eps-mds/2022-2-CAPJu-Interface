@@ -222,7 +222,7 @@ function Unidades() {
                 itemList={currentUnity.admins}
                 columnList={deleteAdminTableColumns}
                 attributeList={(admin) => [admin.name]}
-                actions={(admin) => removeAdmins(admin)}
+                actions={removeAdmins}
               />
             </div>
 
@@ -256,7 +256,7 @@ function Unidades() {
                 itemList={foundUsers}
                 columnList={addAdminTableColumns}
                 attributeList={(admin) => [admin.name]}
-                actions={(user) => newAdmin(user)}
+                actions={newAdmin}
               />
             </div>
 

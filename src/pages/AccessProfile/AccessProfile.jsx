@@ -101,7 +101,7 @@ function AccessProfile() {
     });
   };
 
-  function tableActions(user) {
+  function renderActions(user) {
     return (
       <>
         <Tooltip title="Editar Perfil">
@@ -163,7 +163,7 @@ function AccessProfile() {
         </div>
         <Table
           columnList={columnHeaders}
-          actions={tableActions}
+          actions={renderActions}
           itemList={filterUser(users)}
           attributeList={getAttributesForDisplay}
         />

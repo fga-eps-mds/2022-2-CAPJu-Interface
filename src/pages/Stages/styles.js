@@ -100,33 +100,3 @@ export const Content = styled.div`
   border-radius: 10px;
   overflow-x: hidden;
 `;
-
-export const Table = styled.table`
-  background-color: white;
-  width: 600px;
-  font-size: 20px;
-  border-radius: 5px;
-  text-align: left;
-  color: white;
-
-  th {
-    background-color: #7a7b4f;
-    padding: 15px;
-    border: 1px solid #ddd;
-  }
-
-  th:nth-child(3) {
-    width: 25px;
-  }
-
-  tr:nth-child(even) {
-    background-color: #f2f2f2;
-  }
-
-  td {
-    border-radius: 5px;
-    color: #333;
-    padding: 10px;
-    border: 1px solid #ddd;
-  }
-`;

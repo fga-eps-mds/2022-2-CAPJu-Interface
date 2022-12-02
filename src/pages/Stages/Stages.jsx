@@ -10,10 +10,10 @@ import {
   Area,
   Modal,
   Content,
-  Table,
   ContentHeader
 } from './styles';
 import api from 'services/api';
+import Table from 'components/Tables/Table';
 import Button from 'components/Button/Button';
 import TextInput from 'components/TextInput/TextInput';
 
@@ -86,48 +86,35 @@ function Stages() {
     }
   }
 
+  function renderActions(stage) {
+    return (
+      <Tooltip title="Deletar etapa">
+        <DeleteForever
+          className="delete-icon"
+          size={30}
+          onClick={() => {
+            setModalConfDelete(true);
+            setCurrentStage(stage);
+          }}
+        />
+      </Tooltip>
+    );
+  }
+
+  const columnHeaders = ['Nome', 'Duração', 'Ações'];
   return (
     <>
       <Container>
         <h1>Etapas</h1>
         <Area>
-          <Table>
-            <thead>
-              <tr>
-                <th>Nome</th>
-                <th>Duração</th>
-                <th>Ações</th>
-              </tr>
-            </thead>
-            <tbody>
-              {stages.map((stage, index) => {
-                return (
-                  <tr key={index}>
-                    <td>{stage.name}</td>
-                    <td>{stage.time}</td>
-                    <td>
-                      <Tooltip title="Deletar etapa">
-                        <DeleteForever
-                          className="delete-icon"
-                          size={30}
-                          onClick={() => {
-                            setModalConfDelete(true);
-                            setCurrentStage(stage);
-                          }}
-                        />
-                      </Tooltip>
-                    </td>
-                  </tr>
-                );
-              })}
-            </tbody>
-          </Table>
+          <Table
+            columnList={columnHeaders}
+            itemList={stages}
+            actions={renderActions}
+            attributeList={(stage) => [stage.name, stage.time]}
+          />
         </Area>
-        <AddStageButton
-          onClick={() => {
-            setModalOpen(true);
-          }}
-        >
+        <AddStageButton onClick={() => setModalOpen(true)}>
           + Adicionar Etapa
         </AddStageButton>
       </Container>
