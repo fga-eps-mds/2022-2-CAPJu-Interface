@@ -16,10 +16,10 @@ Modal.setAppElement('body');
 
 const customStyles = {
   content: {
-    top: '30%',
+    top: '50%',
     left: '50%',
     right: 'auto',
-    bottom: 'auto',
+    bottom: '-30%',
     marginRight: '-50%',
     transform: 'translate(-50%, -50%)',
     padding: '0px'
@@ -31,8 +31,11 @@ const flowStyle = {
 };
 
 const textAreaStyle = {
-  minHeight: '200px',
-  minWidth: '400px'
+  minHeight: '300px',
+  minWidth: '500px',
+  marginTop: '15%',
+  marginBottom: '7%',
+  fontSize: '20px'
 };
 
 const btnStyle = {
@@ -41,7 +44,10 @@ const btnStyle = {
   borderRadius: '20px',
   padding: '10px 15px',
   fontWeight: 'bold',
-  marginTop: '20px'
+  marginTop: '20px',
+  cursor: 'pointer',
+  width: '130px',
+  fontSize: '20px'
 };
 
 function ShowProcess() {
