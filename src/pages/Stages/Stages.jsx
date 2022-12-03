@@ -1,8 +1,6 @@
 import toast from 'react-hot-toast';
-import Tooltip from '@mui/material/Tooltip';
 import React, { useEffect, useState } from 'react';
 import AxiosError from 'axios/lib/core/AxiosError';
-import { DeleteForever } from '@styled-icons/material';
 
 import {
   Container,
@@ -86,20 +84,16 @@ function Stages() {
     }
   }
 
-  function renderActions(stage) {
-    return (
-      <Tooltip title="Deletar etapa">
-        <DeleteForever
-          className="delete-icon"
-          size={30}
-          onClick={() => {
-            setModalConfDelete(true);
-            setCurrentStage(stage);
-          }}
-        />
-      </Tooltip>
-    );
-  }
+  const actionList = [
+    {
+      tooltip: 'Deletar etapa',
+      action: (stage) => {
+        setModalConfDelete(true);
+        setCurrentStage(stage);
+      },
+      type: 'delete'
+    }
+  ];
 
   const columnHeaders = ['Nome', 'Duração'];
   return (
@@ -110,7 +104,7 @@ function Stages() {
           <Table
             columnList={columnHeaders}
             itemList={stages}
-            actions={renderActions}
+            actionList={actionList}
             attributeList={(stage) => [stage.name, stage.time]}
           />
         </Area>

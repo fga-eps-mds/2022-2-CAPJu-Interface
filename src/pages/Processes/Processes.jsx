@@ -253,7 +253,7 @@ function Processes() {
                     ) : (
                       <></>
                     )}
-                    <td>
+                    <td className="action-column">
                       <Tooltip title="Visualizar processo">
                         <Link to="showProcess" state={{ proc, flow }}>
                           <Visibility className="see-process"></Visibility>

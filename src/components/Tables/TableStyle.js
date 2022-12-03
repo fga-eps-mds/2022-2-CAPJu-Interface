@@ -36,6 +36,14 @@ export const DefaultTable = styled.table`
     background-color: #f2f2f2;
   }
 
+  svg.accept-button {
+    color: #00ff00;
+  }
+
+  svg.deny-button {
+    color: #ff0000;
+  }
+
   td {
     border-radius: 5px;
     color: #333;

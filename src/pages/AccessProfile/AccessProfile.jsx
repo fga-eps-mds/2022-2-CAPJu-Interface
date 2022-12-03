@@ -1,10 +1,7 @@
 import toast from 'react-hot-toast';
 import React, { useEffect, useState } from 'react';
 import Dropdown from 'react-dropdown';
-import Tooltip from '@mui/material/Tooltip';
 import Button from 'components/Button/Button';
-import EditIcon from '@mui/icons-material/Edit';
-import { DeleteForever } from '@mui/icons-material';
 
 import api from 'services/user';
 import {
@@ -101,30 +98,24 @@ function AccessProfile() {
     });
   };
 
-  function renderActions(user) {
-    return (
-      <>
-        <Tooltip title="Editar Perfil">
-          <EditIcon
-            htmlColor="black"
-            onClick={() => {
-              setRoleModal(true);
-              setSelectedUser(user._id);
-            }}
-          />
-        </Tooltip>
-        <Tooltip title="Deletar Perfil">
-          <DeleteForever
-            htmlColor="black"
-            onClick={() => {
-              setDeleteModal(true);
-              setSelectedUser(user._id);
-            }}
-          />
-        </Tooltip>
-      </>
-    );
-  }
+  const actionList = [
+    {
+      tooltip: 'Editar perfil',
+      action: (user) => {
+        setRoleModal(true);
+        setSelectedUser(user._id);
+      },
+      type: 'edit'
+    },
+    {
+      tootip: 'Deletar Perfil',
+      action: (user) => {
+        setDeleteModal(true);
+        setSelectedUser(user._id);
+      },
+      type: 'delete'
+    }
+  ];
 
   const roles = [
     { label: 'Diretor', value: 1 },
@@ -163,7 +154,7 @@ function AccessProfile() {
         </div>
         <Table
           columnList={columnHeaders}
-          actions={renderActions}
+          actionList={actionList}
           itemList={filterUser(users)}
           attributeList={getAttributesForDisplay}
         />

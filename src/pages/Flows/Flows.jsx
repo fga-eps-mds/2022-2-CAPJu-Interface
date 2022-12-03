@@ -1,11 +1,5 @@
 import toast from 'react-hot-toast';
-import { Link } from 'react-router-dom';
-import Tooltip from '@mui/material/Tooltip';
-import EditIcon from '@mui/icons-material/Edit';
 import React, { useEffect, useState } from 'react';
-import { DeleteForever } from '@mui/icons-material';
-import InsertChartIcon from '@mui/icons-material/InsertChart';
-import DescriptionIcon from '@mui/icons-material/Description';
 import { ArrowRight } from '@styled-icons/bootstrap/ArrowRight';
 
 import api from 'services/api';
@@ -13,6 +7,7 @@ import Button from 'components/Button/Button';
 import TextInput from 'components/TextInput/TextInput';
 import StagesInFlow from 'components/StagesInFlow/StagesInFlow';
 import AddStageInFlow from 'components/AddStageInFlow/AddStageInFlow';
+import DescriptionIcon from '@mui/icons-material/Description';
 import AddSequenceInFlow from 'components/AddSequenceInFlow/AddSequenceInFlow';
 import {
   Container,
@@ -193,41 +188,38 @@ function Flows() {
     return flows.find((flow) => flow._id == flowId);
   }
 
-  function renderActions(flow) {
-    return (
-      <>
-        <Tooltip title="Visualizar processos">
-          <Link to="/processes" state={flow}>
-            <DescriptionIcon htmlColor="black" />
-          </Link>
-        </Tooltip>
-        <Tooltip title="Editar fluxo">
-          <EditIcon
-            htmlColor="black"
-            onClick={() => {
-              setShowFlow(1);
-              setNewFlow(getFlow(flow._id));
-            }}
-          />
-        </Tooltip>
-        <Tooltip title="Deletar fluxo">
-          <DeleteForever
-            htmlColor="black"
-            onClick={() => {
-              setDeleteModal(true);
-              setSelectedFlow(flow._id);
-              setShowFlow(-1);
-            }}
-          />
-        </Tooltip>
-        <Tooltip title="Visualizar estatísticas">
-          <Link to="/statistics" state={flow}>
-            <InsertChartIcon htmlColor="black" />
-          </Link>
-        </Tooltip>
-      </>
-    );
-  }
+  const actionList = [
+    {
+      tooltip: 'Visualizar processos',
+      linkTo: '/processes',
+      linkIcon: <DescriptionIcon htmlColor="black" />,
+      type: 'link'
+    },
+    {
+      tooltip: 'Editar fluxo',
+      action: (flow) => {
+        setShowFlow(1);
+        setNewFlow(getFlow(flow._id));
+      },
+      type: 'edit'
+    },
+    {
+      tooltip: 'Deletar fluxo',
+      action: (flow) => {
+        setDeleteModal(true);
+        setSelectedFlow(flow._id);
+        setShowFlow(-1);
+      },
+      type: 'delete'
+    }
+    /*,
+    {
+      tooltip: 'Visualizar estatísticas',
+      linkTo: '/statistics',
+      linkIcon: <InsertChartIcon htmlColor="black" />,
+      type: 'link'
+    }*/
+  ];
 
   return (
     <>
@@ -238,7 +230,7 @@ function Flows() {
             columnList={['Nome']}
             itemList={flows}
             attributeList={(flow) => [flow.name]}
-            actions={renderActions}
+            actionList={actionList}
           />
         </Area>
         <AddFlowButton onClick={() => setModalOpen(true)}>

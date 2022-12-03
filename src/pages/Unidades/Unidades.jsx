@@ -1,15 +1,10 @@
 import toast from 'react-hot-toast';
-import { Eye } from '@styled-icons/entypo';
-import Tooltip from '@mui/material/Tooltip';
-import { UserPlus } from '@styled-icons/fa-solid';
 import React, { useEffect, useState } from 'react';
 import AxiosError from 'axios/lib/core/AxiosError';
-import { DeleteForever } from '@styled-icons/material';
 
 import {
   Container,
   AddUnityButton,
-  Area,
   Modal,
   Content,
   ContentHeader
@@ -38,12 +33,15 @@ function Unidades() {
     updateUnitys();
   }, []);
 
-  async function searchUsers(name) {
-    const response = await userApi.get('searchUsers/' + name);
+  async function searchUsers(unit) {
+    setCurrentUnity({ ...unit, admins: [] });
+    const response = await userApi.get('searchUsers/');
     setFoundUsers(response.data.user);
+    setAddAdminsModalOpen(true);
   }
 
-  async function setAdmin(userId) {
+  async function setAdmin({ _id: userId }) {
+    setAddAdminsModalOpen(true);
     const response = await userApi.post('setUnityAdmin/', {
       unityId: currentUnity._id,
       userId
@@ -54,10 +52,12 @@ function Unidades() {
   }
 
   async function updateUnityAdmins(unit) {
+    setCurrentUnity({ ...unit, admins: [] });
     const response = await api.get('unityAdmins/' + unit._id);
     let existingUnity = { ...unit };
     existingUnity.admins = response.data.admins || [];
     setCurrentUnity(existingUnity);
+    setSeeAdminsModalOpen(true);
   }
 
   async function removeAdmin(adminId) {
@@ -67,12 +67,21 @@ function Unidades() {
     });
     if (response.status == 200) {
       toast.success('Administrador removido com sucesso');
+      updateUnityAdmins(currentUnity);
     }
   }
 
   async function updateUnitys() {
     const response = await api.get('/unitys');
     setUnitList(response.data.Unitys);
+  }
+
+  function filterUsers() {
+    return foundUsers.filter(
+      (user) =>
+        user.name.includes(adminSearchName) &&
+        !(user.unityAdmin === currentUnity._id)
+    );
   }
 
   async function addUnity() {
@@ -100,65 +109,34 @@ function Unidades() {
     }
   }
 
-  async function addAdminModal(unit) {
-    setCurrentUnity({ ...unit, admins: [] });
-    await searchUsers(adminSearchName);
-    console.log(foundUsers);
-    setAddAdminsModalOpen(true);
-  }
-
-  async function showAdminsModal(unit) {
-    setCurrentUnity({ ...unit, admins: [] });
-    await updateUnityAdmins(unit);
-    setSeeAdminsModalOpen(true);
-  }
-
-  function renderActions(unit) {
-    return (
-      <>
-        <Tooltip title="Visualizar Admins">
-          <Eye onClick={() => showAdminsModal(unit)} />
-        </Tooltip>
-        <Tooltip title="Adicionar Admins">
-          <UserPlus onClick={() => addAdminModal(unit)} />
-        </Tooltip>
-      </>
-    );
-  }
-
-  function removeAdmins(admin) {
-    return (
-      <Tooltip title="Remover Admin">
-        <DeleteForever onClick={() => removeAdmin(admin._id)} />
-      </Tooltip>
-    );
-  }
-
-  function newAdmin(user) {
-    return (
-      <Tooltip title="Adicionar como Admin">
-        <UserPlus
-          onClick={() => {
-            setAddAdminsModalOpen(true);
-            setAdmin(user._id);
-          }}
-        />
-      </Tooltip>
-    );
-  }
-
+  const newAdminActions = [
+    {
+      name: 'Adicionar como Admin',
+      action: setAdmin,
+      type: 'addUser'
+    }
+  ];
+  const removeAdminsActions = [
+    {
+      name: 'Remover Admin',
+      action: (user) => removeAdmin(user._id),
+      type: 'delete'
+    }
+  ];
+  const unitListActions = [
+    { tooltip: 'Visualizar Admins', action: updateUnityAdmins, type: 'eye' },
+    { tooltip: 'Adicionar Admins', action: searchUsers, type: 'addUser' }
+  ];
   return (
     <>
       <Container>
         <h1>Unidades</h1>
-        <Area>
-          <Table
-            itemList={unitList}
-            actions={renderActions}
-            columnList={['Nome']}
-            attributeList={(unit) => [unit.name]}
-          />
-        </Area>
+        <Table
+          itemList={unitList}
+          actionList={unitListActions}
+          columnList={['Nome']}
+          attributeList={(unit) => [unit.name]}
+        />
         <AddUnityButton
           onClick={() => {
             setModalOpen(true);
@@ -216,7 +194,7 @@ function Unidades() {
                 itemList={currentUnity.admins}
                 columnList={['Nome']}
                 attributeList={(admin) => [admin.name]}
-                actions={removeAdmins}
+                actionList={removeAdminsActions}
               />
             </div>
 
@@ -247,23 +225,15 @@ function Unidades() {
                 placeholder="Nome do usuário"
               ></TextInput>
               <Table
-                itemList={foundUsers}
+                itemList={filterUsers()}
                 columnList={['Nome']}
                 attributeList={(admin) => [admin.name]}
-                actions={newAdmin}
+                actionList={newAdminActions}
               />
             </div>
 
             <div>
-              <div>
-                <Button
-                  onClick={() => {
-                    searchUsers(adminSearchName);
-                  }}
-                >
-                  Buscar
-                </Button>
-              </div>
+              <Button onClick={() => searchUsers()}>Buscar</Button>
               <div>
                 <Button
                   onClick={() => {

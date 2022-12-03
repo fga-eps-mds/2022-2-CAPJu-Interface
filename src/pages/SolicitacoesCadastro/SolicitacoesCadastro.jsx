@@ -1,8 +1,5 @@
 import toast from 'react-hot-toast';
-import Tooltip from '@mui/material/Tooltip';
-import { Check } from '@styled-icons/entypo/Check';
 import React, { useEffect, useState } from 'react';
-import { Delete } from '@styled-icons/typicons/Delete';
 
 import { Container, Area, Modal, Content, ContentHeader } from './styles';
 import Table from 'components/Tables/Table';
@@ -95,28 +92,48 @@ function SolicitacoesCadastro() {
     return users.find((user) => user._id == userId);
   }
 
-  function renderActions(user) {
-    return (
-      <>
-        <Tooltip title="Aceitar solicitação">
-          <Check
-            onClick={() => {
-              setAcceptModal(true);
-              setSelectedUser(user._id);
-            }}
-          />
-        </Tooltip>
-        <Tooltip title="Recusar solicitação">
-          <Delete
-            onClick={() => {
-              setDeleteModal(true);
-              setSelectedUser(user._id);
-            }}
-          />
-        </Tooltip>
-      </>
-    );
+  function renderModal(user) {
+    setAcceptModal(true);
+    setSelectedUser(user._id);
   }
+
+  const actionList = [
+    {
+      tooltip: 'Aceitar solicitação',
+      action: (user) => renderModal(user),
+      type: 'check',
+      className: 'accept-button'
+    },
+    {
+      tooltip: 'Recusar solicitação',
+      action: (user) => renderModal(user),
+      type: 'deny',
+      className: 'deny-button'
+    }
+  ];
+
+  // function renderActions(user) {
+  //   return (
+  //     <>
+  //       <Tooltip title="Aceitar solicitação">
+  //         <Check
+  //           onClick={() => {
+  //             setAcceptModal(true);
+  //             setSelectedUser(user._id);
+  //           }}
+  //         />
+  //       </Tooltip>
+  //       <Tooltip title="Recusar solicitação">
+  //         <Delete
+  //           onClick={() => {
+  //             setDeleteModal(true);
+  //             setSelectedUser(user._id);
+  //           }}
+  //         />
+  //       </Tooltip>
+  //     </>
+  //   );
+  // }
 
   return (
     <Container>
@@ -125,7 +142,7 @@ function SolicitacoesCadastro() {
         <Table
           columnList={['Nome']}
           itemList={users}
-          actions={renderActions}
+          actionList={actionList}
           attributeList={(user) => [user.name]}
         />
       </Area>

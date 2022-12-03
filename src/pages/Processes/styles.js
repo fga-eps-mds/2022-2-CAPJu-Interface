@@ -27,6 +27,18 @@ export const Container = styled.div`
     gap: 20px;
   }
 
+  td.action-column {
+    min-width: 90px;
+    width: fit-content;
+  }
+
+  svg {
+    color: #000001;
+    width: 30px;
+    height: 30px;
+    cursor: pointer;
+  }
+
   div.processName {
     background-color: #1b9454;
     border-radius: 10px;
@@ -42,21 +54,6 @@ export const Container = styled.div`
 
   div.processName > :first-child {
     margin-left: 0.5em;
-  }
-
-  svg.see-process {
-    color: #000001;
-    cursor: pointer;
-  }
-
-  svg.edit-process {
-    color: #000001;
-    cursor: pointer;
-  }
-
-  svg.delete-process {
-    color: #000001;
-    cursor: pointer;
   }
 
   div.currentStage-green {
