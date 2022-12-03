@@ -178,7 +178,7 @@ test('Testando deletar fluxo no componente Flows', async () => {
     </MemoryRouter>
   );
 
-  const deleteIcon = await screen.findAllByTestId('DeleteForeverIcon');
+  const deleteIcon = await screen.findAllByLabelText('Deletar fluxo');
   fireEvent.click(deleteIcon[1]);
 
   const modalName = screen.getByText('Deseja realmente excluir este Fluxo?');

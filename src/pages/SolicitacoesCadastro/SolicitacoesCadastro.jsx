@@ -92,48 +92,26 @@ function SolicitacoesCadastro() {
     return users.find((user) => user._id == userId);
   }
 
-  function renderModal(user) {
-    setAcceptModal(true);
-    setSelectedUser(user._id);
-  }
-
   const actionList = [
     {
       tooltip: 'Aceitar solicitação',
-      action: (user) => renderModal(user),
+      action: (user) => {
+        setAcceptModal(true);
+        setSelectedUser(user._id);
+      },
       type: 'check',
       className: 'accept-button'
     },
     {
       tooltip: 'Recusar solicitação',
-      action: (user) => renderModal(user),
+      action: (user) => {
+        setDeleteModal(true);
+        setSelectedUser(user._id);
+      },
       type: 'deny',
       className: 'deny-button'
     }
   ];
-
-  // function renderActions(user) {
-  //   return (
-  //     <>
-  //       <Tooltip title="Aceitar solicitação">
-  //         <Check
-  //           onClick={() => {
-  //             setAcceptModal(true);
-  //             setSelectedUser(user._id);
-  //           }}
-  //         />
-  //       </Tooltip>
-  //       <Tooltip title="Recusar solicitação">
-  //         <Delete
-  //           onClick={() => {
-  //             setDeleteModal(true);
-  //             setSelectedUser(user._id);
-  //           }}
-  //         />
-  //       </Tooltip>
-  //     </>
-  //   );
-  // }
 
   return (
     <Container>

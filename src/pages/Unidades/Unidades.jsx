@@ -111,14 +111,14 @@ function Unidades() {
 
   const newAdminActions = [
     {
-      name: 'Adicionar como Admin',
+      tooltip: 'Adicionar como Admin',
       action: setAdmin,
       type: 'addUser'
     }
   ];
   const removeAdminsActions = [
     {
-      name: 'Remover Admin',
+      tooltip: 'Remover Admin',
       action: (user) => removeAdmin(user._id),
       type: 'delete'
     }

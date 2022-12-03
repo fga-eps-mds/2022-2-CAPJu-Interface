@@ -108,7 +108,7 @@ function AccessProfile() {
       type: 'edit'
     },
     {
-      tootip: 'Deletar Perfil',
+      tooltip: 'Deletar Perfil',
       action: (user) => {
         setDeleteModal(true);
         setSelectedUser(user._id);

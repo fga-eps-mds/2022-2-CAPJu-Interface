@@ -56,7 +56,7 @@ test('Testando deletar um usuário', async () => {
 
   await waitFor(() => expect(scopeGet.isDone()).toBe(true), { timeout: 1000 });
 
-  const deleteIcon = await screen.findAllByTestId('DeleteForeverIcon');
+  const deleteIcon = await screen.getAllByLabelText('Deletar Perfil');
   fireEvent.click(deleteIcon[1]);
 
   const modalName = screen.getByText('Excluir Usuário');
