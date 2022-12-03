@@ -234,3 +234,47 @@ export const units = {
     }
   ]
 };
+
+export const adminsList = {
+  admins: [
+    {
+      _id: '6366b61c1103cade86f4b145',
+      name: 'João Vitor Alves',
+      email: 'vitor.alves07750@outlook.com',
+      password: '$2b$10$J7iH9vrZGVQSKGyXp2aKUuUwJ87sVKJz2aUkGVYD7AYN0TCCZv.Ji',
+      accepted: true,
+      role: 1,
+      unity: '6366b55accb406a52123e319',
+      createdAt: '2022-11-05T19:14:36.201Z',
+      updatedAt: '2022-12-03T16:33:35.634Z',
+      __v: 0,
+      unityAdmin: '6366b55accb406a52123e319'
+    },
+    {
+      _id: '6366be8a32943db6cb47ffd0',
+      name: 'Fernando',
+      email: 'teste@gmail.com',
+      password: '$2b$10$u4c2vFSzB4TQPEOYRyuZMeSt/J3ViN/vGA4Jh5WqsOjnrNMUXI3la',
+      accepted: true,
+      role: 1,
+      unity: '6366b55accb406a52123e319',
+      createdAt: '2022-11-05T19:50:34.320Z',
+      updatedAt: '2022-11-26T14:56:41.146Z',
+      __v: 0,
+      unityAdmin: '6366b55accb406a52123e319'
+    },
+    {
+      _id: '6369a99b857faed1f519ecb3',
+      name: 'Lude Teste',
+      email: 'ludeyuri07@gmail.com',
+      password: '$2b$10$IFr3p.UB9HY/lF9qW.BtC.ajLGJ/X3eupdRGS40HzLZU9O7o6g0BS',
+      accepted: true,
+      role: 2,
+      unity: '6366b55accb406a52123e319',
+      createdAt: '2022-11-08T00:58:03.623Z',
+      updatedAt: '2022-12-03T16:39:55.619Z',
+      __v: 0,
+      unityAdmin: '6366b55accb406a52123e319'
+    }
+  ]
+};
