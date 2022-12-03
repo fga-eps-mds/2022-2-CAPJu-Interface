@@ -53,9 +53,9 @@ function Unidades() {
     }
   }
 
-  async function updateUnityAdmins() {
-    const response = await api.get('unityAdmins/' + currentUnity._id);
-    let existingUnity = { ...currentUnity };
+  async function updateUnityAdmins(unit) {
+    const response = await api.get('unityAdmins/' + unit._id);
+    let existingUnity = { ...unit };
     existingUnity.admins = response.data.admins || [];
     setCurrentUnity(existingUnity);
   }
@@ -100,29 +100,27 @@ function Unidades() {
     }
   }
 
-  function listAdmins(unit) {
+  async function addAdminModal(unit) {
     setCurrentUnity({ ...unit, admins: [] });
-    updateUnityAdmins();
+    await searchUsers(adminSearchName);
+    console.log(foundUsers);
+    setAddAdminsModalOpen(true);
+  }
+
+  async function showAdminsModal(unit) {
+    setCurrentUnity({ ...unit, admins: [] });
+    await updateUnityAdmins(unit);
+    setSeeAdminsModalOpen(true);
   }
 
   function renderActions(unit) {
     return (
       <>
         <Tooltip title="Visualizar Admins">
-          <Eye
-            onClick={() => {
-              setSeeAdminsModalOpen(true);
-              listAdmins(unit);
-            }}
-          />
+          <Eye onClick={() => showAdminsModal(unit)} />
         </Tooltip>
         <Tooltip title="Adicionar Admins">
-          <UserPlus
-            onClick={() => {
-              setAddAdminsModalOpen(true);
-              listAdmins(unit);
-            }}
-          />
+          <UserPlus onClick={() => addAdminModal(unit)} />
         </Tooltip>
       </>
     );
