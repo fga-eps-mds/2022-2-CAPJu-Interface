@@ -25,11 +25,14 @@ export const DefaultTable = styled.table`
     border: 1px solid #ddd;
   }
 
-  .actions-column {
+  th.actions-column {
+    padding-right: 10px;
+  }
+
+  td.actions-column {
     min-width: fit-content;
     width: 1%;
     white-space: nowrap;
-    padding-right: 10px;
   }
 
   tr:nth-child(even) {

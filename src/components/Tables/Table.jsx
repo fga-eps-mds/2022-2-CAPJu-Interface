@@ -4,7 +4,7 @@ import Tooltip from '@mui/material/Tooltip';
 import { Check } from '@styled-icons/entypo/Check';
 import { Link } from 'react-router-dom';
 import { Eye } from '@styled-icons/entypo';
-import { DeleteForever } from '@styled-icons/material';
+import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import { UserPlus } from '@styled-icons/fa-solid';
 import { Delete } from '@styled-icons/typicons/Delete';
 import EditIcon from '@mui/icons-material/Edit';
@@ -13,7 +13,7 @@ import { DefaultTable } from './TableStyle';
 
 const componentList = {
   eye: Eye,
-  delete: DeleteForever,
+  delete: DeleteForeverIcon,
   addUser: UserPlus,
   edit: EditIcon,
   link: Link,
