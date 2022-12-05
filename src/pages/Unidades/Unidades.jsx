@@ -54,7 +54,6 @@ function Unidades() {
   }
 
   async function updateUnityAdmins(unity) {
-    console.log(unity._id);
     const response = await api.get('unityAdmins/' + unity._id);
     let existingUnity = { ...unity };
     existingUnity.admins = response.data.admins || [];
