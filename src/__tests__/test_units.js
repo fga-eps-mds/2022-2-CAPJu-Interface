@@ -1,6 +1,5 @@
 import React from 'react';
 import nock from 'nock';
-import axios from 'axios';
 import '@testing-library/jest-dom';
 import { MemoryRouter, Route, Routes } from 'react-router-dom';
 import {
@@ -10,24 +9,12 @@ import {
   fireEvent,
   act
 } from '@testing-library/react';
-import '@testing-library/react/dont-cleanup-after-each';
 
 import { baseURL } from 'services/api';
 import { userURL } from 'services/user';
 import Unidades from 'pages/Unidades/Unidades';
 import { units, adminsList, usersResponse } from 'testConstants';
 import userEvent from '@testing-library/user-event';
-
-axios.defaults.adapter = require('axios/lib/adapters/http');
-
-const mockNavigate = jest.fn();
-
-jest.mock('react-router-dom', () => {
-  return {
-    ...jest.requireActual('react-router-dom'),
-    useNavigate: () => mockNavigate
-  };
-});
 
 const getUnits = nock(baseURL)
   .defaultReplyHeaders({
@@ -47,23 +34,23 @@ const getAdmins = nock(baseURL)
   .get(/unityAdmins/)
   .reply(200, adminsList);
 
-describe('Testando Unidades', () => {
-  const postUnit = nock(baseURL)
-    .defaultReplyHeaders({
-      'access-control-allow-origin': '*',
-      'access-control-allow-credentials': 'true'
-    })
-    .persist()
-    .post('/newUnity')
-    .reply(200, {
-      _id: 'meuIdAleatório',
-      name: 'unidade 3',
-      createdAt: '2022-08-17T20:11:43.499+00:00',
-      updatedAt: '2022-08-17T20:11:43.499+00:00',
-      __v: 0
-    });
+const postUnit = nock(baseURL)
+  .defaultReplyHeaders({
+    'access-control-allow-origin': '*',
+    'access-control-allow-credentials': 'true'
+  })
+  .persist()
+  .post('/newUnity')
+  .reply(200, {
+    _id: 'meuIdAleatório',
+    name: 'unidade 3',
+    createdAt: '2022-08-17T20:11:43.499+00:00',
+    updatedAt: '2022-08-17T20:11:43.499+00:00',
+    __v: 0
+  });
 
-  it('Testando criar Unidades', async () => {
+describe('Testando Unidades', () => {
+  beforeEach(async () => {
     render(
       <MemoryRouter initialEntries={['/unidades']}>
         <Routes>
@@ -71,8 +58,11 @@ describe('Testando Unidades', () => {
         </Routes>
       </MemoryRouter>
     );
-    await waitFor(() => expect(getUnits.isDone()).toBe(true));
 
+    await waitFor(() => expect(getUnits.isDone()).toBe(true));
+  });
+
+  it('Testando criar Unidades', async () => {
     const buttonUnit = screen.getByText('+ Adicionar Unidade');
     expect(buttonUnit).toBeInTheDocument();
     act(() => buttonUnit.click());
@@ -90,15 +80,6 @@ describe('Testando Unidades', () => {
   });
 
   it('Teste cancela criação de unidade', async () => {
-    render(
-      <MemoryRouter initialEntries={['/unidades']}>
-        <Routes>
-          <Route path="/unidades" element={<Unidades />} />
-        </Routes>
-      </MemoryRouter>
-    );
-    await waitFor(() => expect(getUnits.isDone()).toBe(true));
-
     const buttonUnit = screen.getByText('+ Adicionar Unidade');
     expect(buttonUnit).toBeInTheDocument();
     act(() => buttonUnit.click());
@@ -116,15 +97,6 @@ describe('Testando Unidades', () => {
   });
 
   it('Teste visualizar admins', async () => {
-    render(
-      <MemoryRouter initialEntries={['/unidades']}>
-        <Routes>
-          <Route path="/unidades" element={<Unidades />} />
-        </Routes>
-      </MemoryRouter>
-    );
-    await waitFor(() => expect(getUnits.isDone()).toBe(true));
-
     const listAdminsButton = screen.getByLabelText('Visualizar Admins');
     expect(listAdminsButton).toBeInTheDocument();
     act(() => userEvent.click(listAdminsButton));
@@ -159,15 +131,6 @@ describe('Testando Unidades', () => {
       .post(/setUnityAdmin/)
       .reply(200, 'ok');
 
-    render(
-      <MemoryRouter initialEntries={['/unidades']}>
-        <Routes>
-          <Route path="/unidades" element={<Unidades />} />
-        </Routes>
-      </MemoryRouter>
-    );
-    await waitFor(() => expect(getUnits.isDone()).toBe(true));
-
     const addAdminButton = screen.getByLabelText('Adicionar Admins');
     expect(addAdminButton).toBeInTheDocument();
     act(() => userEvent.click(addAdminButton));
@@ -196,15 +159,6 @@ describe('Testando Unidades', () => {
       .post(/removeUnityAdmin/)
       .reply(200, 'ok');
 
-    render(
-      <MemoryRouter initialEntries={['/unidades']}>
-        <Routes>
-          <Route path="/unidades" element={<Unidades />} />
-        </Routes>
-      </MemoryRouter>
-    );
-    await waitFor(() => expect(getUnits.isDone()).toBe(true));
-
     const listAdminsButton = screen.getByLabelText('Visualizar Admins');
     expect(listAdminsButton).toBeInTheDocument();
     act(() => userEvent.click(listAdminsButton));
@@ -228,15 +182,6 @@ describe('Testando Unidades', () => {
       .persist()
       .post('/newUnity')
       .reply(401, { message: 'Erro ao criar unidade' });
-
-    render(
-      <MemoryRouter initialEntries={['/unidades']}>
-        <Routes>
-          <Route path="/unidades" element={<Unidades />} />
-        </Routes>
-      </MemoryRouter>
-    );
-    await waitFor(() => expect(getUnits.isDone()).toBe(true));
 
     const buttonUnit = screen.getByText('+ Adicionar Unidade');
     expect(buttonUnit).toBeInTheDocument();

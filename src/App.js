@@ -27,8 +27,11 @@ function App() {
   const [user, setUser] = useState(null);
 
   useEffect(() => {
+    const currentDate = new Date();
+    const localStorageUser = localStorage.getItem('user');
+
     if (
-      !localStorage.getItem('user') &&
+      !localStorageUser &&
       location.pathname != '/Login' &&
       !location.pathname.startsWith('/recovery/')
     ) {
@@ -36,20 +39,16 @@ function App() {
       return;
     }
 
-    let currentDate = new Date();
-
     if (
-      !localStorage.getItem('user') ||
-      !JSON.parse(localStorage.getItem('user'))?.expiresIn ||
-      new Date(JSON.parse(localStorage.getItem('user'))?.expiresIn) <
-        currentDate
+      !localStorageUser ||
+      !JSON.parse(localStorageUser)?.expiresIn ||
+      new Date(JSON.parse(localStorageUser)?.expiresIn) < currentDate
     ) {
       navigate('Login');
       return;
     }
-    if (!user) {
-      setUser(localStorage.getItem('user'));
-    }
+
+    setUser(localStorageUser);
   }, [user, location.pathname, navigate]);
 
   return (

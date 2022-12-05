@@ -1,25 +1,12 @@
 import React from 'react';
 import nock from 'nock';
-import axios from 'axios';
 import '@testing-library/jest-dom';
 import { MemoryRouter, Route, Routes } from 'react-router-dom';
 import { render, waitFor, screen } from '@testing-library/react';
-import '@testing-library/react/dont-cleanup-after-each';
 
 import { userURL } from 'services/user';
 import { loggedUser, usersResponse } from 'testConstants';
 import SideBar from 'components/SideBar/ModalHeader';
-
-axios.defaults.adapter = require('axios/lib/adapters/http');
-
-const mockNavigate = jest.fn();
-
-jest.mock('react-router-dom', () => {
-  return {
-    ...jest.requireActual('react-router-dom'),
-    useNavigate: () => mockNavigate
-  };
-});
 
 describe('Testando SideBar', () => {
   it('Testando se o componente carrega todo o conteúdo', async () => {
