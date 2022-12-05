@@ -11,7 +11,7 @@ import EditIcon from '@mui/icons-material/Edit';
 
 import { DefaultTable } from './TableStyle';
 
-const componentList = {
+const iconList = {
   eye: Eye,
   delete: DeleteForeverIcon,
   addUser: UserPlus,
@@ -41,7 +41,7 @@ function Table({ itemList, actionList, columnList, attributeList }) {
               ))}
               <td className="actions-column">
                 {actionList.map((action, index) => {
-                  const ActionIcon = componentList[action.type];
+                  const ActionIcon = iconList[action.type];
                   return ActionIcon == Link ? (
                     <Tooltip title={action.tooltip} key={index}>
                       <Link to={action.linkTo} state={item}>
