@@ -22,8 +22,5 @@ describe('Testando carregamento do aplicativo', () => {
         <App />
       </MemoryRouter>
     );
-    console.log(window);
-
-    // expect(mockSetState).toHaveBeenCalled();
   });
 });
