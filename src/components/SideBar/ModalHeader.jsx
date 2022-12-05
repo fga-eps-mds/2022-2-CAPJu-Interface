@@ -22,7 +22,7 @@ import {
 function SideBar() {
   const [users, setUsers] = useState([]);
   const navigate = useNavigate();
-  const authHeader = authConfig().headers;
+  const authHeader = authConfig()?.headers;
 
   useEffect(() => {
     updateNotification();
@@ -63,12 +63,7 @@ function SideBar() {
         </MenuItem>
         <hr />
 
-        <MenuItem
-          href=""
-          onClick={() =>
-            navigate('/processes', { state: undefined, replace: false })
-          }
-        >
+        <MenuItem href="/processes">
           <ClipboardTaskListLtr size={35} />
           Processos
         </MenuItem>
@@ -90,12 +85,7 @@ function SideBar() {
           </MenuItem>
           <hr />
 
-          <MenuItem
-            href=""
-            onClick={() =>
-              navigate('/editAccount', { state: undefined, replace: false })
-            }
-          >
+          <MenuItem href="/editAccount">
             <UserCircle size={35} />
             Editar Conta
           </MenuItem>

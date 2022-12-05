@@ -48,6 +48,7 @@ export const flowsResponse = {
     }
   ]
 };
+
 export const processResponse = {
   processes: [
     {
@@ -277,4 +278,15 @@ export const adminsList = {
       unityAdmin: '6366b55accb406a52123e319'
     }
   ]
+};
+
+export const loggedUser = {
+  user: {
+    email: 'teste@teste.teste',
+    expiresIn: '2022-12-06T22:59:03.775Z',
+    name: 'Teste',
+    token:
+      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYzNjZiZThhMzI5NDNkYjZjYjQ3ZmZkMCIsImlhdCI6MTY3MDEwODM0MywiZXhwIjoxNjcwMzY3NTQzfQ.R7lD6IiNQjwNcSSwqufN7DfqnhfENmA69ddM8JqvlUQ',
+    _id: '6366be8a32943db6cb47ffd0'
+  }
 };

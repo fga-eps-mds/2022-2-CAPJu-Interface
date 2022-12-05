@@ -38,21 +38,6 @@ const getUnits = nock(baseURL)
   .get('/unitys')
   .reply(200, units);
 
-const postUnit = nock(baseURL)
-  .defaultReplyHeaders({
-    'access-control-allow-origin': '*',
-    'access-control-allow-credentials': 'true'
-  })
-  .persist()
-  .post('/newUnity')
-  .reply(200, {
-    _id: 'meuIdAleatório',
-    name: 'unidade 3',
-    createdAt: '2022-08-17T20:11:43.499+00:00',
-    updatedAt: '2022-08-17T20:11:43.499+00:00',
-    __v: 0
-  });
-
 const getAdmins = nock(baseURL)
   .defaultReplyHeaders({
     'access-control-allow-origin': '*',
@@ -62,25 +47,22 @@ const getAdmins = nock(baseURL)
   .get(/unityAdmins/)
   .reply(200, adminsList);
 
-const getUsers = nock(userURL)
-  .defaultReplyHeaders({
-    'access-control-allow-origin': '*',
-    'access-control-allow-credentials': 'true'
-  })
-  .persist()
-  .get(/searchUsers/)
-  .reply(200, usersResponse);
-
-const postAdmin = nock(userURL)
-  .defaultReplyHeaders({
-    'access-control-allow-origin': '*',
-    'access-control-allow-credentials': 'true'
-  })
-  .persist()
-  .post(/setUnityAdmin/)
-  .reply(200, 'ok');
-
 describe('Testando Unidades', () => {
+  const postUnit = nock(baseURL)
+    .defaultReplyHeaders({
+      'access-control-allow-origin': '*',
+      'access-control-allow-credentials': 'true'
+    })
+    .persist()
+    .post('/newUnity')
+    .reply(200, {
+      _id: 'meuIdAleatório',
+      name: 'unidade 3',
+      createdAt: '2022-08-17T20:11:43.499+00:00',
+      updatedAt: '2022-08-17T20:11:43.499+00:00',
+      __v: 0
+    });
+
   it('Testando criar Unidades', async () => {
     render(
       <MemoryRouter initialEntries={['/unidades']}>
@@ -159,6 +141,24 @@ describe('Testando Unidades', () => {
   });
 
   it('Teste adicionar admins', async () => {
+    const getUsers = nock(userURL)
+      .defaultReplyHeaders({
+        'access-control-allow-origin': '*',
+        'access-control-allow-credentials': 'true'
+      })
+      .persist()
+      .get(/searchUsers/)
+      .reply(200, usersResponse);
+
+    const postAdmin = nock(userURL)
+      .defaultReplyHeaders({
+        'access-control-allow-origin': '*',
+        'access-control-allow-credentials': 'true'
+      })
+      .persist()
+      .post(/setUnityAdmin/)
+      .reply(200, 'ok');
+
     render(
       <MemoryRouter initialEntries={['/unidades']}>
         <Routes>
@@ -184,5 +184,73 @@ describe('Testando Unidades', () => {
     const returnButton = screen.getByText('Voltar');
     expect(returnButton).toBeInTheDocument();
     act(() => userEvent.click(returnButton));
+  });
+
+  it('Teste remover admins', async () => {
+    const deleteAdmin = nock(userURL)
+      .defaultReplyHeaders({
+        'access-control-allow-origin': '*',
+        'access-control-allow-credentials': 'true'
+      })
+      .persist()
+      .post(/removeUnityAdmin/)
+      .reply(200, 'ok');
+
+    render(
+      <MemoryRouter initialEntries={['/unidades']}>
+        <Routes>
+          <Route path="/unidades" element={<Unidades />} />
+        </Routes>
+      </MemoryRouter>
+    );
+    await waitFor(() => expect(getUnits.isDone()).toBe(true));
+
+    const listAdminsButton = screen.getByLabelText('Visualizar Admins');
+    expect(listAdminsButton).toBeInTheDocument();
+    act(() => userEvent.click(listAdminsButton));
+
+    await waitFor(() => expect(getAdmins.isDone()).toBe(true));
+    await screen.findByText('Administradores -');
+
+    const makeAdminButton = screen.getAllByLabelText('Remover Admin')[0];
+    expect(makeAdminButton).toBeInTheDocument();
+    userEvent.click(makeAdminButton);
+
+    await waitFor(() => expect(deleteAdmin.isDone()).toBe(true));
+  });
+
+  it('Teste erro ao adicionar Unidade', async () => {
+    const postUnit = nock(baseURL)
+      .defaultReplyHeaders({
+        'access-control-allow-origin': '*',
+        'access-control-allow-credentials': 'true'
+      })
+      .persist()
+      .post('/newUnity')
+      .reply(401, { message: 'Erro ao criar unidade' });
+
+    render(
+      <MemoryRouter initialEntries={['/unidades']}>
+        <Routes>
+          <Route path="/unidades" element={<Unidades />} />
+        </Routes>
+      </MemoryRouter>
+    );
+    await waitFor(() => expect(getUnits.isDone()).toBe(true));
+
+    const buttonUnit = screen.getByText('+ Adicionar Unidade');
+    expect(buttonUnit).toBeInTheDocument();
+    act(() => buttonUnit.click());
+
+    await screen.getByText('Salvar');
+    let input = screen.getByRole('textbox');
+    expect(input).toBeInTheDocument();
+    fireEvent.change(input, { target: { value: 'unidade 3' } });
+
+    const buttonSave = screen.getByText('Salvar');
+    expect(buttonSave).toBeInTheDocument();
+    act(() => buttonSave.click());
+
+    await waitFor(() => expect(postUnit.isDone()).toBe(false));
   });
 });
