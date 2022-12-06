@@ -53,10 +53,9 @@ function Unidades() {
     }
   }
 
-  async function updateUnityAdmins() {
-    console.log(currentUnity._id);
-    const response = await api.get('unityAdmins/' + currentUnity._id);
-    let existingUnity = { ...currentUnity };
+  async function updateUnityAdmins(unity) {
+    const response = await api.get('unityAdmins/' + unity._id);
+    let existingUnity = { ...unity };
     existingUnity.admins = response.data.admins || [];
     setCurrentUnity(existingUnity);
   }
@@ -128,7 +127,7 @@ function Unidades() {
                           onClick={() => {
                             setSeeAdminsModalOpen(true);
                             setCurrentUnity({ ...unity, admins: [] });
-                            updateUnityAdmins();
+                            updateUnityAdmins(unity);
                           }}
                         />
                       </Tooltip>
@@ -139,7 +138,7 @@ function Unidades() {
                           onClick={() => {
                             setAddAdminsModalOpen(true);
                             setCurrentUnity({ ...unity, admins: [] });
-                            updateUnityAdmins();
+                            updateUnityAdmins(unity);
                           }}
                         />
                       </Tooltip>
