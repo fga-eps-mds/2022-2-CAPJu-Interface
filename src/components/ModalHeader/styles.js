@@ -26,7 +26,7 @@ export const Xbutton = styled.button`
   border: none;
   font-weight: bold;
   font-size: 1em;
-  align-self: self-end;
+  align-self: center;
   text-shadow: 2px 1px 1px black;
 `;
 
