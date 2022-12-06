@@ -16,6 +16,7 @@ export const DefaultTable = styled.table`
     width: 30px;
     height: 30px;
     cursor: pointer;
+    color: #000001;
   }
 
   th {
