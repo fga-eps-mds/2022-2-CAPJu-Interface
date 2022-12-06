@@ -32,8 +32,7 @@ const scopeGet = nock(userURL)
 localStorage.setItem('user', JSON.stringify(usersResponse.user[0]));
 
 test('Testando deletar um usuário', async () => {
-  const users = usersResponse.user[1];
-  const deleteURL = `/deleteRequest/${users._id}`;
+  const deleteURL = /deleteRequest/;
   const scopeDelete = nock(userURL)
     .defaultReplyHeaders({
       'access-control-allow-origin': '*',
@@ -57,7 +56,7 @@ test('Testando deletar um usuário', async () => {
 
   await waitFor(() => expect(scopeGet.isDone()).toBe(true), { timeout: 1000 });
 
-  const deleteIcon = await screen.findAllByTestId('DeleteForeverIcon');
+  const deleteIcon = await screen.getAllByLabelText('Deletar Perfil');
   fireEvent.click(deleteIcon[1]);
 
   const modalName = screen.getByText('Excluir Usuário');
@@ -90,7 +89,7 @@ test('Testando editar perfil de acesso de um usuário', async () => {
   );
 
   await waitFor(() => expect(scopeGet.isDone()).toBe(true), { timeout: 1000 });
-  const role = await screen.findByText('Juíz');
+  const role = await screen.findByText('Juiz');
   expect(role).toBeInTheDocument();
 
   const editIcon = await screen.findAllByTestId('EditIcon');

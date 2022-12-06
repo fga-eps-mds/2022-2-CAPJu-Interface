@@ -1,8 +1,6 @@
 import toast from 'react-hot-toast';
-import Tooltip from '@mui/material/Tooltip';
 import React, { useEffect, useState } from 'react';
 import AxiosError from 'axios/lib/core/AxiosError';
-import { DeleteForever } from '@styled-icons/material';
 
 import {
   Container,
@@ -10,10 +8,10 @@ import {
   Area,
   Modal,
   Content,
-  Table,
   ContentHeader
 } from './styles';
 import api from 'services/api';
+import Table from 'components/Tables/Table';
 import Button from 'components/Button/Button';
 import TextInput from 'components/TextInput/TextInput';
 
@@ -31,7 +29,6 @@ function Stages() {
 
   async function updateStages() {
     const response = await api.get('/stages');
-    console.log(response.data.Stages);
     function compara(a, b) {
       if (a.time > b.time) return a.name > b.name ? 1 : 0;
       return -1;
@@ -41,7 +38,6 @@ function Stages() {
   }
 
   async function addStage() {
-    console.log(stageTime);
     try {
       const response = await api.post('/newStage', {
         name: stageName,
@@ -61,7 +57,6 @@ function Stages() {
           duration: 3000
         });
       } else {
-        console.log(e);
         toast.error('Erro ao adicionar a etapa');
       }
       if (e instanceof AxiosError) toast.error('Etapa já existe');
@@ -78,7 +73,6 @@ function Stages() {
         updateStages();
       }
     } catch (e) {
-      console.log(e);
       if (e.response.status == 401) {
         toast(e.response.data.message, {
           icon: '⚠️',
@@ -90,48 +84,31 @@ function Stages() {
     }
   }
 
+  const actionList = [
+    {
+      tooltip: 'Deletar etapa',
+      action: (stage) => {
+        setModalConfDelete(true);
+        setCurrentStage(stage);
+      },
+      type: 'delete'
+    }
+  ];
+
+  const columnHeaders = ['Nome', 'Duração'];
   return (
     <>
       <Container>
         <h1>Etapas</h1>
         <Area>
-          <Table>
-            <thead>
-              <tr>
-                <th>Nome</th>
-                <th>Duração</th>
-                <th>Ações</th>
-              </tr>
-            </thead>
-            <tbody>
-              {stages.map((stage, index) => {
-                return (
-                  <tr key={index}>
-                    <td>{stage.name}</td>
-                    <td>{stage.time}</td>
-                    <td>
-                      <Tooltip title="Deletar etapa">
-                        <DeleteForever
-                          className="delete-icon"
-                          size={30}
-                          onClick={() => {
-                            setModalConfDelete(true);
-                            setCurrentStage(stage);
-                          }}
-                        />
-                      </Tooltip>
-                    </td>
-                  </tr>
-                );
-              })}
-            </tbody>
-          </Table>
+          <Table
+            columnList={columnHeaders}
+            itemList={stages}
+            actionList={actionList}
+            attributeList={(stage) => [stage.name, stage.time]}
+          />
         </Area>
-        <AddStageButton
-          onClick={() => {
-            setModalOpen(true);
-          }}
-        >
+        <AddStageButton onClick={() => setModalOpen(true)}>
           + Adicionar Etapa
         </AddStageButton>
       </Container>

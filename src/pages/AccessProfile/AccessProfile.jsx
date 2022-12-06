@@ -1,20 +1,17 @@
 import toast from 'react-hot-toast';
 import React, { useEffect, useState } from 'react';
 import Dropdown from 'react-dropdown';
-import Tooltip from '@mui/material/Tooltip';
 import Button from 'components/Button/Button';
-import EditIcon from '@mui/icons-material/Edit';
-import { DeleteForever } from '@mui/icons-material';
 
 import api from 'services/user';
 import {
   Container,
-  Table,
   InputSearch,
   Modal,
   Content,
   ContentHeader
 } from './sytles.js';
+import Table from 'components/Tables/Table';
 import authConfig from 'services/config';
 
 function AccessProfile() {
@@ -46,30 +43,27 @@ function AccessProfile() {
     try {
       const response = await api.put(
         '/updateRole',
-        {
-          _id: users[selectedUser]._id,
-          role: newRole
-        },
+        { _id: selectedUser, role: newRole },
         { headers: authHeader }
       );
 
       if (response.status == 200) {
-        toast.success('Role alterada com sucesso');
+        toast.success('Perfil alterado com sucesso');
       } else {
-        toast.error('Erro ao alterar Role');
+        toast.error('Erro ao alterar o perfil');
       }
     } catch (error) {
-      console.log(error);
       if (error.response.status == 401) {
         toast(error.response.data.message, {
           icon: '⚠️',
           duration: 3000
         });
       } else {
-        toast.error('Erro ao tentar alterar Role');
+        toast.error('Erro ao tentar alterar o perfil');
       }
     }
   }
+
   async function deleteUser(userId) {
     try {
       const response = await api.delete(`/deleteRequest/${userId}`, {
@@ -79,7 +73,6 @@ function AccessProfile() {
         toast.success('Usuário deletado com sucesso!', { duration: 3000 });
       }
     } catch (error) {
-      console.log(error);
       if (error.response.status == 401) {
         toast(error.response.data.message, {
           icon: '⚠️',
@@ -105,13 +98,49 @@ function AccessProfile() {
     });
   };
 
-  const OptionsRoles = [
-    { label: 'DIRETOR', value: 1 },
-    { label: 'JUIZ', value: 2 },
-    { label: 'SERVIDOR', value: 3 },
-    { label: 'ESTAGIARIO', value: 4 }
+  const actionList = [
+    {
+      tooltip: 'Editar perfil',
+      action: (user) => {
+        setRoleModal(true);
+        setSelectedUser(user._id);
+      },
+      type: 'edit'
+    },
+    {
+      tooltip: 'Deletar Perfil',
+      action: (user) => {
+        setDeleteModal(true);
+        setSelectedUser(user._id);
+      },
+      type: 'delete'
+    }
   ];
 
+  const roles = [
+    { label: 'Diretor', value: 1 },
+    { label: 'Juiz', value: 2 },
+    { label: 'Servidor', value: 3 },
+    { label: 'Estagiario', value: 4 }
+  ];
+
+  function getUserRole(user) {
+    return roles.find((role) => role.value == user.role).label;
+  }
+
+  function getSelectedUser() {
+    return users.find((user) => user._id == selectedUser);
+  }
+
+  function getAttributesForDisplay(user) {
+    return [
+      user.name,
+      getUserRole(user),
+      user.accepted ? 'Aceito' : 'Pendente'
+    ];
+  }
+
+  const columnHeaders = ['Nome', 'Perfil', 'Status'];
   return (
     <Container>
       <div className="userstyle ">
@@ -123,93 +152,40 @@ function AccessProfile() {
             placeholder={'Buscar Usuário'}
           />
         </div>
-        <Table>
-          <tr>
-            <th>Nome</th>
-            <th>Perfil</th>
-            <th>Status</th>
-            <th></th>
-          </tr>
-          {filterUser(users).map((users, idx) => {
-            let role;
-            let accepted;
-            switch (users.role) {
-              case 1:
-                role = 'Diretor';
-                break;
-              case 2:
-                role = 'Juíz';
-                break;
-              case 3:
-                role = 'Servidor';
-                break;
-              case 4:
-                role = 'Estagiário';
-                break;
-              default:
-                role = 'Nulo';
-                break;
-            }
-            switch (users.accepted) {
-              case false:
-                accepted = 'Pendente';
-                break;
-              case true:
-                accepted = 'Aceito';
-                break;
-              default:
-                accepted = 'Nulo';
-                break;
-            }
-
-            return (
-              <tr key={idx}>
-                <td>{users.name}</td>
-                <td>{role}</td>
-                <td>{accepted}</td>
-                <td>
-                  <Tooltip title="Editar Perfil">
-                    <EditIcon
-                      className="edit-icon"
-                      htmlColor="black"
-                      onClick={() => {
-                        setRoleModal(true);
-                        setSelectedUser(idx);
-                      }}
-                    ></EditIcon>
-                  </Tooltip>
-                  <Tooltip title="Deletar Perfil">
-                    <DeleteForever
-                      className="delete-icon"
-                      htmlColor="black"
-                      onClick={() => {
-                        setDeleteModal(true);
-                        setSelectedUser(idx);
-                      }}
-                    ></DeleteForever>
-                  </Tooltip>
-                </td>
-              </tr>
-            );
-          })}
-        </Table>
+        <Table
+          columnList={columnHeaders}
+          actionList={actionList}
+          itemList={filterUser(users)}
+          attributeList={getAttributesForDisplay}
+        />
         {roleModal && (
-          <>
-            <Modal>
-              <Content>
-                <ContentHeader>
-                  <span>Editar Perfil de Acesso</span>
-                </ContentHeader>
-                <span>Escolha um Perfil</span>
-                <Dropdown
-                  options={OptionsRoles}
-                  onChange={(e) => {
-                    setNewRole(e.value);
+          <Modal>
+            <Content>
+              <ContentHeader>
+                <span>Editar Perfil de Acesso</span>
+              </ContentHeader>
+              <span>Escolha um Perfil</span>
+              <Dropdown
+                options={roles}
+                onChange={(e) => setNewRole(e.value)}
+                value={getUserRole(getSelectedUser())}
+                placeholder="Selecione o perfil"
+                className="dropdown"
+                controlClassName="dropdown-control"
+                placeholderClassName="dropdown-placeholder"
+                menuClassName="dropdown-menu"
+                arrowClassName="dropdown-arrow"
+              />
+              <div>
+                <Button
+                  onClick={async () => {
+                    await editRole();
+                    await updateUser();
+                    setRoleModal(false);
                   }}
                   value={
-                    OptionsRoles.find(
-                      (el) => el.value === users[selectedUser].role
-                    ).label
+                    roles.find(({ value }) => value === getSelectedUser().role)
+                      .label
                   }
                   placeholder="Selecione o perfil"
                   className="dropdown"
@@ -237,41 +213,39 @@ function AccessProfile() {
                     Cancelar
                   </Button>
                 </div>
-              </Content>
-            </Modal>
-          </>
+              </div>
+            </Content>
+          </Modal>
         )}
         {deleteModal && (
-          <>
-            <Modal>
-              <Content>
-                <ContentHeader>
-                  <span>Excluir Usuário</span>
-                </ContentHeader>
-                <span>Deseja realmente excluir Usuário?</span>
-                {users[selectedUser].name}
-                <div>
-                  <Button
-                    onClick={async () => {
-                      await deleteUser(users[selectedUser]._id);
-                      await updateUser();
-                      setDeleteModal(false);
-                    }}
-                  >
-                    Confirmar
-                  </Button>
-                  <Button
-                    onClick={() => {
-                      setDeleteModal(false);
-                    }}
-                    background="#DE5353"
-                  >
-                    Cancelar
-                  </Button>
-                </div>
-              </Content>
-            </Modal>
-          </>
+          <Modal>
+            <Content>
+              <ContentHeader>
+                <span>Excluir Usuário</span>
+              </ContentHeader>
+              <span>Deseja realmente excluir Usuário?</span>
+              {getSelectedUser().name}
+              <div>
+                <Button
+                  onClick={async () => {
+                    await deleteUser(getSelectedUser()._id);
+                    await updateUser();
+                    setDeleteModal(false);
+                  }}
+                >
+                  Confirmar
+                </Button>
+                <Button
+                  onClick={() => {
+                    setDeleteModal(false);
+                  }}
+                  background="#DE5353"
+                >
+                  Cancelar
+                </Button>
+              </div>
+            </Content>
+          </Modal>
         )}
       </div>
     </Container>

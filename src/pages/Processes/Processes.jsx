@@ -41,13 +41,11 @@ function Processes() {
     updateProcesses();
     getFlows();
     getStages();
-    console.log(flows);
     // eslint-disable-next-line
   }, []);
 
   async function updateProcesses() {
     const response = await api.get(`/processes/${flow ? flow._id : ''}`);
-    console.log(flow);
     setProcesses(response.data.processes);
   }
 
@@ -100,9 +98,6 @@ function Processes() {
       setProcessesId(proc._id);
       setFlowId(proc.fluxoId);
     } else setEditOrCreate('create');
-
-    console.log(editOrCreate);
-    console.log(proc);
     setEditModalIsOpen(true);
   }
 
@@ -140,8 +135,6 @@ function Processes() {
     try {
       const flow = flows.find((flow) => flow._id === flowId);
       if (registro && flow) {
-        console.log('flow', flow);
-
         let sequences = flow.sequences;
 
         await api.post('/newProcess', {
@@ -158,7 +151,6 @@ function Processes() {
 
       toast.success('Processo Registrado com Sucesso', { duration: 4000 });
     } catch (error) {
-      console.log(error);
       if (error.response.status == 401) {
         toast(error.response.data.message, {
           icon: '⚠️',
@@ -229,7 +221,7 @@ function Processes() {
                     (el) => el._id === proc.etapaAtual
                   );
                   FinalStage = stages.find(
-                    (el) => el._id === flow.sequences.at(-1).to
+                    (el) => el._id === flow.sequences[flow.sequences.length - 1]
                   );
 
                   CurrentStagePos = stages.indexOf(CurrentStage) + 1;
@@ -261,7 +253,7 @@ function Processes() {
                     ) : (
                       <></>
                     )}
-                    <td>
+                    <td className="action-column">
                       <Tooltip title="Visualizar processo">
                         <Link to="showProcess" state={{ proc, flow }}>
                           <Visibility className="see-process"></Visibility>
