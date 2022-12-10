@@ -51,8 +51,11 @@ const btnStyle = {
 };
 
 function ShowProcess() {
-  const [modalIsOpen, setModalIsOpen] = useState(false);
+  const [openNextStageModal, setOpenNextStageModal] = useState(false);
+  const [newObservationModal, setNewObservationModal] = useState(false);
   const [observation, setObservation] = useState('');
+  const [originStage, setOriginStage] = useState('');
+  const [destinationStage, setDestinationStage] = useState('');
   const location = useLocation();
   const [stages, setStages] = useState([]);
   const { proc } = location.state;
@@ -64,16 +67,12 @@ function ShowProcess() {
     // eslint-disable-next-line
   }, []);
 
-  function openModal() {
-    setModalIsOpen(true);
-  }
-
   function afterOpenModal() {
     // references are now sync'd and can be accessed.
   }
 
   function closeModal() {
-    setModalIsOpen(false);
+    setOpenNextStageModal(false);
   }
 
   async function fetchStages() {
@@ -127,63 +126,132 @@ function ShowProcess() {
     }
   }
 
+  async function newObservation() {
+    try {
+      await api.put('/processNewObservation/', {
+        processId: proc._id,
+        originStage,
+        destinationStage,
+        observation
+      });
+
+      const response = await api.get(`getOneProcess/${proc._id}`);
+      proc.etapas = response.data.etapas;
+      closeModal();
+
+      toast.success('Notificação salva com sucesso!', { duration: 4000 });
+    } catch (error) {
+      if (error.response.status == 401) {
+        toast(error.response.data.message, {
+          icon: '⚠️',
+          duration: 3000
+        });
+      } else {
+        toast.error(
+          'Erro ao criar notificação \n ' + error.response.data.message,
+          {
+            duration: 3000
+          }
+        );
+      }
+    }
+  }
+
+  const renderNextStageModal = () => {
+    return (
+      <Modal
+        isOpen={openNextStageModal}
+        onAfterOpen={afterOpenModal}
+        onRequestClose={closeModal}
+        style={customStyles}
+        contentLabel="avançar etapa"
+      >
+        <ModalHeader close={closeModal}>Avançar etapa</ModalHeader>
+        <ModalBody>
+          <textarea
+            className="observation-field"
+            placeholder="Observações sobre a etapa atual..."
+            style={textAreaStyle}
+            value={observation}
+            onChange={(e) => setObservation(e.target.value)}
+          />
+          <button style={btnStyle} onClick={nextStage}>
+            Avançar
+          </button>
+        </ModalBody>
+      </Modal>
+    );
+  };
+
+  const openNewObservation = (originStage, destinationStage) => {
+    setNewObservationModal(true);
+    setOriginStage(originStage);
+    setDestinationStage(destinationStage);
+  };
+
+  const renderNewObservationModal = () => {
+    return (
+      <Modal
+        isOpen={newObservationModal}
+        onAfterOpen={afterOpenModal}
+        onRequestClose={() => setNewObservationModal(false)}
+        style={customStyles}
+        contentLabel="nova anotação"
+      >
+        <ModalHeader close={() => setNewObservationModal(false)}>
+          Nova Anotação
+        </ModalHeader>
+        <ModalBody>
+          <textarea
+            className="observation-field"
+            placeholder="Observações sobre a etapa."
+            style={textAreaStyle}
+            value={observation}
+            onChange={(e) => setObservation(e.target.value)}
+          />
+          <button style={btnStyle} onClick={newObservation}>
+            Salvar
+          </button>
+        </ModalBody>
+      </Modal>
+    );
+  };
+
   return (
-    <>
-      <Container>
-        <Link to="../processes" state={flow} className="voltarButton">
-          <span>Voltar</span>
-        </Link>
-        <div className="processInfo">
-          <h1>
-            {proc.apelido.length > 0
-              ? proc.apelido
-              : `Processo ${proc.registro}`}
-          </h1>
-          <div className="process">
-            {proc.apelido.length > 0
-              ? `${proc.registro} - ${proc.apelido}`
-              : `${proc.registro}`}
-          </div>
+    <Container>
+      <Link to="../processes" state={flow} className="voltarButton">
+        <span>Voltar</span>
+      </Link>
+      <div className="processInfo">
+        <h1>
+          {proc.apelido.length > 0 ? proc.apelido : `Processo ${proc.registro}`}
+        </h1>
+        <div className="process">
+          {proc.apelido.length > 0
+            ? `${proc.registro} - ${proc.apelido}`
+            : `${proc.registro}`}
         </div>
-        {flow ? (
-          <FlowWrapper style={flowStyle}>
-            <FlowViewer
-              stages={stages}
-              flow={flow}
-              highlight={proc.etapaAtual}
-              proc={proc}
-            ></FlowViewer>
-          </FlowWrapper>
-        ) : (
-          <Ring />
-        )}
-        <Modal
-          isOpen={modalIsOpen}
-          onAfterOpen={afterOpenModal}
-          onRequestClose={closeModal}
-          style={customStyles}
-          contentLabel="avançar etapa"
-        >
-          <ModalHeader close={closeModal}>Avançar etapa</ModalHeader>
-          <ModalBody>
-            <textarea
-              className="observation-field"
-              placeholder="Observações sobre a etapa atual..."
-              style={textAreaStyle}
-              value={observation}
-              onChange={(e) => setObservation(e.target.value)}
-            ></textarea>
-            <button style={btnStyle} onClick={nextStage}>
-              Avançar
-            </button>
-          </ModalBody>
-        </Modal>
-        <Button onClick={() => openModal()}>
-          <SkipNextIcon />
-          <span>Avançar etapa</span>
-        </Button>
-      </Container>
-    </>
+      </div>
+      {flow ? (
+        <FlowWrapper style={flowStyle}>
+          <FlowViewer
+            newModal={openNewObservation}
+            stages={stages}
+            flow={flow}
+            highlight={proc.etapaAtual}
+            proc={proc}
+          ></FlowViewer>
+        </FlowWrapper>
+      ) : (
+        <Ring />
+      )}
+      {renderNextStageModal()}
+      {renderNewObservationModal()}
+      <Button onClick={() => setOpenNextStageModal(true)}>
+        <SkipNextIcon />
+        <span>Avançar etapa</span>
+      </Button>
+    </Container>
   );
 }
 
