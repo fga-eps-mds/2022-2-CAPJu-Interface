@@ -71,6 +71,8 @@ function AccessProfile() {
       });
       if (response.status == 200) {
         toast.success('Usuário deletado com sucesso!', { duration: 3000 });
+      } else {
+        toast.error('Erro ao deletar o usuário');
       }
     } catch (error) {
       if (error.response.status == 401) {
@@ -183,36 +185,17 @@ function AccessProfile() {
                     await updateUser();
                     setRoleModal(false);
                   }}
-                  value={
-                    roles.find(({ value }) => value === getSelectedUser().role)
-                      .label
-                  }
-                  placeholder="Selecione o perfil"
-                  className="dropdown"
-                  controlClassName="dropdown-control"
-                  placeholderClassName="dropdown-placeholder"
-                  menuClassName="dropdown-menu"
-                  arrowClassName="dropdown-arrow"
-                />
-                <div>
-                  <Button
-                    onClick={async () => {
-                      await editRole();
-                      await updateUser();
-                      setRoleModal(false);
-                    }}
-                  >
-                    Salvar
-                  </Button>
-                  <Button
-                    onClick={() => {
-                      setRoleModal(false);
-                    }}
-                    background="#DE5353"
-                  >
-                    Cancelar
-                  </Button>
-                </div>
+                >
+                  Salvar
+                </Button>
+                <Button
+                  onClick={() => {
+                    setRoleModal(false);
+                  }}
+                  background="#DE5353"
+                >
+                  Cancelar
+                </Button>
               </div>
             </Content>
           </Modal>
