@@ -3,10 +3,9 @@ on:
   push:
     branches:
       - main
-      - 'refeactor/**'
+      - 'develop/**'
       - 'hotfix/**'
       - 'feature/**'
-      - 'develop/**'
   pull_request:
     types: [opened, synchronize, reopened]
 
