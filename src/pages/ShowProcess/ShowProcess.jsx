@@ -73,6 +73,7 @@ function ShowProcess() {
 
   function closeModal() {
     setOpenNextStageModal(false);
+    setNewObservationModal(false);
   }
 
   async function fetchStages() {
