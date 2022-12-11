@@ -6,7 +6,7 @@ on:
       - 'refeactor/**'
       - 'hotfix/**'
       - 'feature/**'
-      - 'develop/**
+      - 'develop/**'
   pull_request:
     types: [opened, synchronize, reopened]
 
