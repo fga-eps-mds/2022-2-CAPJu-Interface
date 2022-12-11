@@ -16,13 +16,9 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - name: Download dependencies
-        run: cd src && yarn && cd ..
-      - name: Check code style
-        run: cd src && yarn prettier --check . && cd ..
-      - name: Lint Analysis
-        run: cd src && yarn eslint . && cd ..
+        run: yarn install
       - name: Tests
-        run: cd src && yarn test && cd ../
+        run: yarn test
   sonarcloud:
     name: SonarCloud
     runs-on: ubuntu-20.04
@@ -30,10 +26,6 @@ jobs:
       - uses: actions/checkout@v2
         with:
           fetch-depth: 0 # Shallow clones should be disabled for a better relevancy of analysis
-      - name: Install dependencies
-        run: yarn
-      - name: Test and coverage
-        run: yarn test
       - name: SonarCloud Scan
         uses: SonarSource/sonarcloud-github-action@master
         env:
