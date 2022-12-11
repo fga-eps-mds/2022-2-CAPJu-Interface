@@ -137,7 +137,6 @@ function ShowProcess() {
 
   async function newObservation() {
     try {
-      console.log(stages);
       await api.put('/processNewObservation/', {
         processId: proc?._id,
         originStage,
@@ -146,7 +145,6 @@ function ShowProcess() {
       });
       const response = await api.get(`getOneProcess/${proc?._id}`);
       setProc(response.data);
-      console.log(stages);
       closeModal();
       toast.success('Notificação salva com sucesso!', { duration: 4000 });
     } catch (error) {
