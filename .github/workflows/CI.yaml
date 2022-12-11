@@ -3,7 +3,7 @@ on:
   push:
     branches:
       - main
-      - 'refeactor/**'
+      - 'develop/**'
       - 'hotfix/**'
       - 'feature/**'
   pull_request:
