@@ -11,7 +11,7 @@ on:
 
 
 jobs:
-  build:
+  teste:
     runs-on: ubuntu-20.04
     steps:
       - uses: actions/checkout@v3
@@ -20,6 +20,7 @@ jobs:
       - name: Tests
         run: yarn test
   sonarcloud:
+    needs: teste
     name: SonarCloud
     runs-on: ubuntu-20.04
     steps:
