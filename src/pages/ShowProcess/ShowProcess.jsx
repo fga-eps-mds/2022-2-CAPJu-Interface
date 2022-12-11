@@ -58,12 +58,13 @@ function ShowProcess() {
   const [destinationStage, setDestinationStage] = useState('');
   const location = useLocation();
   const [stages, setStages] = useState([]);
-  const { proc } = location.state;
+  const [proc, setProc] = useState(location.state?.proc);
   const [flow, setFlow] = useState(null);
 
   useEffect(() => {
     fetchFlow();
     fetchStages();
+    updateProc();
     // eslint-disable-next-line
   }, []);
 
@@ -76,6 +77,13 @@ function ShowProcess() {
     setNewObservationModal(false);
   }
 
+  async function updateProc() {
+    const response = await api.get(
+      `/getOneProcess/${location.state?.proc._id}`
+    );
+    setProc(response.data);
+  }
+
   async function fetchStages() {
     let response = await api.get('/stages');
     setStages(response.data.Stages);
@@ -84,7 +92,7 @@ function ShowProcess() {
   async function fetchFlow() {
     if (location.state.flow) setFlow(location.state.flow);
     else {
-      let response = await api.get(`/flows/${proc.fluxoId}`);
+      let response = await api.get(`/flows/${proc?.fluxoId}`);
       setFlow(response.data);
     }
   }
@@ -93,23 +101,23 @@ function ShowProcess() {
     try {
       let stageTo = '';
       for (let proc_iterator of flow.sequences) {
-        if (proc_iterator.from == proc.etapaAtual) {
+        if (proc_iterator.from == proc?.etapaAtual) {
           stageTo = proc_iterator.to;
           break;
         }
       }
 
       await api.put('/processNextStage/', {
-        processId: proc._id,
+        processId: proc?._id,
         stageIdTo: stageTo,
-        stageIdFrom: proc.etapaAtual,
+        stageIdFrom: proc?.etapaAtual,
         observation: observation
       });
 
-      const response = await api.get(`getOneProcess/${proc._id}`);
+      const response = await api.get(`getOneProcess/${proc?._id}`);
 
+      setProc(response.data);
       proc.etapaAtual = stageTo;
-      proc.etapas = response.data.etapas;
       closeModal();
 
       toast.success('Etapa avançada!', { duration: 4000 });
@@ -129,17 +137,17 @@ function ShowProcess() {
 
   async function newObservation() {
     try {
+      console.log(stages);
       await api.put('/processNewObservation/', {
-        processId: proc._id,
+        processId: proc?._id,
         originStage,
         destinationStage,
         observation
       });
-
-      const response = await api.get(`getOneProcess/${proc._id}`);
-      proc.etapas = response.data.etapas;
+      const response = await api.get(`getOneProcess/${proc?._id}`);
+      setProc(response.data);
+      console.log(stages);
       closeModal();
-
       toast.success('Notificação salva com sucesso!', { duration: 4000 });
     } catch (error) {
       if (error.response.status == 401) {
@@ -219,40 +227,44 @@ function ShowProcess() {
   };
 
   return (
-    <Container>
-      <Link to="../processes" state={flow} className="voltarButton">
-        <span>Voltar</span>
-      </Link>
-      <div className="processInfo">
-        <h1>
-          {proc.apelido.length > 0 ? proc.apelido : `Processo ${proc.registro}`}
-        </h1>
-        <div className="process">
-          {proc.apelido.length > 0
-            ? `${proc.registro} - ${proc.apelido}`
-            : `${proc.registro}`}
+    proc && (
+      <Container>
+        <Link to="../processes" state={flow} className="voltarButton">
+          <span>Voltar</span>
+        </Link>
+        <div className="processInfo">
+          <h1>
+            {proc.apelido.length > 0
+              ? proc.apelido
+              : `Processo ${proc.registro}`}
+          </h1>
+          <div className="process">
+            {proc?.apelido.length > 0
+              ? `${proc?.registro} - ${proc?.apelido}`
+              : `${proc?.registro}`}
+          </div>
         </div>
-      </div>
-      {flow ? (
-        <FlowWrapper style={flowStyle}>
-          <FlowViewer
-            newModal={openNewObservation}
-            stages={stages}
-            flow={flow}
-            highlight={proc.etapaAtual}
-            proc={proc}
-          ></FlowViewer>
-        </FlowWrapper>
-      ) : (
-        <Ring />
-      )}
-      {renderNextStageModal()}
-      {renderNewObservationModal()}
-      <Button onClick={() => setOpenNextStageModal(true)}>
-        <SkipNextIcon />
-        <span>Avançar etapa</span>
-      </Button>
-    </Container>
+        {flow ? (
+          <FlowWrapper style={flowStyle}>
+            <FlowViewer
+              newModal={openNewObservation}
+              stages={stages}
+              flow={flow}
+              highlight={proc?.etapaAtual}
+              proc={proc}
+            ></FlowViewer>
+          </FlowWrapper>
+        ) : (
+          <Ring />
+        )}
+        {renderNextStageModal()}
+        {renderNewObservationModal()}
+        <Button onClick={() => setOpenNextStageModal(true)}>
+          <SkipNextIcon />
+          <span>Avançar etapa</span>
+        </Button>
+      </Container>
+    )
   );
 }
 
