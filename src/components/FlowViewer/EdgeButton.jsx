@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { getBezierPath } from 'react-flow-renderer';
 // import EditIcon from '@mui/icons-material/Edit';
-import './index.css';
+import { AnnotationEdgeButton, ForeignObject } from './styles';
 
 export default function EdgeButton({
   id,
@@ -39,19 +39,19 @@ export default function EdgeButton({
         d={edgePath}
         markerEnd={markerEnd}
       />
-      <foreignObject
+
+      <ForeignObject
         width={foreignObjectSize}
         height={50}
         x={(targetX + sourceX) / 2 - foreignObjectSize / 2}
         y={(targetY + sourceX) / 2 - 12}
-        className="edgebutton-foreignobject"
         requiredExtensions="http://www.w3.org/1999/xhtml"
         onClick={() => onClick(source, target)}
       >
-        <div>
-          <button className="edgebutton">{label}</button>
-        </div>
-      </foreignObject>
+        <AnnotationEdgeButton className="edgebutton-foreignobject">
+          <button className="edge-button">{label}</button>
+        </AnnotationEdgeButton>
+      </ForeignObject>
     </>
   );
 }
