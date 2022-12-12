@@ -49,24 +49,26 @@ function FlowViewer(props) {
       };
     });
 
-  let edges;
-  edges = procStages.map((sequence) => {
-    return {
-      id: 'e' + sequence.stageIdFrom + '-' + sequence.stageIdTo,
-      source: sequence.stageIdFrom,
-      target: sequence.stageIdTo,
-      label:
-        sequence.observation || (!disabled && '+ Adicionar nova notificação'),
-      type: sequence.observation.length == 0 && !disabled ? 'edgebutton' : '',
-      animated: true,
-      data: { onClick: newModal },
-      markerEnd: {
-        type: MarkerType.ArrowClosed,
-        color: '#2a2a32'
-      },
-      style: { stroke: '#1b9454' }
-    };
-  });
+  let edges = [];
+  if (procStages) {
+    edges = procStages.map((sequence) => {
+      return {
+        id: 'e' + sequence.stageIdFrom + '-' + sequence.stageIdTo,
+        source: sequence.stageIdFrom,
+        target: sequence.stageIdTo,
+        label:
+          sequence.observation || (!disabled && '+ Adicionar nova notificação'),
+        type: sequence.observation.length == 0 && !disabled ? 'edgebutton' : '',
+        animated: true,
+        data: { onClick: newModal },
+        markerEnd: {
+          type: MarkerType.ArrowClosed,
+          color: '#2a2a32'
+        },
+        style: { stroke: '#1b9454' }
+      };
+    });
+  }
 
   edges = [
     ...edges,
@@ -84,7 +86,9 @@ function FlowViewer(props) {
       };
     })
   ];
-  const uniqueEdges = edges.filter((edgeS) => {
+
+  let uniqueEdges;
+  uniqueEdges = edges.filter((edgeS) => {
     if (
       edges.some((edgeI) => edgeS.id == edgeI.id && edgeS.label !== edgeI.label)
     ) {
