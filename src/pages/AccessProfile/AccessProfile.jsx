@@ -22,9 +22,10 @@ function AccessProfile() {
   const [deleteModal, setDeleteModal] = useState(false);
   const [selectedUser, setSelectedUser] = useState(0);
 
-  const handleChange = (event) => {
+  function handleChange(event) {
     setSearchUser(event.target.value);
-  };
+  }
+
   const authHeader = authConfig()?.headers;
 
   useEffect(() => {
