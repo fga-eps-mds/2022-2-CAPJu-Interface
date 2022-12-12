@@ -77,6 +77,17 @@ function ShowProcess() {
     setNewObservationModal(false);
   }
 
+  function checkExistAnnotation() {
+    const foundStage = proc.etapas.find(
+      (etapa) =>
+        etapa.stageIdFrom === proc.etapaAtual && etapa.observation.length > 0
+    );
+    if (foundStage) setObservation(foundStage.observation);
+    else setObservation('');
+
+    setOpenNextStageModal(true);
+  }
+
   async function updateProc() {
     const response = await api.get(
       `/getOneProcess/${location.state?.proc._id}`
@@ -192,6 +203,7 @@ function ShowProcess() {
 
   const openNewObservation = (originStage, destinationStage) => {
     setNewObservationModal(true);
+    setObservation('');
     setOriginStage(originStage);
     setDestinationStage(destinationStage);
   };
@@ -257,7 +269,7 @@ function ShowProcess() {
         )}
         {renderNextStageModal()}
         {renderNewObservationModal()}
-        <Button onClick={() => setOpenNextStageModal(true)}>
+        <Button onClick={() => checkExistAnnotation()}>
           <SkipNextIcon />
           <span>Avançar etapa</span>
         </Button>

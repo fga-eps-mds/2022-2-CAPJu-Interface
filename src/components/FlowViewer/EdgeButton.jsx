@@ -39,7 +39,6 @@ export default function EdgeButton({
     targetPosition
   });
 
-  console.log(centerX);
   return (
     <>
       <path
