@@ -84,7 +84,6 @@ function FlowViewer(props) {
       };
     })
   ];
-
   const uniqueEdges = edges.filter((edgeS) => {
     if (
       edges.some((edgeI) => edgeS.id == edgeI.id && edgeS.label !== edgeI.label)

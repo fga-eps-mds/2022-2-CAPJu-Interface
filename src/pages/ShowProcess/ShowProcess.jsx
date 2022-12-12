@@ -157,6 +157,7 @@ function ShowProcess() {
       const response = await api.get(`getOneProcess/${proc?._id}`);
       setProc(response.data);
       closeModal();
+      window.location.reload();
       toast.success('Notificação salva com sucesso!', { duration: 4000 });
     } catch (error) {
       if (error.response.status == 401) {
