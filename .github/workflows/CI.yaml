@@ -1,32 +1,31 @@
-name: CAPJu Interface CI
-on:
-  push:
-    branches:
-      - main
-      - 'develop/**'
-      - 'hotfix/**'
-      - 'feature/**'
-  pull_request:
-    types: [opened, synchronize, reopened]
-
-
+name: Interface-CI
+on: [push]
 jobs:
-  teste:
-    runs-on: ubuntu-20.04
+  build:
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - name: Download dependencies
-        run: yarn install
-      - name: Tests
-        run: yarn test
+      - name: Install Dependencies
+        run: yarn
+      - name: Check code style
+        run: yarn prettier --check src
+      - name: Lint analysis
+        run: yarn eslint src
+      - name: Run test suite
+        run: yarn testGActions
+      - name: Build
+        run: yarn build
   sonarcloud:
-    needs: teste
     name: SonarCloud
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
         with:
           fetch-depth: 0 # Shallow clones should be disabled for a better relevancy of analysis
+      - name: Install dependencies
+        run: cd src && yarn
+      - name: Test and coverage
+        run: cd src && yarn testGActions
       - name: SonarCloud Scan
         uses: SonarSource/sonarcloud-github-action@master
         env:
