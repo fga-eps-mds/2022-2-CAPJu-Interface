@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { getBezierPath } from 'react-flow-renderer';
+import { getBezierPath, getBezierEdgeCenter } from 'react-flow-renderer';
 // import EditIcon from '@mui/icons-material/Edit';
 import { AnnotationEdgeButton, ForeignObject } from './styles';
 
@@ -30,6 +30,16 @@ export default function EdgeButton({
     targetPosition
   });
 
+  const [centerX, centerY] = getBezierEdgeCenter({
+    sourceX,
+    sourceY,
+    sourcePosition,
+    targetX,
+    targetY,
+    targetPosition
+  });
+
+  console.log(centerX);
   return (
     <>
       <path
@@ -43,8 +53,8 @@ export default function EdgeButton({
       <ForeignObject
         width={foreignObjectSize}
         height={50}
-        x={(targetX + sourceX) / 2 - foreignObjectSize / 2}
-        y={(targetY + sourceX) / 2 - 12}
+        x={centerX - foreignObjectSize / 2}
+        y={centerY - 50 / 2}
         requiredExtensions="http://www.w3.org/1999/xhtml"
         onClick={() => onClick(source, target)}
       >
