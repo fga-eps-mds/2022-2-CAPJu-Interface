@@ -4,9 +4,15 @@ import ReactFlow, { MarkerType } from 'react-flow-renderer';
 
 import { Container } from './styles';
 import { isLate, getStageDate } from 'components/IsLate/index.js';
+import EdgeButton from './EdgeButton.jsx';
+
+const edgeTypes = {
+  edgebutton: EdgeButton
+};
 
 function FlowViewer(props) {
   const procStages = props.proc?.etapas;
+  const { disabled, newModal } = props;
 
   function deadlineDate(stage) {
     const stageDate = getStageDate(stage._id, props.proc, props.flow);
@@ -44,60 +50,75 @@ function FlowViewer(props) {
     });
 
   let edges;
-  if (procStages) {
-    const edgesProcs =
-      procStages.map((sequence) => {
-        return {
-          id: 'e' + sequence.stageIdFrom + '-' + sequence.stageIdTo,
-          source: sequence.stageIdFrom,
-          target: sequence.stageIdTo,
-          label: sequence.observation,
-          animated: true,
-          markerEnd: {
-            type: MarkerType.ArrowClosed,
-            color: '#2a2a32'
-          },
-          style: { stroke: '#1b9454' }
-        };
-      }) || [];
-    const edgesFlows =
-      props.flow.sequences.map((sequence) => {
-        const id = 'e' + sequence.from + '-' + sequence.to;
-        if (edgesProcs.some((edge) => edge.id === id)) return;
-        return {
-          id: id,
-          source: sequence.from,
-          target: sequence.to,
-          animated: true,
-          style: { stroke: 'black' }
-        };
-      }) || [];
-    edges = edgesProcs.concat(edgesFlows);
-  } else {
-    edges = props.flow.sequences.map((sequence) => {
+  edges = procStages.map((sequence) => {
+    return {
+      id: 'e' + sequence.stageIdFrom + '-' + sequence.stageIdTo,
+      source: sequence.stageIdFrom,
+      target: sequence.stageIdTo,
+      label:
+        sequence.observation || (!disabled && '+ Adicionar nova notificação'),
+      type: sequence.observation.length == 0 && !disabled ? 'edgebutton' : '',
+      animated: true,
+      data: { onClick: newModal },
+      markerEnd: {
+        type: MarkerType.ArrowClosed,
+        color: '#2a2a32'
+      },
+      style: { stroke: '#1b9454' }
+    };
+  });
+
+  edges = [
+    ...edges,
+    ...props.flow.sequences.map((sequence) => {
       const id = 'e' + sequence.from + '-' + sequence.to;
       return {
         id: id,
         source: sequence.from,
         target: sequence.to,
+        label: !disabled && '+ Adicionar nova notificação',
+        type: !disabled && 'edgebutton',
         animated: true,
+        data: { onClick: newModal },
         style: { stroke: 'black' }
       };
-    });
-  }
+    })
+  ];
+  const uniqueEdges = edges.filter((edgeS) => {
+    if (
+      edges.some((edgeI) => edgeS.id == edgeI.id && edgeS.label !== edgeI.label)
+    ) {
+      if (edgeS.label !== '+ Adicionar nova notificação') return edgeS;
+    } else return edgeS;
+  });
+
   return (
-    <Container onClick={props.onClick}>
-      <ReactFlow nodes={nodes} edges={edges} fitView></ReactFlow>
-    </Container>
+    uniqueEdges && (
+      <Container onClick={props.onClick}>
+        <ReactFlow
+          nodes={nodes}
+          edges={uniqueEdges}
+          edgeTypes={edgeTypes}
+          fitView
+        />
+      </Container>
+    )
   );
 }
 
 FlowViewer.propTypes = {
+  disabled: PropTypes.bool,
   onClick: PropTypes.func,
   flow: PropTypes.any,
   stages: PropTypes.array,
   highlight: PropTypes.string,
-  proc: PropTypes.object
+  proc: PropTypes.object,
+  newModal: PropTypes.func
+};
+
+FlowViewer.defaultProps = {
+  disabled: false,
+  newModal: null
 };
 
 export default FlowViewer;
