@@ -19,7 +19,8 @@ export default function EdgeButton({
   markerEnd
 }) {
   const { onClick } = data;
-  const foreignObjectSize = 150;
+  const foreignObjectWidth = 150;
+  const foreignObjectHeight = 25;
   const edgePath = getBezierPath({
     sourceX,
     sourceY,
@@ -49,10 +50,10 @@ export default function EdgeButton({
       />
 
       <ForeignObject
-        width={foreignObjectSize}
-        height={50}
-        x={centerX - foreignObjectSize / 2}
-        y={centerY - 50 / 2}
+        width={foreignObjectWidth}
+        height={foreignObjectHeight}
+        x={centerX - foreignObjectWidth / 2}
+        y={centerY - foreignObjectHeight / 2}
         requiredExtensions="http://www.w3.org/1999/xhtml"
         onClick={() => onClick(source, target)}
       >

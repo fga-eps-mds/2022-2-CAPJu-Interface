@@ -308,7 +308,11 @@ function Flows() {
                 stageList={stages}
                 setNewFlow={setNewFlow}
               />
-              <FlowViewer flow={newFlow} stages={stages || []}></FlowViewer>
+              <FlowViewer
+                flow={newFlow}
+                disabled={true}
+                stages={stages || []}
+              ></FlowViewer>
               {newFlow.stages.length > 0 && (
                 <>
                   <>Sequências</>
