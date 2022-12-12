@@ -1,7 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { getBezierPath, getBezierEdgeCenter } from 'react-flow-renderer';
-// import EditIcon from '@mui/icons-material/Edit';
 import { AnnotationEdgeButton, ForeignObject } from './styles';
 
 export default function EdgeButton({
