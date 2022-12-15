@@ -30,6 +30,7 @@ function Login() {
   const [newPassword2, setNewPassword2] = useState('');
   const [unitys, setUnitys] = useState([]);
   const [newUnity, setNewUnity] = useState('');
+  const [newCpf, setNewCpf] = useState('');
 
   const [selectedTab, setSelectedTab] = useState('login');
 
@@ -59,7 +60,8 @@ function Login() {
         email: newEmail,
         password: newPassword,
         role: newRole,
-        unity: newUnity
+        unity: newUnity,
+        cpf: newCpf
       });
       response.status = 200;
       toast.success('Usuário cadastrado com  sucesso');
@@ -70,6 +72,7 @@ function Login() {
       setSelectedTab('login');
       setNewRole('');
       setNewUnity('');
+      setNewCpf('');
     } catch (error) {
       toast.error('Erro ao cadastrar \n' + error.response.data.message);
     }
@@ -183,6 +186,13 @@ function Login() {
             set={setNewName}
             value={newName}
             placeholder="Nome completo"
+          ></TextInput>
+          <br></br>
+          <TextInput
+            set={setNewCpf}
+            value={newCpf}
+            placeholder="CPF"
+            maxLength={14}
           ></TextInput>
           <br></br>
           <TextInput
