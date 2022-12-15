@@ -3,6 +3,8 @@ import Dropdown from 'react-dropdown';
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
+import { Input } from 'components/TextInput/styles';
+
 import api from 'services/api';
 import user from 'services/user';
 import {
@@ -31,6 +33,7 @@ function Login() {
   const [unitys, setUnitys] = useState([]);
   const [newUnity, setNewUnity] = useState('');
   const [newCpf, setNewCpf] = useState('');
+  const [cpfValidate, setCpfValidate] = useState(false);
 
   const [selectedTab, setSelectedTab] = useState('login');
 
@@ -51,6 +54,10 @@ function Login() {
     }
     if (newPassword != newPassword2) {
       toast.error('Senha invalida');
+      return;
+    }
+    if (!cpfValidate) {
+      toast.error('CPF inválido');
       return;
     }
 
@@ -94,6 +101,37 @@ function Login() {
     } catch (error) {
       toast.error('Erro no login: ' + error.response.data.message);
     }
+  }
+
+  function ValidateCPF(strCPF) {
+    let Soma;
+    let Resto;
+    let i;
+    Soma = 0;
+    strCPF = strCPF.replaceAll('.', '');
+    strCPF = strCPF.replaceAll('-', '');
+    if (strCPF == '00000000000') return false;
+
+    for (i = 1; i <= 9; i++)
+      Soma = Soma + parseInt(strCPF.substring(i - 1, i)) * (11 - i);
+    Resto = (Soma * 10) % 11;
+
+    if (Resto == 10 || Resto == 11) Resto = 0;
+    if (Resto != parseInt(strCPF.substring(9, 10))) return false;
+
+    Soma = 0;
+    for (i = 1; i <= 10; i++)
+      Soma = Soma + parseInt(strCPF.substring(i - 1, i)) * (12 - i);
+    Resto = (Soma * 10) % 11;
+
+    if (Resto == 10 || Resto == 11) Resto = 0;
+    if (Resto != parseInt(strCPF.substring(10, 11))) return false;
+    return true;
+  }
+
+  function onHandleCPF(event) {
+    setNewCpf(event.target.value);
+    setCpfValidate(ValidateCPF(event.target.value));
   }
 
   async function requestNewPassword() {
@@ -188,12 +226,26 @@ function Login() {
             placeholder="Nome completo"
           ></TextInput>
           <br></br>
-          <TextInput
-            set={setNewCpf}
-            value={newCpf}
+          <Input
             placeholder="CPF"
             maxLength={14}
-          ></TextInput>
+            onChange={onHandleCPF}
+            value={newCpf}
+          ></Input>
+          {!newCpf || (!cpfValidate && <br></br>)}
+          {!newCpf ||
+            (!cpfValidate && (
+              <span
+                style={{
+                  color: 'red',
+                  fontSize: '0.6em',
+                  fontWeight: 'bold',
+                  marginRight: '17em'
+                }}
+              >
+                CPF Inválido!
+              </span>
+            ))}
           <br></br>
           <TextInput
             set={setNewEmail}
