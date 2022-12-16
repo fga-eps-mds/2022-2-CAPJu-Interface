@@ -25,7 +25,7 @@ jobs:
       - name: Install dependencies
         run: cd src && yarn
       - name: Test and coverage
-        run: cd src && yarn testGActions
+        run: cd src && yarn test
       - name: SonarCloud Scan
         uses: SonarSource/sonarcloud-github-action@master
         env:
