@@ -2,6 +2,7 @@ import toast from 'react-hot-toast';
 import Dropdown from 'react-dropdown';
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { Input } from 'components/TextInput/styles';
 
 import api from 'services/api';
 import user from 'services/user';
@@ -25,6 +26,7 @@ function Login() {
   const [password, setPassword] = useState('');
   const [newRole, setNewRole] = useState('');
   const [newName, setNewName] = useState('');
+  const [nameValidate, setNameValidate] = useState(false);
   const [newEmail, setNewEmail] = useState('');
   const [newPassword, setNewPassword] = useState('');
   const [newPassword2, setNewPassword2] = useState('');
@@ -40,6 +42,10 @@ function Login() {
   async function register() {
     const re = /^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/;
     const pass = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z$*&@#]{6,}$/;
+    if (!nameValidate) {
+      toast.error('Nome invalido');
+      return;
+    }
     if (!re.test(newEmail)) {
       toast.error('E-mail Inválido');
       return;
@@ -92,7 +98,19 @@ function Login() {
       toast.error('Erro no login: ' + error.response.data.message);
     }
   }
-
+  function validateName(strName) {
+    const fullName =
+      /\b[A-Za-zÀ-ú][A-Za-zÀ-ú]+,?\s[A-Za-zÀ-ú][A-Za-zÀ-ú]{2,19}\b/gi;
+    if (fullName.test(strName)) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+  function onHandleName(event) {
+    setNewName(event.target.value);
+    setNameValidate(validateName(event.target.value));
+  }
   async function requestNewPassword() {
     const response = await user.post('/requestRecovery', {
       email: email
@@ -179,11 +197,28 @@ function Login() {
           }}
         >
           <h1>Cadastre-se </h1>
-          <TextInput
+          <Input
             set={setNewName}
+            onChange={onHandleName}
             value={newName}
             placeholder="Nome completo"
-          ></TextInput>
+          ></Input>
+          {!newName ||
+            (!nameValidate && (
+              <>
+                <br />
+                <span
+                  style={{
+                    color: 'red',
+                    fontSize: '0.6em',
+                    fontWeight: 'bold',
+                    marginRight: '17em'
+                  }}
+                >
+                  Nome inválido
+                </span>
+              </>
+            ))}
           <br></br>
           <TextInput
             set={setNewEmail}
@@ -244,6 +279,7 @@ function Login() {
               </h6>
             </ul>
           </Criterios>
+
           <Button type="submit">Cadastrar</Button>
         </form>
       )}
