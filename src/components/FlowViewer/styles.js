@@ -9,6 +9,7 @@ export const Container = styled.div`
 
 export const AnnotationEdgeButton = styled.div`
   button.edge-button {
+    display: flex;
     background: #304974;
     border: 1px solid #fff;
     cursor: pointer;
@@ -16,6 +17,12 @@ export const AnnotationEdgeButton = styled.div`
     font-size: 0.65rem;
     line-height: 1;
     color: #fff;
+  }
+
+  svg {
+    height: 10px;
+    width: 10px;
+    padding-left: 4px;
   }
 
   .edge-button:hover {

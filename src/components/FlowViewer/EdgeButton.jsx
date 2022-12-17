@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { getBezierPath, getBezierEdgeCenter } from 'react-flow-renderer';
 import { AnnotationEdgeButton, ForeignObject } from './styles';
+import EditIcon from '@mui/icons-material/Edit';
 
 export default function EdgeButton({
   id,
@@ -20,7 +21,7 @@ export default function EdgeButton({
 }) {
   const { onClick } = data;
   const foreignObjectHeight = label.length >= 40 ? 30 : 13;
-  const foreignObjectWidth = label.length * 5 + 20;
+  const foreignObjectWidth = label.length * 5 + 30;
   const edgePath = getBezierPath({
     sourceX,
     sourceY,
@@ -58,7 +59,10 @@ export default function EdgeButton({
         onClick={() => onClick(source, target, label)}
       >
         <AnnotationEdgeButton className="edgebutton-foreignobject">
-          <button className="edge-button">{label}</button>
+          <button className="edge-button">
+            {label}
+            {label !== '+ Adicionar nova notificação' && <EditIcon />}
+          </button>
         </AnnotationEdgeButton>
       </ForeignObject>
     </>
