@@ -19,8 +19,8 @@ export default function EdgeButton({
   markerEnd
 }) {
   const { onClick } = data;
-  const foreignObjectWidth = 150;
-  const foreignObjectHeight = 25;
+  const foreignObjectHeight = label.length >= 40 ? 30 : 13;
+  const foreignObjectWidth = label.length * 5 + 20;
   const edgePath = getBezierPath({
     sourceX,
     sourceY,
@@ -55,7 +55,7 @@ export default function EdgeButton({
         x={centerX - foreignObjectWidth / 2}
         y={centerY - foreignObjectHeight / 2}
         requiredExtensions="http://www.w3.org/1999/xhtml"
-        onClick={() => onClick(source, target)}
+        onClick={() => onClick(source, target, label)}
       >
         <AnnotationEdgeButton className="edgebutton-foreignobject">
           <button className="edge-button">{label}</button>
