@@ -39,6 +39,11 @@
       "react-app/jest"
     ]
   },
+  "jestSonar": {
+    "reportPath": "coverage",
+    "reportFile": "sonar-report.xml",
+    "indent": 4
+  },
   "browserslist": {
     "production": [
       ">0.2%",
