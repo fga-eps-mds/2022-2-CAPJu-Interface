@@ -1,5 +1,5 @@
 import toast from 'react-hot-toast';
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import Dropdown from 'react-dropdown';
 import Button from 'components/Button/Button';
 
@@ -22,9 +22,9 @@ function AccessProfile() {
   const [deleteModal, setDeleteModal] = useState(false);
   const [selectedUser, setSelectedUser] = useState(0);
 
-  function handleChange(event) {
+  const handleChange = useCallback((event) => {
     setSearchUser(event.target.value);
-  }
+  }, []);
 
   const authHeader = authConfig()?.headers;
 
@@ -120,28 +120,37 @@ function AccessProfile() {
     }
   ];
 
-  const roles = [
-    { label: 'Diretor', value: 1 },
-    { label: 'Juiz', value: 2 },
-    { label: 'Servidor', value: 3 },
-    { label: 'Estagiario', value: 4 }
-  ];
+  const roles = useMemo(
+    () => [
+      { label: 'Diretor', value: 1 },
+      { label: 'Juiz', value: 2 },
+      { label: 'Servidor', value: 3 },
+      { label: 'Estagiario', value: 4 }
+    ],
+    []
+  );
 
-  function getUserRole(user) {
-    return roles.find((role) => role.value == user.role).label;
-  }
+  const getUserRole = useCallback(
+    (user) => {
+      return roles.find((role) => role.value == user.role).label;
+    },
+    [roles]
+  );
 
   function getSelectedUser() {
     return users.find((user) => user._id == selectedUser);
   }
 
-  function getAttributesForDisplay(user) {
-    return [
-      user.name,
-      getUserRole(user),
-      user.accepted ? 'Aceito' : 'Pendente'
-    ];
-  }
+  const getAttributesForDisplay = useCallback(
+    (user) => {
+      return [
+        user.name,
+        getUserRole(user),
+        user.accepted ? 'Aceito' : 'Pendente'
+      ];
+    },
+    [getUserRole]
+  );
 
   const columnHeaders = ['Nome', 'Perfil', 'Status'];
   return (

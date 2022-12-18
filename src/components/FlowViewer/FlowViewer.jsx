@@ -122,6 +122,11 @@ FlowViewer.propTypes = {
 
 FlowViewer.defaultProps = {
   disabled: false,
+  onClick: null,
+  flow: null,
+  stages: [],
+  highlight: null,
+  proc: null,
   openModal: null
 };
 

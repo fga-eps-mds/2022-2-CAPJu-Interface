@@ -40,6 +40,10 @@ export default function EdgeButton({
     targetPosition
   });
 
+  function handleClick() {
+    onClick(source, target, label);
+  }
+
   return (
     <>
       <path
@@ -56,7 +60,7 @@ export default function EdgeButton({
         x={centerX - foreignObjectWidth / 2}
         y={centerY - foreignObjectHeight / 2}
         requiredExtensions="http://www.w3.org/1999/xhtml"
-        onClick={() => onClick(source, target, label)}
+        onClick={handleClick}
       >
         <AnnotationEdgeButton className="edgebutton-foreignobject">
           <button className="edge-button">
