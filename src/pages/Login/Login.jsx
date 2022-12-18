@@ -33,6 +33,7 @@ function Login() {
   const [unitys, setUnitys] = useState([]);
   const [newUnity, setNewUnity] = useState('');
   const [newCpf, setNewCpf] = useState('');
+  const [loginCpf, setLoginCpf] = useState('');
   const [cpfValidate, setCpfValidate] = useState(false);
 
   const [selectedTab, setSelectedTab] = useState('login');
@@ -88,7 +89,7 @@ function Login() {
   async function login() {
     try {
       const response = await user.post('/login', {
-        email: email,
+        cpf: loginCpf,
         password: password
       });
 
@@ -145,6 +146,10 @@ function Login() {
       .replace(/(\d{3})(\d)/, '$1.$2')
       .replace(/(\d{3})(\d{1,2})/, '$1-$2')
       .replace(/(-\d{2})\d+?$/, '$1'); // captura 2 numeros seguidos de um traço e não deixa ser digitado mais nada
+  }
+
+  function onHandleLoginCPF(event) {
+    setLoginCpf(cpfMask(event.target.value));
   }
 
   function onHandleCPF(event) {
@@ -207,11 +212,12 @@ function Login() {
               login();
             }}
           >
-            <TextInput
-              set={setEmail}
-              value={email}
-              placeholder="Email"
-            ></TextInput>
+            <Input
+              placeholder="CPF"
+              maxLength={14}
+              onChange={onHandleLoginCPF}
+              value={loginCpf}
+            ></Input>
             <br></br>
             <br></br>
             <TextInput
