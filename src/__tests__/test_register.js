@@ -21,7 +21,7 @@ jest.mock('react-router-dom', () => {
 // jest.setTimeout(8000);
 test('Testando o cadastro', async () => {
   const registerData = {
-    name: 'João',
+    name: 'João Silva',
     email: 'test@test.com',
     password: 'SenhaForte1',
     cpf: '055.740.430-41',
