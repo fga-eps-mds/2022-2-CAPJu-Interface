@@ -2,7 +2,6 @@ import toast from 'react-hot-toast';
 import Dropdown from 'react-dropdown';
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Input } from 'components/TextInput/styles';
 
 import api from 'services/api';
 import user from 'services/user';
