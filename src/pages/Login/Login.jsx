@@ -3,8 +3,6 @@ import Dropdown from 'react-dropdown';
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import { Input } from 'components/TextInput/styles';
-
 import api from 'services/api';
 import user from 'services/user';
 import {
@@ -19,6 +17,8 @@ import {
 import { Content } from 'pages/Stages/styles';
 import Button from 'components/Button/Button';
 import TextInput from 'components/TextInput/TextInput';
+import { Input } from 'components/TextInput/styles';
+import validateCPF from 'validators/cpfValidator';
 
 function Login() {
   const [isModalOpen, setModalOpen] = useState(false);
@@ -34,7 +34,7 @@ function Login() {
   const [newUnity, setNewUnity] = useState('');
   const [newCpf, setNewCpf] = useState('');
   const [loginCpf, setLoginCpf] = useState('');
-  const [cpfValidate, setCpfValidate] = useState(false);
+  const [validateCpf, setValidateCpf] = useState(false);
 
   const [selectedTab, setSelectedTab] = useState('login');
 
@@ -57,7 +57,7 @@ function Login() {
       toast.error('Senha invalida');
       return;
     }
-    if (!cpfValidate) {
+    if (!validateCpf) {
       toast.error('CPF inválido');
       return;
     }
@@ -104,43 +104,8 @@ function Login() {
     }
   }
 
-  function ValidateCPF(strCPF) {
-    let Soma;
-    let Resto;
-    let i;
-    Soma = 0;
-    strCPF = strCPF.replaceAll('.', '');
-    strCPF = strCPF.replaceAll('-', '');
-    if (strCPF == '00000000000') return false;
-    if (strCPF == '11111111111') return false;
-    if (strCPF == '22222222222') return false;
-    if (strCPF == '33333333333') return false;
-    if (strCPF == '44444444444') return false;
-    if (strCPF == '55555555555') return false;
-    if (strCPF == '66666666666') return false;
-    if (strCPF == '77777777777') return false;
-    if (strCPF == '88888888888') return false;
-    if (strCPF == '99999999999') return false;
-
-    for (i = 1; i <= 9; i++)
-      Soma = Soma + parseInt(strCPF.substring(i - 1, i)) * (11 - i);
-    Resto = (Soma * 10) % 11;
-
-    if (Resto == 10 || Resto == 11) Resto = 0;
-    if (Resto != parseInt(strCPF.substring(9, 10))) return false;
-
-    Soma = 0;
-    for (i = 1; i <= 10; i++)
-      Soma = Soma + parseInt(strCPF.substring(i - 1, i)) * (12 - i);
-    Resto = (Soma * 10) % 11;
-
-    if (Resto == 10 || Resto == 11) Resto = 0;
-    if (Resto != parseInt(strCPF.substring(10, 11))) return false;
-    return true;
-  }
-
-  function cpfMask(strCPF) {
-    return strCPF
+  function cpfMask(strCpf) {
+    return strCpf
       .replace(/\D/g, '') // substitui qualquer caracter que nao seja numero por nada
       .replace(/(\d{3})(\d)/, '$1.$2') // captura 2 grupos de numero o primeiro de 3 e o segundo de 1, apos capturar o primeiro grupo ele adiciona um ponto antes do segundo grupo de numero
       .replace(/(\d{3})(\d)/, '$1.$2')
@@ -154,7 +119,7 @@ function Login() {
 
   function onHandleCPF(event) {
     setNewCpf(cpfMask(event.target.value));
-    setCpfValidate(ValidateCPF(event.target.value));
+    setValidateCpf(validateCPF(event.target.value));
   }
 
   async function requestNewPassword() {
@@ -255,22 +220,24 @@ function Login() {
             maxLength={14}
             onChange={onHandleCPF}
             value={newCpf}
-          ></Input>
-          {!newCpf || (!cpfValidate && <br></br>)}
+          />
           {!newCpf ||
-            (!cpfValidate && (
-              <span
-                style={{
-                  color: 'red',
-                  fontSize: '0.6em',
-                  fontWeight: 'bold',
-                  marginRight: '17em'
-                }}
-              >
-                CPF Inválido!
-              </span>
+            (!validateCpf && (
+              <React.Fragment>
+                <br />
+                <span
+                  style={{
+                    color: 'red',
+                    fontSize: '0.6em',
+                    fontWeight: 'bold',
+                    marginRight: '17em'
+                  }}
+                >
+                  CPF Inválido!
+                </span>
+              </React.Fragment>
             ))}
-          <br></br>
+          <br />
           <TextInput
             set={setNewEmail}
             value={newEmail}
