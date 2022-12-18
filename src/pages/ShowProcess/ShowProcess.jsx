@@ -2,7 +2,7 @@ import api from 'services/api';
 import Modal from 'react-modal';
 import toast from 'react-hot-toast';
 import { Ring } from 'react-awesome-spinners';
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useLocation, Link } from 'react-router-dom';
 import SkipNextIcon from '@mui/icons-material/SkipNext';
 
@@ -50,9 +50,12 @@ const btnStyle = {
   fontSize: '20px'
 };
 
+const OBSERVATION_MAX_LENGTH = 100;
+
 function ShowProcess() {
   const [openNextStageModal, setOpenNextStageModal] = useState(false);
   const [newObservationModal, setNewObservationModal] = useState(false);
+  const [editObservationModal, setEditObservationModal] = useState(false);
   const [observation, setObservation] = useState('');
   const [originStage, setOriginStage] = useState('');
   const [destinationStage, setDestinationStage] = useState('');
@@ -75,6 +78,7 @@ function ShowProcess() {
   function closeModal() {
     setOpenNextStageModal(false);
     setNewObservationModal(false);
+    setEditObservationModal(false);
   }
 
   function checkExistAnnotation() {
@@ -82,8 +86,8 @@ function ShowProcess() {
       (etapa) =>
         etapa.stageIdFrom === proc.etapaAtual && etapa.observation.length > 0
     );
-    if (foundStage) setObservation(foundStage.observation);
-    else setObservation('');
+    if (foundStage) handleObservation(foundStage.observation);
+    else handleObservation('');
 
     setOpenNextStageModal(true);
   }
@@ -146,19 +150,20 @@ function ShowProcess() {
     }
   }
 
-  async function newObservation() {
+  async function newObservation(newObservation) {
     try {
       await api.put('/processNewObservation/', {
         processId: proc?._id,
         originStage,
         destinationStage,
-        observation
+        observation: newObservation
       });
+
       const response = await api.get(`getOneProcess/${proc?._id}`);
       setProc(response.data);
       closeModal();
-      window.location.reload();
-      toast.success('Notificação salva com sucesso!', { duration: 4000 });
+
+      toast.success('Notificação alterada com sucesso!', { duration: 4000 });
     } catch (error) {
       if (error.response.status == 401) {
         toast(error.response.data.message, {
@@ -167,13 +172,18 @@ function ShowProcess() {
         });
       } else {
         toast.error(
-          'Erro ao criar notificação \n ' + error.response.data.message,
+          'Erro ao alterar notificação \n ' + error.response.data.message,
           {
             duration: 3000
           }
         );
       }
     }
+  }
+
+  function handleObservation(observation) {
+    if (observation.length <= OBSERVATION_MAX_LENGTH)
+      setObservation(observation);
   }
 
   const renderNextStageModal = () => {
@@ -192,7 +202,7 @@ function ShowProcess() {
             placeholder="Observações sobre a etapa atual..."
             style={textAreaStyle}
             value={observation}
-            onChange={(e) => setObservation(e.target.value)}
+            onChange={(e) => handleObservation(e.target.value)}
           />
           <button style={btnStyle} onClick={nextStage}>
             Avançar
@@ -202,12 +212,22 @@ function ShowProcess() {
     );
   };
 
-  const openNewObservation = (originStage, destinationStage) => {
-    setNewObservationModal(true);
-    setObservation('');
-    setOriginStage(originStage);
-    setDestinationStage(destinationStage);
-  };
+  function deleteObservation() {
+    newObservation('');
+    updateProc();
+  }
+
+  const observationModal = useCallback(
+    (originStage, destinationStage, observation) => {
+      observation !== '+ Adicionar nova notificação'
+        ? setEditObservationModal(true)
+        : setNewObservationModal(true);
+      handleObservation(observation);
+      setOriginStage(originStage);
+      setDestinationStage(destinationStage);
+    },
+    []
+  );
 
   const renderNewObservationModal = () => {
     return (
@@ -226,12 +246,56 @@ function ShowProcess() {
             className="observation-field"
             placeholder="Observações sobre a etapa."
             style={textAreaStyle}
-            value={observation}
-            onChange={(e) => setObservation(e.target.value)}
+            value={
+              observation === '+ Adicionar nova notificação' ? '' : observation
+            }
+            onChange={(e) => handleObservation(e.target.value)}
           />
-          <button style={btnStyle} onClick={newObservation}>
+          <button style={btnStyle} onClick={() => newObservation(observation)}>
             Salvar
           </button>
+        </ModalBody>
+      </Modal>
+    );
+  };
+
+  const renderEditObservationModal = () => {
+    return (
+      <Modal
+        isOpen={editObservationModal}
+        onAfterOpen={afterOpenModal}
+        onRequestClose={() => setEditObservationModal(false)}
+        style={customStyles}
+        contentLabel="Editar anotação"
+      >
+        <ModalHeader close={() => setEditObservationModal(false)}>
+          Editar Anotação
+        </ModalHeader>
+        <ModalBody>
+          <textarea
+            className="observation-field"
+            placeholder="Observações sobre a etapa."
+            style={textAreaStyle}
+            value={observation}
+            onChange={(e) => handleObservation(e.target.value)}
+          />
+          <div>
+            <button
+              style={btnStyle}
+              onClick={() => setEditObservationModal(false)}
+            >
+              Cancelar
+            </button>
+            <button
+              style={btnStyle}
+              onClick={() => newObservation(observation)}
+            >
+              Salvar
+            </button>
+            <button style={btnStyle} onClick={() => deleteObservation()}>
+              Excluir
+            </button>
+          </div>
         </ModalBody>
       </Modal>
     );
@@ -258,18 +322,19 @@ function ShowProcess() {
         {flow ? (
           <FlowWrapper style={flowStyle}>
             <FlowViewer
-              newModal={openNewObservation}
+              openModal={observationModal}
               stages={stages}
               flow={flow}
               highlight={proc?.etapaAtual}
               proc={proc}
-            ></FlowViewer>
+            />
           </FlowWrapper>
         ) : (
           <Ring />
         )}
         {renderNextStageModal()}
         {renderNewObservationModal()}
+        {renderEditObservationModal()}
         <Button onClick={() => checkExistAnnotation()}>
           <SkipNextIcon />
           <span>Avançar etapa</span>

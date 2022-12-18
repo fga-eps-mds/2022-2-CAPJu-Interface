@@ -9,9 +9,7 @@ export const Container = styled.div`
 
 export const AnnotationEdgeButton = styled.div`
   button.edge-button {
-    width: max-content;
-    max-width: 150px;
-    height: auto;
+    display: flex;
     background: #304974;
     border: 1px solid #fff;
     cursor: pointer;
@@ -19,6 +17,12 @@ export const AnnotationEdgeButton = styled.div`
     font-size: 0.65rem;
     line-height: 1;
     color: #fff;
+  }
+
+  svg {
+    height: 10px;
+    width: 10px;
+    padding-left: 4px;
   }
 
   .edge-button:hover {
@@ -29,12 +33,8 @@ export const AnnotationEdgeButton = styled.div`
 export const ForeignObject = styled.foreignObject`
   div.edgebutton-foreignobject {
     background: transparent;
-    width: max-content;
-    max-width: 150px;
-    height: 40px;
     display: flex;
     justify-content: center;
     align-items: center;
-    min-height: 40px;
   }
 `;
