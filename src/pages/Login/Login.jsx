@@ -191,7 +191,7 @@ function Login() {
               maxLength={14}
               onChange={onHandleLoginCPF}
               value={loginCpf}
-            ></Input>
+            />
             <br></br>
             <br></br>
             <TextInput
