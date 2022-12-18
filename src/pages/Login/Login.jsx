@@ -19,7 +19,7 @@ import { Content } from 'pages/Stages/styles';
 import Button from 'components/Button/Button';
 import TextInput from 'components/TextInput/TextInput';
 import { Input } from 'components/TextInput/styles';
-import validateCPF from 'validators/cpfValidator';
+import { validateCPF, validateName } from 'validators/registryValidator';
 
 function Login() {
   const [isModalOpen, setModalOpen] = useState(false);
@@ -108,15 +108,7 @@ function Login() {
       toast.error('Erro no login: ' + error.response.data.message);
     }
   }
-  function validateName(strName) {
-    const fullName =
-      /\b[A-Za-zÀ-ú][A-Za-zÀ-ú]+,?\s[A-Za-zÀ-ú][A-Za-zÀ-ú]{2,19}\b/gi;
-    if (fullName.test(strName)) {
-      return true;
-    } else {
-      return false;
-    }
-  }
+  
   function onHandleName(event) {
     setNewName(event.target.value);
     setNameValidate(validateName(event.target.value));
