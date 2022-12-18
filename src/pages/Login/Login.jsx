@@ -18,7 +18,7 @@ import { Content } from 'pages/Stages/styles';
 import Button from 'components/Button/Button';
 import TextInput from 'components/TextInput/TextInput';
 import { Input } from 'components/TextInput/styles';
-import validateCPF from 'validators/cpfValidator';
+import { validateCPF, validateName } from 'validators/registryValidator';
 
 function Login() {
   const [isModalOpen, setModalOpen] = useState(false);
@@ -27,6 +27,7 @@ function Login() {
   const [password, setPassword] = useState('');
   const [newRole, setNewRole] = useState('');
   const [newName, setNewName] = useState('');
+  const [nameValidate, setNameValidate] = useState(false);
   const [newEmail, setNewEmail] = useState('');
   const [newPassword, setNewPassword] = useState('');
   const [newPassword2, setNewPassword2] = useState('');
@@ -45,6 +46,10 @@ function Login() {
   async function register() {
     const re = /^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/;
     const pass = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z$*&@#]{6,}$/;
+    if (!nameValidate) {
+      toast.error('Nome invalido');
+      return;
+    }
     if (!re.test(newEmail)) {
       toast.error('E-mail Inválido');
       return;
@@ -104,6 +109,10 @@ function Login() {
     }
   }
 
+  function onHandleName(event) {
+    setNewName(event.target.value);
+    setNameValidate(validateName(event.target.value));
+  }
   function cpfMask(strCpf) {
     return strCpf
       .replace(/\D/g, '') // substitui qualquer caracter que nao seja numero por nada
@@ -209,11 +218,28 @@ function Login() {
           }}
         >
           <h1>Cadastre-se </h1>
-          <TextInput
+          <Input
             set={setNewName}
+            onChange={onHandleName}
             value={newName}
             placeholder="Nome completo"
-          ></TextInput>
+          />
+          {!newName ||
+            (!nameValidate && (
+              <>
+                <br />
+                <span
+                  style={{
+                    color: 'red',
+                    fontSize: '0.6em',
+                    fontWeight: 'bold',
+                    marginRight: '17em'
+                  }}
+                >
+                  Nome inválido
+                </span>
+              </>
+            ))}
           <br></br>
           <Input
             placeholder="CPF"
