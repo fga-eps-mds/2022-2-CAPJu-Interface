@@ -89,13 +89,13 @@ function AccessProfile() {
     setRoleModal(false);
   }, [editRole, updateUser, setRoleModal]);
 
-  function handleRoleModal() {
+  const handleRoleModal = useCallback(() => {
     setRoleModal(!roleModal);
-  }
+  }, [roleModal]);
 
-  function handleDeleteModal() {
+  const handleDeleteModal = useCallback(() => {
     setDeleteModal(!deleteModal);
-  }
+  }, [deleteModal]);
 
   useEffect(() => {
     updateUser();
