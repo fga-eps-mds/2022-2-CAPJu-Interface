@@ -22,25 +22,37 @@ function AccessProfile() {
   const [deleteModal, setDeleteModal] = useState(false);
   const [selectedUser, setSelectedUser] = useState(0);
 
-  const handleChange = useCallback((event) => {
-    setSearchUser(event.target.value);
-  }, []);
-
   const authHeader = authConfig()?.headers;
 
-  useEffect(() => {
-    updateUser();
-    // eslint-disable-next-line
-  }, []);
+  const roles = useMemo(
+    () => [
+      { label: 'Diretor', value: 1 },
+      { label: 'Juiz', value: 2 },
+      { label: 'Servidor', value: 3 },
+      { label: 'Estagiario', value: 4 }
+    ],
+    []
+  );
 
-  async function updateUser() {
+  const getUserRole = useCallback(
+    (user) => {
+      return roles.find((role) => role.value == user.role).label;
+    },
+    [roles]
+  );
+
+  const getSelectedUser = useCallback(() => {
+    return users.find((user) => user._id == selectedUser);
+  }, [users, selectedUser]);
+
+  const updateUser = useCallback(async () => {
     const response = await api.get('/allUser', {
       headers: authHeader
     });
     setUsers(response.data.user);
-  }
+  }, [authHeader]);
 
-  async function editRole() {
+  const editRole = useCallback(async () => {
     try {
       const response = await api.put(
         '/updateRole',
@@ -63,31 +75,68 @@ function AccessProfile() {
         toast.error('Erro ao tentar alterar o perfil');
       }
     }
+  }, [authHeader, newRole, selectedUser]);
+
+  const handleChange = useCallback((event) => {
+    setSearchUser(event.target.value);
+  }, []);
+
+  const handleChangeRole = useCallback((e) => setNewRole(e.value), []);
+
+  const handleEditRole = useCallback(async () => {
+    await editRole();
+    await updateUser();
+    setRoleModal(false);
+  }, [editRole, updateUser, setRoleModal]);
+
+  function handleRoleModal() {
+    setRoleModal(!roleModal);
   }
 
-  async function deleteUser(userId) {
-    try {
-      const response = await api.delete(`/deleteRequest/${userId}`, {
-        headers: authHeader
-      });
-      if (response.status == 200) {
-        toast.success('Usuário deletado com sucesso!', { duration: 3000 });
-      } else {
-        toast.error('Erro ao deletar o usuário');
-      }
-    } catch (error) {
-      if (error.response.status == 401) {
-        toast(error.response.data.message, {
-          icon: '⚠️',
-          duration: 3000
-        });
-      } else {
-        toast.error('Erro ao deletar usuário!' + error.response.data.message, {
-          duration: 3000
-        });
-      }
-    }
+  function handleDeleteModal() {
+    setDeleteModal(!deleteModal);
   }
+
+  useEffect(() => {
+    updateUser();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  const deleteUser = useCallback(
+    async (userId) => {
+      try {
+        const response = await api.delete(`/deleteRequest/${userId}`, {
+          headers: authHeader
+        });
+        if (response.status == 200) {
+          toast.success('Usuário deletado com sucesso!', { duration: 3000 });
+        } else {
+          toast.error('Erro ao deletar o usuário');
+        }
+      } catch (error) {
+        if (error.response.status == 401) {
+          toast(error.response.data.message, {
+            icon: '⚠️',
+            duration: 3000
+          });
+        } else {
+          toast.error(
+            'Erro ao deletar usuário!' + error.response.data.message,
+            {
+              duration: 3000
+            }
+          );
+        }
+      }
+    },
+    [authHeader]
+  );
+
+  const handleDeleteUser = useCallback(async () => {
+    await deleteUser(getSelectedUser()._id);
+    await updateUser();
+    setDeleteModal(false);
+  }, [deleteUser, updateUser, setDeleteModal, getSelectedUser]);
 
   const filterUser = (arr) => {
     const user = JSON.parse(localStorage.getItem('user'));
@@ -119,27 +168,6 @@ function AccessProfile() {
       type: 'delete'
     }
   ];
-
-  const roles = useMemo(
-    () => [
-      { label: 'Diretor', value: 1 },
-      { label: 'Juiz', value: 2 },
-      { label: 'Servidor', value: 3 },
-      { label: 'Estagiario', value: 4 }
-    ],
-    []
-  );
-
-  const getUserRole = useCallback(
-    (user) => {
-      return roles.find((role) => role.value == user.role).label;
-    },
-    [roles]
-  );
-
-  function getSelectedUser() {
-    return users.find((user) => user._id == selectedUser);
-  }
 
   const getAttributesForDisplay = useCallback(
     (user) => {
@@ -179,7 +207,7 @@ function AccessProfile() {
               <span>Escolha um Perfil</span>
               <Dropdown
                 options={roles}
-                onChange={(e) => setNewRole(e.value)}
+                onChange={handleChangeRole}
                 value={getUserRole(getSelectedUser())}
                 placeholder="Selecione o perfil"
                 className="dropdown"
@@ -189,21 +217,8 @@ function AccessProfile() {
                 arrowClassName="dropdown-arrow"
               />
               <div>
-                <Button
-                  onClick={async () => {
-                    await editRole();
-                    await updateUser();
-                    setRoleModal(false);
-                  }}
-                >
-                  Salvar
-                </Button>
-                <Button
-                  onClick={() => {
-                    setRoleModal(false);
-                  }}
-                  background="#DE5353"
-                >
+                <Button onClick={handleEditRole}>Salvar</Button>
+                <Button onClick={handleRoleModal} background="#DE5353">
                   Cancelar
                 </Button>
               </div>
@@ -219,21 +234,8 @@ function AccessProfile() {
               <span>Deseja realmente excluir Usuário?</span>
               {getSelectedUser().name}
               <div>
-                <Button
-                  onClick={async () => {
-                    await deleteUser(getSelectedUser()._id);
-                    await updateUser();
-                    setDeleteModal(false);
-                  }}
-                >
-                  Confirmar
-                </Button>
-                <Button
-                  onClick={() => {
-                    setDeleteModal(false);
-                  }}
-                  background="#DE5353"
-                >
+                <Button onClick={handleDeleteUser}>Confirmar</Button>
+                <Button onClick={handleDeleteModal} background="#DE5353">
                   Cancelar
                 </Button>
               </div>

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import PropTypes from 'prop-types';
 import { getBezierPath, getBezierEdgeCenter } from 'react-flow-renderer';
 import { AnnotationEdgeButton, ForeignObject } from './styles';
@@ -40,9 +40,10 @@ export default function EdgeButton({
     targetPosition
   });
 
-  function handleClick() {
-    onClick(source, target, label);
-  }
+  const handleClick = useCallback(
+    () => onClick(source, target, label),
+    [onClick, source, target, label]
+  );
 
   return (
     <>
