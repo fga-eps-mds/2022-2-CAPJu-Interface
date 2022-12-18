@@ -17,6 +17,8 @@ import {
 import { Content } from 'pages/Stages/styles';
 import Button from 'components/Button/Button';
 import TextInput from 'components/TextInput/TextInput';
+import { Input } from 'components/TextInput/styles';
+import validateCPF from 'validators/cpfValidator';
 
 function Login() {
   const [isModalOpen, setModalOpen] = useState(false);
@@ -30,6 +32,8 @@ function Login() {
   const [newPassword2, setNewPassword2] = useState('');
   const [unitys, setUnitys] = useState([]);
   const [newUnity, setNewUnity] = useState('');
+  const [newCpf, setNewCpf] = useState('');
+  const [validateCpf, setValidateCpf] = useState(false);
 
   const [selectedTab, setSelectedTab] = useState('login');
 
@@ -52,6 +56,10 @@ function Login() {
       toast.error('Senha invalida');
       return;
     }
+    if (!validateCpf) {
+      toast.error('CPF inválido');
+      return;
+    }
 
     try {
       const response = await user.post('/newUser', {
@@ -59,7 +67,8 @@ function Login() {
         email: newEmail,
         password: newPassword,
         role: newRole,
-        unity: newUnity
+        unity: newUnity,
+        cpf: newCpf
       });
       response.status = 200;
       toast.success('Usuário cadastrado com  sucesso');
@@ -70,6 +79,7 @@ function Login() {
       setSelectedTab('login');
       setNewRole('');
       setNewUnity('');
+      setNewCpf('');
     } catch (error) {
       toast.error('Erro ao cadastrar \n' + error.response.data.message);
     }
@@ -91,6 +101,20 @@ function Login() {
     } catch (error) {
       toast.error('Erro no login: ' + error.response.data.message);
     }
+  }
+
+  function cpfMask(strCpf) {
+    return strCpf
+      .replace(/\D/g, '') // substitui qualquer caracter que nao seja numero por nada
+      .replace(/(\d{3})(\d)/, '$1.$2') // captura 2 grupos de numero o primeiro de 3 e o segundo de 1, apos capturar o primeiro grupo ele adiciona um ponto antes do segundo grupo de numero
+      .replace(/(\d{3})(\d)/, '$1.$2')
+      .replace(/(\d{3})(\d{1,2})/, '$1-$2')
+      .replace(/(-\d{2})\d+?$/, '$1'); // captura 2 numeros seguidos de um traço e não deixa ser digitado mais nada
+  }
+
+  function onHandleCPF(event) {
+    setNewCpf(cpfMask(event.target.value));
+    setValidateCpf(validateCPF(event.target.value));
   }
 
   async function requestNewPassword() {
@@ -185,6 +209,29 @@ function Login() {
             placeholder="Nome completo"
           ></TextInput>
           <br></br>
+          <Input
+            placeholder="CPF"
+            maxLength={14}
+            onChange={onHandleCPF}
+            value={newCpf}
+          />
+          {!newCpf ||
+            (!validateCpf && (
+              <React.Fragment>
+                <br />
+                <span
+                  style={{
+                    color: 'red',
+                    fontSize: '0.6em',
+                    fontWeight: 'bold',
+                    marginRight: '17em'
+                  }}
+                >
+                  CPF Inválido!
+                </span>
+              </React.Fragment>
+            ))}
+          <br />
           <TextInput
             set={setNewEmail}
             value={newEmail}
