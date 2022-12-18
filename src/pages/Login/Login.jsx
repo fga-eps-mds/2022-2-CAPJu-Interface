@@ -107,7 +107,7 @@ function Login() {
       toast.error('Erro no login: ' + error.response.data.message);
     }
   }
-  
+
   function onHandleName(event) {
     setNewName(event.target.value);
     setNameValidate(validateName(event.target.value));
@@ -217,7 +217,7 @@ function Login() {
             onChange={onHandleName}
             value={newName}
             placeholder="Nome completo"
-          ></Input>
+          />
           {!newName ||
             (!nameValidate && (
               <>
@@ -317,7 +317,6 @@ function Login() {
               </h6>
             </ul>
           </Criterios>
-
           <Button type="submit">Cadastrar</Button>
         </form>
       )}
