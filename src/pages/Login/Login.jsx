@@ -33,7 +33,7 @@ function Login() {
   const [unitys, setUnitys] = useState([]);
   const [newUnity, setNewUnity] = useState('');
   const [newCpf, setNewCpf] = useState('');
-  const [cpfValidate, setCpfValidate] = useState(false);
+  const [validateCpf, setValidateCpf] = useState(false);
 
   const [selectedTab, setSelectedTab] = useState('login');
 
@@ -56,7 +56,7 @@ function Login() {
       toast.error('Senha invalida');
       return;
     }
-    if (!cpfValidate) {
+    if (!validateCpf) {
       toast.error('CPF inválido');
       return;
     }
@@ -149,7 +149,7 @@ function Login() {
 
   function onHandleCPF(event) {
     setNewCpf(cpfMask(event.target.value));
-    setCpfValidate(ValidateCPF(event.target.value));
+    setValidateCpf(ValidateCPF(event.target.value));
   }
 
   async function requestNewPassword() {
@@ -249,22 +249,24 @@ function Login() {
             maxLength={14}
             onChange={onHandleCPF}
             value={newCpf}
-          ></Input>
-          {!newCpf || (!cpfValidate && <br></br>)}
+          />
           {!newCpf ||
-            (!cpfValidate && (
-              <span
-                style={{
-                  color: 'red',
-                  fontSize: '0.6em',
-                  fontWeight: 'bold',
-                  marginRight: '17em'
-                }}
-              >
-                CPF Inválido!
-              </span>
+            (!validateCpf && (
+              <React.Fragment>
+                <br />
+                <span
+                  style={{
+                    color: 'red',
+                    fontSize: '0.6em',
+                    fontWeight: 'bold',
+                    marginRight: '17em'
+                  }}
+                >
+                  CPF Inválido!
+                </span>
+              </React.Fragment>
             ))}
-          <br></br>
+          <br />
           <TextInput
             set={setNewEmail}
             value={newEmail}
