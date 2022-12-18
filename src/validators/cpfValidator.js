@@ -3,7 +3,7 @@ export default function validateCPF(cpf) {
   let rest;
   cpf = cpf.replace(/\D/g, '');
 
-  const cpfblocked = [
+  const cpfBlocked = [
     '00000000000',
     '11111111111',
     '22222222222',
@@ -16,7 +16,7 @@ export default function validateCPF(cpf) {
     '99999999999'
   ];
 
-  if (cpfblocked.includes(cpf)) {
+  if (cpfBlocked.includes(cpf)) {
     return false;
   }
 
