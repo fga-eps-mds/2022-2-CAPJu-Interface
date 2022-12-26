@@ -199,7 +199,7 @@ function Login() {
               value={password}
               placeholder="Senha"
               type="password"
-            ></TextInput>
+            />
             <ForgotPassword
               onClick={() => {
                 setModalOpen(true);
@@ -264,25 +264,21 @@ function Login() {
               </React.Fragment>
             ))}
           <br />
-          <TextInput
-            set={setNewEmail}
-            value={newEmail}
-            placeholder="Email"
-          ></TextInput>
+          <TextInput set={setNewEmail} value={newEmail} placeholder="Email" />
           <br></br>
           <TextInput
             set={setNewPassword}
             value={newPassword}
             placeholder="Crie uma senha"
             type="password"
-          ></TextInput>
+          />
           <br></br>
           <TextInput
             set={setNewPassword2}
             value={newPassword2}
             placeholder="Confirme a senha"
             type="password"
-          ></TextInput>
+          />
           <EditDrop>
             <Dropdown
               options={OptionsRoles}
@@ -335,7 +331,7 @@ function Login() {
               set={setEmail}
               value={email}
               placeholder="Digite seu email"
-            ></TextInput>
+            />
             <Button
               onClick={() => {
                 requestNewPassword();
