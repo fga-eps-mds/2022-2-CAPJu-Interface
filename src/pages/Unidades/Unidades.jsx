@@ -158,7 +158,7 @@ function Unidades() {
                 set={setUnityName}
                 value={UnityName}
                 placeholder="Nome da unidade"
-              ></TextInput>
+              />
             </div>
 
             <div>
@@ -223,7 +223,7 @@ function Unidades() {
                 set={setAdminSearchName}
                 value={adminSearchName}
                 placeholder="Nome do usuário"
-              ></TextInput>
+              />
               <Table
                 itemList={filterUsers()}
                 columnList={['Nome']}
