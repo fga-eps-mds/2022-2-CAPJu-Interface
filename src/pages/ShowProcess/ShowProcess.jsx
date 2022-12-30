@@ -38,18 +38,6 @@ const textAreaStyle = {
   fontSize: '20px'
 };
 
-const btnStyle = {
-  color: '#f1f1f1',
-  backgroundColor: '#304974',
-  borderRadius: '20px',
-  padding: '10px 15px',
-  fontWeight: 'bold',
-  marginTop: '20px',
-  cursor: 'pointer',
-  width: '130px',
-  fontSize: '20px'
-};
-
 const OBSERVATION_MAX_LENGTH = 100;
 
 function ShowProcess() {
@@ -204,9 +192,9 @@ function ShowProcess() {
             value={observation}
             onChange={(e) => handleObservation(e.target.value)}
           />
-          <button style={btnStyle} onClick={nextStage}>
+          <Button className={'showProcess'} onClick={nextStage}>
             Avançar
-          </button>
+          </Button>
         </ModalBody>
       </Modal>
     );
@@ -251,9 +239,12 @@ function ShowProcess() {
             }
             onChange={(e) => handleObservation(e.target.value)}
           />
-          <button style={btnStyle} onClick={() => newObservation(observation)}>
+          <Button
+            className={'showProcess'}
+            onClick={() => newObservation(observation)}
+          >
             Salvar
-          </button>
+          </Button>
         </ModalBody>
       </Modal>
     );
@@ -280,21 +271,24 @@ function ShowProcess() {
             onChange={(e) => handleObservation(e.target.value)}
           />
           <div>
-            <button
-              style={btnStyle}
+            <Button
+              className={'showProcess'}
               onClick={() => setEditObservationModal(false)}
             >
               Cancelar
-            </button>
-            <button
-              style={btnStyle}
+            </Button>
+            <Button
+              className={'showProcess'}
               onClick={() => newObservation(observation)}
             >
               Salvar
-            </button>
-            <button style={btnStyle} onClick={() => deleteObservation()}>
+            </Button>
+            <Button
+              className={'showProcess'}
+              onClick={() => deleteObservation()}
+            >
               Excluir
-            </button>
+            </Button>
           </div>
         </ModalBody>
       </Modal>

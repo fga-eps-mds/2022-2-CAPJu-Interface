@@ -1,14 +1,35 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import { Container } from './styles';
+import { Container, ButtonEdge, BtnStyle } from './styles';
 
 function Button({ background, onClick, children, className }) {
-  return (
-    <Container background={background} onClick={onClick} className={className}>
-      {children}
-    </Container>
-  );
+  if (className === 'edge') {
+    return (
+      <>
+        <ButtonEdge onClick={onClick}>{children}</ButtonEdge>
+      </>
+    );
+  }
+  if (className === 'showProcess') {
+    return (
+      <>
+        <BtnStyle onClick={onClick}>{children}</BtnStyle>
+      </>
+    );
+  } else {
+    return (
+      <>
+        <Container
+          background={background}
+          onClick={onClick}
+          className={className}
+        >
+          {children}
+        </Container>
+      </>
+    );
+  }
 }
 
 Button.propTypes = {

@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { getBezierPath, getBezierEdgeCenter } from 'react-flow-renderer';
 import { AnnotationEdgeButton, ForeignObject } from './styles';
 import EditIcon from '@mui/icons-material/Edit';
+import Button from '../Button/Button';
 
 export default function EdgeButton({
   id,
@@ -64,10 +65,10 @@ export default function EdgeButton({
         onClick={handleClick}
       >
         <AnnotationEdgeButton className="edgebutton-foreignobject">
-          <button className="edge-button">
+          <Button className={'edge'}>
             {label}
-            {label !== '+ Adicionar nova notificação' && <EditIcon />}
-          </button>
+            {label !== '+ Adicionar nova anotação' && <EditIcon />}
+          </Button>
         </AnnotationEdgeButton>
       </ForeignObject>
     </>
