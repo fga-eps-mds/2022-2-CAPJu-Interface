@@ -49,13 +49,13 @@ function Login() {
             value={newPassword}
             placeholder="Crie uma nova senha"
             type="password"
-          ></TextInput>
+          />
           <TextInput
             set={setNewPassword2}
             value={newPassword2}
             placeholder="Confirme a senha"
             type="password"
-          ></TextInput>
+          />
           <Button
             onClick={() => {
               setModalOpen(true);

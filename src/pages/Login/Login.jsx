@@ -192,14 +192,14 @@ function Login() {
               onChange={onHandleLoginCPF}
               value={loginCpf}
             />
-            <br></br>
-            <br></br>
+            <br />
+            <br />
             <TextInput
               set={setPassword}
               value={password}
               placeholder="Senha"
               type="password"
-            ></TextInput>
+            />
             <ForgotPassword
               onClick={() => {
                 setModalOpen(true);
@@ -240,7 +240,7 @@ function Login() {
                 </span>
               </>
             ))}
-          <br></br>
+          <br />
           <Input
             placeholder="CPF"
             maxLength={14}
@@ -264,25 +264,21 @@ function Login() {
               </React.Fragment>
             ))}
           <br />
-          <TextInput
-            set={setNewEmail}
-            value={newEmail}
-            placeholder="Email"
-          ></TextInput>
-          <br></br>
+          <TextInput set={setNewEmail} value={newEmail} placeholder="Email" />
+          <br />
           <TextInput
             set={setNewPassword}
             value={newPassword}
             placeholder="Crie uma senha"
             type="password"
-          ></TextInput>
-          <br></br>
+          />
+          <br />
           <TextInput
             set={setNewPassword2}
             value={newPassword2}
             placeholder="Confirme a senha"
             type="password"
-          ></TextInput>
+          />
           <EditDrop>
             <Dropdown
               options={OptionsRoles}
@@ -335,7 +331,7 @@ function Login() {
               set={setEmail}
               value={email}
               placeholder="Digite seu email"
-            ></TextInput>
+            />
             <Button
               onClick={() => {
                 requestNewPassword();

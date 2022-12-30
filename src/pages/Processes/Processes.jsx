@@ -191,7 +191,7 @@ function Processes() {
         </div>
         {processes.length == 0 && (
           <>
-            Nenhum processo foi encontrado <br></br> <br></br>{' '}
+            Nenhum processo foi encontrado <br /> <br />{' '}
           </>
         )}
         <Table>
