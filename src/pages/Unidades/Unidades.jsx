@@ -2,18 +2,13 @@ import toast from 'react-hot-toast';
 import React, { useEffect, useState } from 'react';
 import AxiosError from 'axios/lib/core/AxiosError';
 
-import {
-  Container,
-  AddUnityButton,
-  Modal,
-  Content,
-  ContentHeader
-} from './styles';
+import { Container, AddUnityButton } from './styles';
 import Table from 'components/Tables/Table';
 import api from 'services/api';
 import userApi from 'services/user';
 import Button from 'components/Button/Button';
 import TextInput from 'components/TextInput/TextInput';
+import Modal from 'components/Modal/Modal';
 
 function Unidades() {
   const [unitList, setUnitList] = useState([{ name: '', time: '', _id: '' }]);
@@ -146,106 +141,90 @@ function Unidades() {
         </AddUnityButton>
       </Container>
       {isModalOpen && (
-        <Modal>
-          <Content>
-            <ContentHeader>
-              <span>Criar Unidade</span>
-            </ContentHeader>
-            <div>
-              <p> Nome </p>
+        <Modal title="Criar unidade">
+          <div>
+            <p> Nome </p>
+            <TextInput
+              set={setUnityName}
+              value={UnityName}
+              placeholder="Nome da unidade"
+            />
+          </div>
 
-              <TextInput
-                set={setUnityName}
-                value={UnityName}
-                placeholder="Nome da unidade"
-              ></TextInput>
-            </div>
-
-            <div>
-              <Button
-                onClick={() => {
-                  addUnity();
-                  setModalOpen(false);
-                }}
-              >
-                Salvar
-              </Button>
-              <Button
-                onClick={() => {
-                  setModalOpen(false);
-                }}
-                background="#DE5353"
-              >
-                Cancelar
-              </Button>
-            </div>
-          </Content>
+          <div>
+            <Button
+              onClick={() => {
+                addUnity();
+                setModalOpen(false);
+              }}
+            >
+              Salvar
+            </Button>
+            <Button
+              onClick={() => {
+                setModalOpen(false);
+              }}
+              background="#DE5353"
+            >
+              Cancelar
+            </Button>
+          </div>
         </Modal>
       )}
       {isSeeAdminsModalOpen && (
-        <Modal>
-          <Content>
-            <div>
-              <ContentHeader>
-                <span>Visualizar Admins</span>
-              </ContentHeader>
-              <h3>Administradores - {currentUnity.name}</h3>
-              <Table
-                itemList={currentUnity.admins}
-                columnList={['Nome']}
-                attributeList={(admin) => [admin.name]}
-                actionList={removeAdminsActions}
-              />
-            </div>
+        <Modal title="Visualizar Admins">
+          <div>
+            <h3>Administradores - {currentUnity.name}</h3>
+            <Table
+              itemList={currentUnity.admins}
+              columnList={['Nome']}
+              attributeList={(admin) => [admin.name]}
+              actionList={removeAdminsActions}
+            />
+          </div>
 
+          <div>
+            <Button
+              onClick={() => {
+                setSeeAdminsModalOpen(false);
+              }}
+              background="rgb(222,83,83)"
+            >
+              Voltar
+            </Button>
+          </div>
+        </Modal>
+      )}
+      {isAddAdminsModalOpen && (
+        <Modal title="Adicionar Admins">
+          <div>
+            <h3>Administradores - {currentUnity.name}</h3>
+            <TextInput
+              set={setAdminSearchName}
+              value={adminSearchName}
+              placeholder="Nome do usuário"
+            />
+            <Table
+              itemList={filterUsers()}
+              columnList={['Nome']}
+              attributeList={(admin) => [admin.name]}
+              actionList={newAdminActions}
+            />
+          </div>
+
+          <div>
+            <Button onClick={() => searchUsers()}>Buscar</Button>
             <div>
               <Button
                 onClick={() => {
-                  setSeeAdminsModalOpen(false);
+                  setAddAdminsModalOpen(false);
                 }}
                 background="rgb(222,83,83)"
               >
                 Voltar
               </Button>
             </div>
-          </Content>
-        </Modal>
-      )}
-      {isAddAdminsModalOpen && (
-        <Modal>
-          <Content>
-            <div>
-              <ContentHeader>
-                <span>Adicionar Admins</span>
-              </ContentHeader>
-              <h3>Administradores - {currentUnity.name}</h3>
-              <TextInput
-                set={setAdminSearchName}
-                value={adminSearchName}
-                placeholder="Nome do usuário"
-              ></TextInput>
-              <Table
-                itemList={filterUsers()}
-                columnList={['Nome']}
-                attributeList={(admin) => [admin.name]}
-                actionList={newAdminActions}
-              />
-            </div>
-
-            <div>
-              <Button onClick={() => searchUsers()}>Buscar</Button>
-              <div>
-                <Button
-                  onClick={() => {
-                    setAddAdminsModalOpen(false);
-                  }}
-                  background="rgb(222,83,83)"
-                >
-                  Voltar
-                </Button>
-              </div>
-            </div>
-          </Content>
+          </div>
         </Modal>
       )}
     </>

@@ -8,24 +8,10 @@ export const ModalStyle = styled.div`
   width: 100%;
   height: 100%;
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   font-size: 20px;
   background-color: rgba(0, 0, 0, 0.5);
   z-index: 3;
-`;
-
-export const Content = styled.div`
-  display: flex;
-  background-color: white;
-  min-width: 800px;
-  max-height: 90vh;
-  min-height: 60vh;
-  justify-content: space-between;
-  align-items: center;
-  flex-direction: column;
-  gap: 10px;
-  font-size: 20px;
-  border-radius: 10px;
 `;
 
 export const ContentHeader = styled.div`
@@ -45,13 +31,16 @@ export const ContentHeader = styled.div`
   }
 `;
 
-export const Xbutton = styled.button`
-  cursor: pointer;
-  color: #f1f1f1;
-  background-color: transparent;
-  border: none;
-  font-weight: bold;
-  font-size: 1em;
-  align-self: center;
-  text-shadow: 2px 1px 1px black;
+export const Content = styled.div`
+  display: flex;
+  background-color: white;
+  min-width: 800px;
+  height: 80vh;
+  justify-content: space-between;
+  align-items: justify;
+  flex-direction: column;
+  gap: 10px;
+  font-size: 20px;
+  border-radius: 10px;
+  overflow-x: hidden;
 `;

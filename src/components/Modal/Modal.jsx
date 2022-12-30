@@ -18,8 +18,7 @@ function Modal({ title, children }) {
 
 Modal.propTypes = {
   title: PropTypes.string,
-  children: PropTypes.any,
-  close: PropTypes.func
+  children: PropTypes.any
 };
 
 export default Modal;
