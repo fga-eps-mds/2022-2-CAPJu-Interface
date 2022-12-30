@@ -417,7 +417,7 @@ function Flows() {
                     options={selectedOptions}
                   />
                   <div className="addStage" onClick={addSequence}>
-                    <Button className={'add'}>Adicionar</Button>
+                    <Button buttonType={'add'}>Adicionar</Button>
                   </div>
                 </SelectorWrapper>
                 <SequencesWrapper>

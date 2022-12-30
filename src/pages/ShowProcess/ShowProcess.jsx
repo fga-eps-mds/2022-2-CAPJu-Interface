@@ -192,7 +192,7 @@ function ShowProcess() {
             value={observation}
             onChange={(e) => handleObservation(e.target.value)}
           />
-          <Button className={'showProcess'} onClick={nextStage}>
+          <Button buttonType={'showProcess'} onClick={nextStage}>
             Avançar
           </Button>
         </ModalBody>
@@ -240,7 +240,7 @@ function ShowProcess() {
             onChange={(e) => handleObservation(e.target.value)}
           />
           <Button
-            className={'showProcess'}
+            buttonType={'showProcess'}
             onClick={() => newObservation(observation)}
           >
             Salvar
@@ -272,19 +272,19 @@ function ShowProcess() {
           />
           <div>
             <Button
-              className={'showProcess'}
+              buttonType={'showProcess'}
               onClick={() => setEditObservationModal(false)}
             >
               Cancelar
             </Button>
             <Button
-              className={'showProcess'}
+              buttonType={'showProcess'}
               onClick={() => newObservation(observation)}
             >
               Salvar
             </Button>
             <Button
-              className={'showProcess'}
+              buttonType={'showProcess'}
               onClick={() => deleteObservation()}
             >
               Excluir

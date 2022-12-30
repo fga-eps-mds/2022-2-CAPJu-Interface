@@ -22,9 +22,9 @@ function AddStageInFlow(props) {
         menuClassName="dropdown-menu"
         arrowClassName="dropdown-arrow"
       />
-      <div onClick={() => onClick(flow)}>
-        <Button className={'add'}>Adicionar</Button>
-      </div>
+      <Button buttonType={'add'} onClick={() => onClick(flow)}>
+        Adicionar
+      </Button>
     </SelectorWrapper>
   );
 }

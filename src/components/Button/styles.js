@@ -21,7 +21,9 @@ export const Container = styled.button.attrs((props) => ({
   }
 `;
 
-export const ButtonEdge = styled.button`
+export const ButtonEdge = styled.button.attrs((props) => ({
+  background: props.background || '#304974'
+}))`
   display: flex;
   background: #304974;
   border: 1px solid #fff;
@@ -36,7 +38,9 @@ export const ButtonEdge = styled.button`
   }
 `;
 
-export const BtnStyle = styled.button`
+export const BtnStyle = styled.button.attrs((props) => ({
+  background: props.background || '#304974'
+}))`
   color: #f1f1f1;
   background-color: #304974;
   border-radius: 20px;
@@ -48,7 +52,9 @@ export const BtnStyle = styled.button`
   font-size: 20px;
 `;
 
-export const ButtonAdd = styled.button`
+export const ButtonAdd = styled.button.attrs((props) => ({
+  background: props.background || '#304974'
+}))`
   background-color: #44c767;
   border-radius: 28px;
   border: 1px solid #18ab29;
