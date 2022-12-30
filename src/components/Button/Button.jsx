@@ -1,13 +1,21 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import { Container, ButtonEdge, BtnStyle } from './styles';
+import { Container, ButtonEdge, BtnStyle, ButtonAdd } from './styles';
 
 function Button({ background, onClick, children, className }) {
   if (className === 'edge') {
     return (
       <>
         <ButtonEdge onClick={onClick}>{children}</ButtonEdge>
+      </>
+    );
+  }
+
+  if (className === 'add') {
+    return (
+      <>
+        <ButtonAdd onClick={onClick}>{children}</ButtonAdd>
       </>
     );
   }

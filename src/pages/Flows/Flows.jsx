@@ -24,7 +24,6 @@ import {
 } from './styles';
 import FlowViewer from 'components/FlowViewer/FlowViewer';
 import Table from 'components/Tables/Table';
-import ButtonAdd from 'components/ButtonAdd/ButtonAdd';
 
 function Flows() {
   const [flows, setFlows] = useState([]);
@@ -357,7 +356,9 @@ function Flows() {
                       setValue={setTo}
                       options={selectedOptions}
                     />
-                    <ButtonAdd onClickProps={addSequence} />
+                    <Button className={'add'} onClick={addSequence}>
+                      Adicionar
+                    </Button>
                   </SelectorWrapper>
                   <Button background="#de5353" onClick={removeSequence}>
                     <span>Retroceder</span>
@@ -416,7 +417,7 @@ function Flows() {
                     options={selectedOptions}
                   />
                   <div className="addStage" onClick={addSequence}>
-                    <ButtonAdd />
+                    <Button className={'add'}>Adicionar</Button>
                   </div>
                 </SelectorWrapper>
                 <SequencesWrapper>

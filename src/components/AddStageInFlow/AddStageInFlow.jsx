@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import Dropdown from 'react-dropdown';
 
 import { SelectorWrapper } from './styles.js';
-import ButtonAdd from 'components/ButtonAdd/ButtonAdd';
+import Button from 'components/Button/Button';
 
 function AddStageInFlow(props) {
   const { selectedStage, options, onClick, setSelectedStage, flow } = props;
@@ -22,7 +22,9 @@ function AddStageInFlow(props) {
         menuClassName="dropdown-menu"
         arrowClassName="dropdown-arrow"
       />
-      <ButtonAdd onClickProps={() => onClick(flow)} />
+      <div onClick={() => onClick(flow)}>
+        <Button className={'add'}>Adicionar</Button>
+      </div>
     </SelectorWrapper>
   );
 }
