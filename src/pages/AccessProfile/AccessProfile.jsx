@@ -217,10 +217,12 @@ function AccessProfile() {
                 arrowClassName="dropdown-arrow"
               />
               <div>
-                <Button onClick={handleEditRole}>Salvar</Button>
-                <Button onClick={handleRoleModal} background="#DE5353">
-                  Cancelar
-                </Button>
+                <Button onClick={handleEditRole} text={'Salvar'} />
+                <Button
+                  onClick={handleRoleModal}
+                  background="#DE5353"
+                  text={'Cancelar'}
+                />
               </div>
             </Content>
           </Modal>
@@ -234,10 +236,12 @@ function AccessProfile() {
               <span>Deseja realmente excluir Usuário?</span>
               {getSelectedUser().name}
               <div>
-                <Button onClick={handleDeleteUser}>Confirmar</Button>
-                <Button onClick={handleDeleteModal} background="#DE5353">
-                  Cancelar
-                </Button>
+                <Button onClick={handleDeleteUser} text={'Confirmar'} />
+                <Button
+                  onClick={handleDeleteModal}
+                  background="#DE5353"
+                  text={'Cancelar'}
+                />
               </div>
             </Content>
           </Modal>

@@ -298,10 +298,12 @@ function Flows() {
               <span>Deseja realmente excluir este Fluxo?</span>
               {getFlow(selectedFlow)?.name}
               <div>
-                <Button onClick={handleDeleteFlow}>Confirmar</Button>
-                <Button onClick={handleDeleteModal} background="#DE5353">
-                  Cancelar
-                </Button>
+                <Button onClick={handleDeleteFlow} text={'Confirmar'} />
+                <Button
+                  onClick={handleDeleteModal}
+                  background="#DE5353"
+                  text={'Cancelar'}
+                />
               </div>
             </Content>
           </Modal>
@@ -356,21 +358,25 @@ function Flows() {
                       setValue={setTo}
                       options={selectedOptions}
                     />
-                    <Button className={'add'} onClick={addSequence}>
-                      Adicionar
-                    </Button>
+                    <Button
+                      className={'add'}
+                      onClick={addSequence}
+                      text={'Adicionar'}
+                    />
                   </SelectorWrapper>
-                  <Button background="#de5353" onClick={removeSequence}>
-                    <span>Retroceder</span>
-                  </Button>
+                  <Button
+                    background="#de5353"
+                    onClick={removeSequence}
+                    text={'Retroceder'}
+                  />
                 </>
               )}
-              <Button onClick={editFlow}>
-                <span>Salvar</span>
-              </Button>
-              <Button onClick={handleShowFlowModal} background="#DE5353">
-                Cancelar
-              </Button>
+              <Button onClick={editFlow} text={'Salvar'} />
+              <Button
+                onClick={handleShowFlowModal}
+                background="#DE5353"
+                text={'Cancelar'}
+              />
             </Content>
           </Modal>
         )}
@@ -417,7 +423,7 @@ function Flows() {
                     options={selectedOptions}
                   />
                   <div className="addStage" onClick={addSequence}>
-                    <Button buttonType={'add'}>Adicionar</Button>
+                    <Button buttonType={'add'} text={'Adicionar'} />
                   </div>
                 </SelectorWrapper>
                 <SequencesWrapper>
@@ -450,12 +456,13 @@ function Flows() {
                 onClick={() => {
                   addFlow();
                 }}
-              >
-                <span>Salvar</span>
-              </Button>
-              <Button onClick={handleNewFlowModal} background="#DE5353">
-                Cancelar
-              </Button>
+                text={'Salvar'}
+              />
+              <Button
+                onClick={handleNewFlowModal}
+                background="#DE5353"
+                text={'Cancelar'}
+              />
             </div>
           </Content>
         </Modal>

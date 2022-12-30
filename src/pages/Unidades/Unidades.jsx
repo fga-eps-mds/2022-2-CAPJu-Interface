@@ -167,17 +167,15 @@ function Unidades() {
                   addUnity();
                   setModalOpen(false);
                 }}
-              >
-                Salvar
-              </Button>
+                text={'Salvar'}
+              />
               <Button
                 onClick={() => {
                   setModalOpen(false);
                 }}
                 background="#DE5353"
-              >
-                Cancelar
-              </Button>
+                text={'Cancelar'}
+              />
             </div>
           </Content>
         </Modal>
@@ -204,9 +202,8 @@ function Unidades() {
                   setSeeAdminsModalOpen(false);
                 }}
                 background="rgb(222,83,83)"
-              >
-                Voltar
-              </Button>
+                text={'Voltar'}
+              />
             </div>
           </Content>
         </Modal>
@@ -240,9 +237,8 @@ function Unidades() {
                     setAddAdminsModalOpen(false);
                   }}
                   background="rgb(222,83,83)"
-                >
-                  Voltar
-                </Button>
+                  text={'Voltar'}
+                />
               </div>
             </div>
           </Content>

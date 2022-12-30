@@ -3,21 +3,17 @@ import PropTypes from 'prop-types';
 
 import { Container, ButtonEdge, BtnStyle, ButtonAdd } from './styles';
 
-function Button({ background, onClick, children, buttonType }) {
-  let ButtonComponent;
+const buttonTypeToComponent = {
+  edge: ButtonEdge,
+  add: ButtonAdd,
+  showProcess: BtnStyle
+};
 
-  if (buttonType === 'edge') {
-    ButtonComponent = ButtonEdge;
-  } else if (buttonType === 'add') {
-    ButtonComponent = ButtonAdd;
-  } else if (buttonType === 'showProcess') {
-    ButtonComponent = BtnStyle;
-  } else {
-    ButtonComponent = Container;
-  }
-
+function Button({ background, onClick, children, buttonType, text }) {
+  const ButtonComponent = buttonTypeToComponent[buttonType] || Container;
   return (
     <ButtonComponent background={background} onClick={onClick}>
+      {text}
       {children}
     </ButtonComponent>
   );
@@ -28,7 +24,8 @@ Button.propTypes = {
   teste: PropTypes.string,
   onClick: PropTypes.func,
   background: PropTypes.string,
-  children: PropTypes.any
+  children: PropTypes.any,
+  text: PropTypes.string
 };
 
 export default Button;

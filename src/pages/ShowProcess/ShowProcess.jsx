@@ -192,9 +192,11 @@ function ShowProcess() {
             value={observation}
             onChange={(e) => handleObservation(e.target.value)}
           />
-          <Button buttonType={'showProcess'} onClick={nextStage}>
-            Avançar
-          </Button>
+          <Button
+            buttonType={'showProcess'}
+            onClick={nextStage}
+            text={'Avançar'}
+          />
         </ModalBody>
       </Modal>
     );
@@ -242,9 +244,8 @@ function ShowProcess() {
           <Button
             buttonType={'showProcess'}
             onClick={() => newObservation(observation)}
-          >
-            Salvar
-          </Button>
+            text={'Salvar'}
+          />
         </ModalBody>
       </Modal>
     );
@@ -274,21 +275,18 @@ function ShowProcess() {
             <Button
               buttonType={'showProcess'}
               onClick={() => setEditObservationModal(false)}
-            >
-              Cancelar
-            </Button>
+              text={'Cancelar'}
+            />
             <Button
               buttonType={'showProcess'}
               onClick={() => newObservation(observation)}
-            >
-              Salvar
-            </Button>
+              text={'Salvar'}
+            />
             <Button
               buttonType={'showProcess'}
               onClick={() => deleteObservation()}
-            >
-              Excluir
-            </Button>
+              text={'Excluir'}
+            />
           </div>
         </ModalBody>
       </Modal>
