@@ -192,8 +192,8 @@ function Login() {
               onChange={onHandleLoginCPF}
               value={loginCpf}
             />
-            <br></br>
-            <br></br>
+            <br />
+            <br />
             <TextInput
               set={setPassword}
               value={password}
@@ -240,7 +240,7 @@ function Login() {
                 </span>
               </>
             ))}
-          <br></br>
+          <br />
           <Input
             placeholder="CPF"
             maxLength={14}
@@ -265,14 +265,14 @@ function Login() {
             ))}
           <br />
           <TextInput set={setNewEmail} value={newEmail} placeholder="Email" />
-          <br></br>
+          <br />
           <TextInput
             set={setNewPassword}
             value={newPassword}
             placeholder="Crie uma senha"
             type="password"
           />
-          <br></br>
+          <br />
           <TextInput
             set={setNewPassword2}
             value={newPassword2}
