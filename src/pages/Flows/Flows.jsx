@@ -359,7 +359,7 @@ function Flows() {
                       options={selectedOptions}
                     />
                     <Button
-                      className={'add'}
+                      buttonType={'add'}
                       onClick={addSequence}
                       text={'Adicionar'}
                     />
