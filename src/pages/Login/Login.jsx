@@ -207,7 +207,7 @@ function Login() {
             >
               Esqueceu a senha?
             </ForgotPassword>
-            <Button type="submit">Entrar</Button>
+            <Button type="submit" text={'Entrar'} />
           </form>
         </>
       ) : (
@@ -319,7 +319,7 @@ function Login() {
               </h6>
             </ul>
           </Criterios>
-          <Button type="submit">Cadastrar</Button>
+          <Button type="submit" text={'Cadastrar'} />
         </form>
       )}
       {isModalOpen && (
@@ -337,17 +337,15 @@ function Login() {
                 requestNewPassword();
                 setModalOpen(false);
               }}
-            >
-              Solicitar recuperação
-            </Button>
+              text={'Soliciar recuperação'}
+            />
             <Button
               onClick={() => {
                 setModalOpen(false);
               }}
               background="#DE5353"
-            >
-              Cancelar
-            </Button>
+              text={'Cancelar'}
+            />
           </Content>
         </Modal>
       )}

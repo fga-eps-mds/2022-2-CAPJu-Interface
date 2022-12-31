@@ -100,9 +100,8 @@ function SideBar() {
               localStorage.removeItem('user');
               navigate('Login');
             }}
-          >
-            Sair
-          </Button>
+            text={'Sair'}
+          />
         </LogoutButton>
       )}
     </Container>

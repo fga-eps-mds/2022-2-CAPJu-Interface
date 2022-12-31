@@ -38,18 +38,6 @@ const textAreaStyle = {
   fontSize: '20px'
 };
 
-const btnStyle = {
-  color: '#f1f1f1',
-  backgroundColor: '#304974',
-  borderRadius: '20px',
-  padding: '10px 15px',
-  fontWeight: 'bold',
-  marginTop: '20px',
-  cursor: 'pointer',
-  width: '130px',
-  fontSize: '20px'
-};
-
 const OBSERVATION_MAX_LENGTH = 100;
 
 function ShowProcess() {
@@ -204,9 +192,11 @@ function ShowProcess() {
             value={observation}
             onChange={(e) => handleObservation(e.target.value)}
           />
-          <button style={btnStyle} onClick={nextStage}>
-            Avançar
-          </button>
+          <Button
+            buttonType={'showProcess'}
+            onClick={nextStage}
+            text={'Avançar'}
+          />
         </ModalBody>
       </Modal>
     );
@@ -251,9 +241,11 @@ function ShowProcess() {
             }
             onChange={(e) => handleObservation(e.target.value)}
           />
-          <button style={btnStyle} onClick={() => newObservation(observation)}>
-            Salvar
-          </button>
+          <Button
+            buttonType={'showProcess'}
+            onClick={() => newObservation(observation)}
+            text={'Salvar'}
+          />
         </ModalBody>
       </Modal>
     );
@@ -280,21 +272,21 @@ function ShowProcess() {
             onChange={(e) => handleObservation(e.target.value)}
           />
           <div>
-            <button
-              style={btnStyle}
+            <Button
+              buttonType={'showProcess'}
               onClick={() => setEditObservationModal(false)}
-            >
-              Cancelar
-            </button>
-            <button
-              style={btnStyle}
+              text={'Cancelar'}
+            />
+            <Button
+              buttonType={'showProcess'}
               onClick={() => newObservation(observation)}
-            >
-              Salvar
-            </button>
-            <button style={btnStyle} onClick={() => deleteObservation()}>
-              Excluir
-            </button>
+              text={'Salvar'}
+            />
+            <Button
+              buttonType={'showProcess'}
+              onClick={() => deleteObservation()}
+              text={'Excluir'}
+            />
           </div>
         </ModalBody>
       </Modal>
