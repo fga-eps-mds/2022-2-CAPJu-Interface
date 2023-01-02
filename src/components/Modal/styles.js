@@ -3,6 +3,7 @@ import styled from 'styled-components';
 export const ModalStyle = styled.div`
   position: absolute;
   backdrop-filter: blur(5px);
+  box-shadow: 0 0 0 100px rgba(0, 0, 0, 0.5);
   justify-content: center;
   align-items: center;
   width: 100%;
