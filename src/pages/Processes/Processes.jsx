@@ -191,7 +191,7 @@ function Processes() {
         </div>
         {processes.length == 0 && (
           <>
-            Nenhum processo foi encontrado <br></br> <br></br>{' '}
+            Nenhum processo foi encontrado <br /> <br />{' '}
           </>
         )}
         <Table>
@@ -320,12 +320,13 @@ function Processes() {
                     await updateProcesses();
                     closeModal();
                   }}
-                >
-                  Confirmar
-                </Button>
-                <Button onClick={closeModal} background="#DE5353">
-                  Cancelar
-                </Button>
+                  text={'Confirmar'}
+                />
+                <Button
+                  onClick={closeModal}
+                  background="#DE5353"
+                  text={'Cancelar'}
+                />
               </div>
             </Content>
           </Modal>
@@ -347,17 +348,15 @@ function Processes() {
                     setDeleteProcessModal(-1);
                     deleteProcess(processes[deleteProcessModal].registro);
                   }}
-                >
-                  Confirmar
-                </Button>
+                  text={'Confirmar'}
+                />
                 <Button
                   onClick={() => {
                     setDeleteProcessModal(-1);
                   }}
                   background="#DE5353"
-                >
-                  Cancelar
-                </Button>
+                  text={'Cancelar'}
+                />
               </div>
             </Content>
           </Modal>

@@ -21,9 +21,10 @@ jest.mock('react-router-dom', () => {
 // jest.setTimeout(8000);
 test('Testando o cadastro', async () => {
   const registerData = {
-    name: 'João',
+    name: 'João Silva',
     email: 'test@test.com',
     password: 'SenhaForte1',
+    cpf: '055.740.430-41',
     role: '1',
     unity: '12341234ldlfasdf'
   };
@@ -73,6 +74,7 @@ test('Testando o cadastro', async () => {
   const title = screen.getByRole('heading', { level: 1 });
   const inputName = screen.getByPlaceholderText('Nome completo');
   const inputEmail = screen.getByPlaceholderText('Email');
+  const inputCpf = screen.getByPlaceholderText('CPF');
   const inputPassword = screen.getByPlaceholderText('Crie uma senha');
   const inputCheckPassword = screen.getByPlaceholderText('Confirme a senha');
   const select = screen.getAllByTestId('react-select-mock');
@@ -80,6 +82,7 @@ test('Testando o cadastro', async () => {
 
   fireEvent.change(inputName, { target: { value: registerData.name } });
   fireEvent.change(inputEmail, { target: { value: registerData.email } });
+  fireEvent.change(inputCpf, { target: { value: registerData.cpf } });
   fireEvent.change(inputPassword, { target: { value: registerData.password } });
   fireEvent.change(inputCheckPassword, {
     target: { value: registerData.password }

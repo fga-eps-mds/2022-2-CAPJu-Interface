@@ -15,7 +15,7 @@ function TextInput(props) {
       value={props.value}
       type={props.type}
       maxLength={props.maxLength}
-    ></Input>
+    />
   );
 }
 

@@ -12,7 +12,7 @@ const edgeTypes = {
 
 function FlowViewer(props) {
   const procStages = props.proc?.etapas;
-  const { disabled, newModal } = props;
+  const { disabled, openModal } = props;
 
   function deadlineDate(stage) {
     const stageDate = getStageDate(stage._id, props.proc, props.flow);
@@ -55,9 +55,9 @@ function FlowViewer(props) {
         target: sequence.stageIdTo,
         label:
           sequence.observation || (!disabled && '+ Adicionar nova notificação'),
-        type: sequence.observation.length == 0 && !disabled && 'edgebutton',
+        type: !disabled && 'edgebutton',
         animated: true,
-        data: { onClick: newModal },
+        data: { onClick: openModal },
         markerEnd: {
           type: MarkerType.ArrowClosed,
           color: '#2a2a32'
@@ -78,7 +78,7 @@ function FlowViewer(props) {
         label: !disabled && '+ Adicionar nova notificação',
         type: !disabled && 'edgebutton',
         animated: true,
-        data: { onClick: newModal },
+        data: { onClick: openModal },
         style: { stroke: 'black' }
       };
     })
@@ -114,12 +114,17 @@ FlowViewer.propTypes = {
   stages: PropTypes.array,
   highlight: PropTypes.string,
   proc: PropTypes.object,
-  newModal: PropTypes.func
+  openModal: PropTypes.func
 };
 
 FlowViewer.defaultProps = {
   disabled: false,
-  newModal: null
+  onClick: null,
+  flow: null,
+  stages: [],
+  highlight: null,
+  proc: null,
+  openModal: null
 };
 
 export default FlowViewer;

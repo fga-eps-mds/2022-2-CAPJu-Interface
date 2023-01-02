@@ -1,7 +1,9 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import PropTypes from 'prop-types';
 import { getBezierPath, getBezierEdgeCenter } from 'react-flow-renderer';
 import { AnnotationEdgeButton, ForeignObject } from './styles';
+import EditIcon from '@mui/icons-material/Edit';
+import Button from 'components/Button/Button';
 
 export default function EdgeButton({
   id,
@@ -19,8 +21,8 @@ export default function EdgeButton({
   markerEnd
 }) {
   const { onClick } = data;
-  const foreignObjectWidth = 150;
-  const foreignObjectHeight = 25;
+  const foreignObjectHeight = label.length >= 40 ? 30 : 13;
+  const foreignObjectWidth = label.length * 5 + 30;
   const edgePath = getBezierPath({
     sourceX,
     sourceY,
@@ -39,6 +41,11 @@ export default function EdgeButton({
     targetPosition
   });
 
+  const handleClick = useCallback(
+    () => onClick(source, target, label),
+    [onClick, source, target, label]
+  );
+
   return (
     <>
       <path
@@ -55,10 +62,13 @@ export default function EdgeButton({
         x={centerX - foreignObjectWidth / 2}
         y={centerY - foreignObjectHeight / 2}
         requiredExtensions="http://www.w3.org/1999/xhtml"
-        onClick={() => onClick(source, target)}
+        onClick={handleClick}
       >
         <AnnotationEdgeButton className="edgebutton-foreignobject">
-          <button className="edge-button">{label}</button>
+          <Button buttonType={'edge'}>
+            {label}
+            {label !== '+ Adicionar nova anotação' && <EditIcon />}
+          </Button>
         </AnnotationEdgeButton>
       </ForeignObject>
     </>
