@@ -4,7 +4,7 @@ import Dropdown from 'react-dropdown';
 import Button from 'components/Button/Button';
 
 import api from 'services/user';
-import { Container, InputSearch, Content, ContentHeader } from './sytles.js';
+import { Container, InputSearch } from './sytles.js';
 import Table from 'components/Tables/Table';
 import Modal from 'components/Modal/Modal';
 import authConfig from 'services/config';
@@ -195,40 +195,36 @@ function AccessProfile() {
         />
         {roleModal && (
           <Modal title="Editar Perfil de Acesso">
-            <Content>
-              <span>Escolha um Perfil</span>
-              <Dropdown
-                options={roles}
-                onChange={handleChangeRole}
-                value={getUserRole(getSelectedUser())}
-                placeholder="Selecione o perfil"
-                className="dropdown"
-                controlClassName="dropdown-control"
-                placeholderClassName="dropdown-placeholder"
-                menuClassName="dropdown-menu"
-                arrowClassName="dropdown-arrow"
-              />
-              <div>
-                <Button onClick={handleEditRole}>Salvar</Button>
-                <Button onClick={handleRoleModal} background="#DE5353">
-                  Cancelar
-                </Button>
-              </div>
-            </Content>
+            <span>Escolha um Perfil</span>
+            <Dropdown
+              options={roles}
+              onChange={handleChangeRole}
+              value={getUserRole(getSelectedUser())}
+              placeholder="Selecione o perfil"
+              className="dropdown"
+              controlClassName="dropdown-control"
+              placeholderClassName="dropdown-placeholder"
+              menuClassName="dropdown-menu"
+              arrowClassName="dropdown-arrow"
+            />
+            <div>
+              <Button onClick={handleEditRole}>Salvar</Button>
+              <Button onClick={handleRoleModal} background="#DE5353">
+                Cancelar
+              </Button>
+            </div>
           </Modal>
         )}
         {deleteModal && (
           <Modal title="Excluir Usuário">
-            <Content>
-              <span>Deseja realmente excluir Usuário?</span>
-              {getSelectedUser().name}
-              <div>
-                <Button onClick={handleDeleteUser}>Confirmar</Button>
-                <Button onClick={handleDeleteModal} background="#DE5353">
-                  Cancelar
-                </Button>
-              </div>
-            </Content>
+            <span>Deseja realmente excluir Usuário?</span>
+            {getSelectedUser().name}
+            <div>
+              <Button onClick={handleDeleteUser}>Confirmar</Button>
+              <Button onClick={handleDeleteModal} background="#DE5353">
+                Cancelar
+              </Button>
+            </div>
           </Modal>
         )}
       </div>
