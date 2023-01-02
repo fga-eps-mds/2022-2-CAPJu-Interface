@@ -4,14 +4,9 @@ import Dropdown from 'react-dropdown';
 import Button from 'components/Button/Button';
 
 import api from 'services/user';
-import {
-  Container,
-  InputSearch,
-  Modal,
-  Content,
-  ContentHeader
-} from './sytles.js';
+import { Container, InputSearch, Content, ContentHeader } from './sytles.js';
 import Table from 'components/Tables/Table';
+import Modal from 'components/Modal/Modal';
 import authConfig from 'services/config';
 
 function AccessProfile() {
@@ -199,11 +194,8 @@ function AccessProfile() {
           attributeList={getAttributesForDisplay}
         />
         {roleModal && (
-          <Modal>
+          <Modal title="Editar Perfil de Acesso">
             <Content>
-              <ContentHeader>
-                <span>Editar Perfil de Acesso</span>
-              </ContentHeader>
               <span>Escolha um Perfil</span>
               <Dropdown
                 options={roles}
@@ -226,11 +218,8 @@ function AccessProfile() {
           </Modal>
         )}
         {deleteModal && (
-          <Modal>
+          <Modal title="Excluir Usuário">
             <Content>
-              <ContentHeader>
-                <span>Excluir Usuário</span>
-              </ContentHeader>
               <span>Deseja realmente excluir Usuário?</span>
               {getSelectedUser().name}
               <div>
