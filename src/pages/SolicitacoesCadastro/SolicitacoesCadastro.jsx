@@ -1,11 +1,12 @@
 import toast from 'react-hot-toast';
 import React, { useEffect, useState } from 'react';
 
-import { Container, Area, Modal, Content, ContentHeader } from './styles';
+import { Container, Area } from './styles';
 import Table from 'components/Tables/Table';
 import api from 'services/user';
 import authConfig from 'services/config.js';
 import Button from 'components/Button/Button';
+import Modal from 'components/Modal/Modal';
 
 function SolicitacoesCadastro() {
   const [users, setUsers] = useState([]);
@@ -125,63 +126,53 @@ function SolicitacoesCadastro() {
         />
       </Area>
       {acceptModal && (
-        <Modal>
-          <Content>
-            <ContentHeader>
-              <span>Aceitar Solicitação</span>
-            </ContentHeader>
-            <span>Deseja realmente aceitar esta solicitação?</span>
-            {getUser(selectedUser).name}
-            <div>
-              <Button
-                onClick={async () => {
-                  await acceptRequest(getUser(selectedUser)._id);
-                  await updateSolicitacoes();
-                  setAcceptModal(false);
-                }}
-              >
-                Confirmar
-              </Button>
-              <Button
-                onClick={() => {
-                  setAcceptModal(false);
-                }}
-                background="red"
-              >
-                Cancelar
-              </Button>
-            </div>
-          </Content>
+        <Modal title="Aceitar Solicitação">
+          <span>Deseja realmente aceitar esta solicitação?</span>
+          {getUser(selectedUser).name}
+          <div>
+            <Button
+              onClick={async () => {
+                await acceptRequest(getUser(selectedUser)._id);
+                await updateSolicitacoes();
+                setAcceptModal(false);
+              }}
+            >
+              Confirmar
+            </Button>
+            <Button
+              onClick={() => {
+                setAcceptModal(false);
+              }}
+              background="red"
+            >
+              Cancelar
+            </Button>
+          </div>
         </Modal>
       )}
       {deleteModal && (
-        <Modal>
-          <Content>
-            <ContentHeader>
-              <span>Recusar Solicitação</span>
-            </ContentHeader>
-            <span>Deseja realmente recusar esta solicitação?</span>
-            {getUser(selectedUser).name}
-            <div>
-              <Button
-                onClick={async () => {
-                  await deleteRequest(getUser(selectedUser)._id);
-                  await updateSolicitacoes();
-                  setDeleteModal(false);
-                }}
-              >
-                Confirmar
-              </Button>
-              <Button
-                onClick={() => {
-                  setDeleteModal(false);
-                }}
-                background="red"
-              >
-                Cancelar
-              </Button>
-            </div>
-          </Content>
+        <Modal title="Recusar Solicitação">
+          <span>Deseja realmente recusar esta solicitação?</span>
+          {getUser(selectedUser).name}
+          <div>
+            <Button
+              onClick={async () => {
+                await deleteRequest(getUser(selectedUser)._id);
+                await updateSolicitacoes();
+                setDeleteModal(false);
+              }}
+            >
+              Confirmar
+            </Button>
+            <Button
+              onClick={() => {
+                setDeleteModal(false);
+              }}
+              background="red"
+            >
+              Cancelar
+            </Button>
+          </div>
         </Modal>
       )}
     </Container>
