@@ -2,18 +2,12 @@ import toast from 'react-hot-toast';
 import React, { useEffect, useState } from 'react';
 import AxiosError from 'axios/lib/core/AxiosError';
 
-import {
-  Container,
-  AddStageButton,
-  Area,
-  Modal,
-  Content,
-  ContentHeader
-} from './styles';
+import { Container, AddStageButton, Area } from './styles';
 import api from 'services/api';
 import Table from 'components/Tables/Table';
 import Button from 'components/Button/Button';
 import TextInput from 'components/TextInput/TextInput';
+import Modal from 'components/Modal/Modal';
 
 function Stages() {
   const [stages, setStages] = useState([{ name: '', time: '', _id: '' }]);
@@ -113,76 +107,66 @@ function Stages() {
         </AddStageButton>
       </Container>
       {isModalOpen && (
-        <Modal>
-          <Content>
-            <ContentHeader>
-              <span>Criar Etapa</span>
-            </ContentHeader>
-            <div>
-              <p> Nome </p>
+        <Modal title="Criar Etapa">
+          <div>
+            <p> Nome </p>
 
-              <TextInput
-                set={setStageName}
-                value={stageName}
-                placeholder="Nome da etapa"
-              ></TextInput>
-              <p> Duração </p>
+            <TextInput
+              set={setStageName}
+              value={stageName}
+              placeholder="Nome da etapa"
+            ></TextInput>
+            <p> Duração </p>
 
-              <TextInput
-                set={setStageTime}
-                value={stageTime}
-                placeholder="Duração (dias)"
-              ></TextInput>
-            </div>
+            <TextInput
+              set={setStageTime}
+              value={stageTime}
+              placeholder="Duração (dias)"
+            ></TextInput>
+          </div>
 
-            <div>
-              <Button
-                onClick={() => {
-                  addStage();
-                  setModalOpen(false);
-                }}
-              >
-                Salvar
-              </Button>
-              <Button
-                onClick={() => {
-                  setModalOpen(false);
-                }}
-                background="#DE5353"
-              >
-                Cancelar
-              </Button>
-            </div>
-          </Content>
+          <div>
+            <Button
+              onClick={() => {
+                addStage();
+                setModalOpen(false);
+              }}
+            >
+              Salvar
+            </Button>
+            <Button
+              onClick={() => {
+                setModalOpen(false);
+              }}
+              background="#DE5353"
+            >
+              Cancelar
+            </Button>
+          </div>
         </Modal>
       )}
       {isModalConfDelete && (
-        <Modal>
-          <Content>
-            <ContentHeader>
-              <span>Excluir Etapa</span>
-            </ContentHeader>
-            {currentStage.name}
-            <h3>Deseja excluir esta etapa?</h3>
-            <div>
-              <Button
-                onClick={() => {
-                  deleteStage(currentStage._id);
-                  setModalConfDelete(false);
-                }}
-              >
-                Excluir
-              </Button>
-              <Button
-                onClick={() => {
-                  setModalConfDelete(false);
-                }}
-                background="#DE5353"
-              >
-                Cancelar
-              </Button>
-            </div>
-          </Content>
+        <Modal title="Excluir Etapa">
+          {currentStage.name}
+          <h3>Deseja excluir esta etapa?</h3>
+          <div>
+            <Button
+              onClick={() => {
+                deleteStage(currentStage._id);
+                setModalConfDelete(false);
+              }}
+            >
+              Excluir
+            </Button>
+            <Button
+              onClick={() => {
+                setModalConfDelete(false);
+              }}
+              background="#DE5353"
+            >
+              Cancelar
+            </Button>
+          </div>
         </Modal>
       )}
     </>
