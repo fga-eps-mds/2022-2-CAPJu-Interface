@@ -7,18 +7,11 @@ import { Link, useLocation } from 'react-router-dom';
 import Visibility from '@mui/icons-material/Visibility';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 
-import {
-  Container,
-  InputSearch,
-  AddProcess,
-  Table,
-  Content,
-  ContentHeader,
-  Modal
-} from './styles';
+import { Container, InputSearch, AddProcess, Table } from './styles';
 import BackButton from 'components/BackButton/BackButton';
 import api from 'services/api';
 import Button from 'components/Button/Button';
+import Modal from 'components/Modal/Modal';
 import TextInput from 'components/TextInput/TextInput';
 import { isLate } from 'components/IsLate/index.js';
 
@@ -278,92 +271,81 @@ function Processes() {
           </tbody>
         </Table>
         {editModalIsOpen && (
-          <Modal>
-            <Content>
-              <ContentHeader>
-                <span>
-                  {editOrCreate == 'edit'
-                    ? 'Editar Processo'
-                    : 'Criar Processo'}{' '}
-                </span>
-              </ContentHeader>
-              <Dropdown
-                options={flows.map((flow) => {
-                  return { label: flow.name, value: flow._id };
-                })}
-                onChange={(e) => {
-                  setFlowId(e.value);
-                }}
-                value={flowId}
-                placeholder="Selecione o fluxo"
-                className="dropdown"
-                controlClassName="dropdown-control"
-                placeholderClassName="dropdown-placeholder"
-                menuClassName="dropdown-menu"
-                arrowClassName="dropdown-arrow"
+          <Modal
+            title={
+              editOrCreate == 'edit' ? 'Editar Processo' : 'Criar Processo'
+            }
+          >
+            <Dropdown
+              options={flows.map((flow) => {
+                return { label: flow.name, value: flow._id };
+              })}
+              onChange={(e) => {
+                setFlowId(e.value);
+              }}
+              value={flowId}
+              placeholder="Selecione o fluxo"
+              className="dropdown"
+              controlClassName="dropdown-control"
+              placeholderClassName="dropdown-placeholder"
+              menuClassName="dropdown-menu"
+              arrowClassName="dropdown-arrow"
+            />
+            <div>
+              <p> Registro </p>
+              <TextInput
+                value={registro}
+                set={setRegistro}
+                placeholder="registro"
               />
-              <div>
-                <p> Registro </p>
-                <TextInput
-                  value={registro}
-                  set={setRegistro}
-                  placeholder="registro"
-                />
-                <p> Apelido</p>
-                <TextInput
-                  value={apelido}
-                  set={setApelido}
-                  placeholder="apelido"
-                />
-              </div>
-              <div>
-                <Button
-                  onClick={async () => {
-                    if (editOrCreate == 'edit') await editProcess();
-                    else await createProcess();
-                    await updateProcesses();
-                    closeModal();
-                  }}
-                >
-                  Confirmar
-                </Button>
-                <Button onClick={closeModal} background="#DE5353">
-                  Cancelar
-                </Button>
-              </div>
-            </Content>
+              <p> Apelido</p>
+              <TextInput
+                value={apelido}
+                set={setApelido}
+                placeholder="apelido"
+              />
+            </div>
+            <div>
+              <Button
+                onClick={async () => {
+                  if (editOrCreate == 'edit') await editProcess();
+                  else await createProcess();
+                  await updateProcesses();
+                  closeModal();
+                }}
+              >
+                Confirmar
+              </Button>
+              <Button onClick={closeModal} background="#DE5353">
+                Cancelar
+              </Button>
+            </div>
           </Modal>
         )}
 
         {deleteProcessModal != -1 && (
-          <Modal>
-            <Content>
-              <ContentHeader>
-                {' '}
-                <span>Excluir Processo</span>
-              </ContentHeader>
-              <span>Deseja realmente excluir este Processo?</span>
-              {processes[deleteProcessModal].registro} -{' '}
-              {processes[deleteProcessModal].apelido}
-              <div>
-                <Button
-                  onClick={async () => {
-                    setDeleteProcessModal(-1);
-                    deleteProcess(processes[deleteProcessModal].registro);
-                  }}
-                >
-                  Confirmar
-                </Button>
-                <Button
-                  onClick={() => {
-                    setDeleteProcessModal(-1);
-                  }}
-                  background="#DE5353"
-                >
-                  Cancelar
-                </Button>
-              </div>
-            </Content>
+          <Modal title="Excluir Processo">
+            <span>Deseja realmente excluir este Processo?</span>
+            {processes[deleteProcessModal].registro} -{' '}
+            {processes[deleteProcessModal].apelido}
+            <div>
+              <Button
+                onClick={async () => {
+                  setDeleteProcessModal(-1);
+                  deleteProcess(processes[deleteProcessModal].registro);
+                }}
+              >
+                Confirmar
+              </Button>
+              <Button
+                onClick={() => {
+                  setDeleteProcessModal(-1);
+                }}
+                background="#DE5353"
+              >
+                Cancelar
+              </Button>
+            </div>
           </Modal>
         )}
       </div>
