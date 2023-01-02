@@ -3,10 +3,10 @@ import React, { useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 
 import user from 'services/user';
-import { Container, Modal } from './styles';
+import { Container } from './styles';
 import Button from 'components/Button/Button';
-import { Content } from 'pages/Stages/styles';
 import TextInput from 'components/TextInput/TextInput';
+import Modal from 'components/Modal/Modal';
 
 function Login() {
   const [isModalOpen, setModalOpen] = useState(false);
@@ -41,53 +41,51 @@ function Login() {
 
   return (
     <Container>
-      <Content>
-        <>
-          <h1>Cadastre sua nova senha </h1>
-          <TextInput
-            set={setNewPassword}
-            value={newPassword}
-            placeholder="Crie uma nova senha"
-            type="password"
-          ></TextInput>
-          <TextInput
-            set={setNewPassword2}
-            value={newPassword2}
-            placeholder="Confirme a senha"
-            type="password"
-          ></TextInput>
-          <Button
-            onClick={() => {
-              setModalOpen(true);
-            }}
-          >
-            Cadastrar
-          </Button>
-        </>
-        {isModalOpen && (
-          <Modal>
-            <Content>
-              <h2>Tem certeza que deseja atualizar sua senha?</h2>
-              <Button
-                onClick={() => {
-                  updatePassword();
-                  setModalOpen(false);
-                }}
-              >
-                Confirmar
-              </Button>
-              <Button
-                onClick={() => {
-                  setModalOpen(false);
-                }}
-                background="#DE5353"
-              >
-                Cancelar
-              </Button>
-            </Content>
-          </Modal>
-        )}
-      </Content>
+      <>
+        <h1>Cadastre sua nova senha </h1>
+        <TextInput
+          set={setNewPassword}
+          value={newPassword}
+          placeholder="Crie uma nova senha"
+          type="password"
+        ></TextInput>
+        <TextInput
+          set={setNewPassword2}
+          value={newPassword2}
+          placeholder="Confirme a senha"
+          type="password"
+        ></TextInput>
+        <Button
+          onClick={() => {
+            setModalOpen(true);
+          }}
+        >
+          Cadastrar
+        </Button>
+      </>
+      {isModalOpen && (
+        <Modal title="Nova Senha">
+          <h2>Tem certeza que deseja atualizar sua senha?</h2>
+          <div>
+            <Button
+              onClick={() => {
+                updatePassword();
+                setModalOpen(false);
+              }}
+            >
+              Confirmar
+            </Button>
+            <Button
+              onClick={() => {
+                setModalOpen(false);
+              }}
+              background="#DE5353"
+            >
+              Cancelar
+            </Button>
+          </div>
+        </Modal>
+      )}
     </Container>
   );
 }
