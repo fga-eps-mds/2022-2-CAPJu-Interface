@@ -35,12 +35,16 @@ export const Content = styled.div`
   display: flex;
   background-color: white;
   min-width: 800px;
-  height: 80vh;
+  max-height: 90vh;
+  min-height: 60vh;
   justify-content: space-between;
-  align-items: justify;
+  align-items: center;
   flex-direction: column;
   gap: 10px;
   font-size: 20px;
   border-radius: 10px;
   overflow-x: hidden;
+  table {
+    margin-left: 0px;
+  }
 `;
