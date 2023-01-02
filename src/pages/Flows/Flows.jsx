@@ -13,12 +13,10 @@ import {
   Container,
   AddFlowButton,
   Area,
-  Content,
   SelectorWrapper,
   StageName,
   SequencesWrapper,
   SequenceItem,
-  ContentHeader,
   CloseModalGeneral
 } from './styles';
 import FlowViewer from 'components/FlowViewer/FlowViewer';
