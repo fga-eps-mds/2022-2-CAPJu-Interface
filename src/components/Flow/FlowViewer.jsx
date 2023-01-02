@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import ReactFlow, { MarkerType } from 'react-flow-renderer';
 
-import { Container } from './styles';
+import { FlowContainer } from './styles';
 import { isLate, getStageDate } from 'components/IsLate/index.js';
 import EdgeButton from './EdgeButton.jsx';
 
@@ -98,14 +98,14 @@ function FlowViewer(props) {
 
   return (
     uniqueEdges && (
-      <Container onClick={props.onClick}>
+      <FlowContainer onClick={props.onClick}>
         <ReactFlow
           nodes={nodes}
           edges={uniqueEdges}
           edgeTypes={edgeTypes}
           fitView
         />
-      </Container>
+      </FlowContainer>
     )
   );
 }

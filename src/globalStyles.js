@@ -49,7 +49,34 @@ const GlobalStyle = createGlobalStyle`
     top: 32px;
   }
 
+  .Dropdown-menu {
+    width: inherit;
+    background-color: #d9d9d9;
+    border: solid #9b8f8f 2px;
+    border-radius: 11px;
+    padding: 16px;
+    position: absolute;
+    z-index: 100000;
+    margin: 0 auto;
+    left: -2px;
+    top: -2px;
+
+    .Dropdown-option {
+      width: auto;
+      cursor: pointer;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+  }
+
+  .Dropdown-control {
+    cursor: pointer;
+    min-width: 200px;
+    min-height: 1.5rem;
+  }
+
   .Dropdown-option {
+    width: 100%;
     padding: 8px 24px;
     border: solid 1px #bbb;
     border-radius: 12px;

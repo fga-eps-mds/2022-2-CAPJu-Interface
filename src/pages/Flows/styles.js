@@ -209,7 +209,7 @@ export const ContentHeader = styled.div`
   flex-direction: row;
   font-size: 32px;
   height: 15vh;
-  width: 50%;
+  width: 100%;
   padding: 5px;
   span {
     color: #f1f1f1;
