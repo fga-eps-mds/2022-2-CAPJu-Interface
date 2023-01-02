@@ -9,13 +9,12 @@ import {
   Container,
   Menu,
   MenuElement,
-  Modal,
   ForgotPassword,
   Criterios,
   EditDrop
 } from './styles';
-import { Content } from 'pages/Stages/styles';
 import Button from 'components/Button/Button';
+import Modal from 'components/Modal/Modal';
 import TextInput from 'components/TextInput/TextInput';
 import { Input } from 'components/TextInput/styles';
 import { validateCPF, validateName } from 'validators/registryValidator';
@@ -327,32 +326,29 @@ function Login() {
         </form>
       )}
       {isModalOpen && (
-        <Modal>
-          <Content>
-            <h3>Recuperação de senha</h3>
-            <h5>Você receberá um link via e-mail para criar sua nova senha</h5>
-            <TextInput
-              set={setEmail}
-              value={email}
-              placeholder="Digite seu email"
-            ></TextInput>
-            <Button
-              onClick={() => {
-                requestNewPassword();
-                setModalOpen(false);
-              }}
-            >
-              Solicitar recuperação
-            </Button>
-            <Button
-              onClick={() => {
-                setModalOpen(false);
-              }}
-              background="#DE5353"
-            >
-              Cancelar
-            </Button>
-          </Content>
+        <Modal title="Recuperação de senha">
+          <h3>Você receberá um link via e-mail para criar sua nova senha</h3>
+          <TextInput
+            set={setEmail}
+            value={email}
+            placeholder="Digite seu email"
+          />
+          <Button
+            onClick={() => {
+              requestNewPassword();
+              setModalOpen(false);
+            }}
+          >
+            Solicitar recuperação
+          </Button>
+          <Button
+            onClick={() => {
+              setModalOpen(false);
+            }}
+            background="#DE5353"
+          >
+            Cancelar
+          </Button>
         </Modal>
       )}
     </Container>
