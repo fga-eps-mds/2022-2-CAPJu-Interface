@@ -1,5 +1,4 @@
 import api from 'services/api';
-import Modal from 'react-modal';
 import toast from 'react-hot-toast';
 import { Ring } from 'react-awesome-spinners';
 import React, { useCallback, useEffect, useState } from 'react';
@@ -9,22 +8,7 @@ import SkipNextIcon from '@mui/icons-material/SkipNext';
 import { Container, FlowWrapper } from './styles';
 import Button from 'components/Button/Button';
 import FlowViewer from 'components/FlowViewer/FlowViewer';
-import ModalHeader from 'components/ModalHeader/ModalHeader';
-import ModalBody from 'components/ModalBody/ModalBody';
-
-Modal.setAppElement('body');
-
-const customStyles = {
-  content: {
-    top: '50%',
-    left: '50%',
-    right: 'auto',
-    bottom: '-30%',
-    marginRight: '-50%',
-    transform: 'translate(-50%, -50%)',
-    padding: '0px'
-  }
-};
+import Modal from 'components/Modal/Modal';
 
 const flowStyle = {
   zIndex: '0'
@@ -35,18 +19,6 @@ const textAreaStyle = {
   minWidth: '500px',
   marginTop: '15%',
   marginBottom: '7%',
-  fontSize: '20px'
-};
-
-const btnStyle = {
-  color: '#f1f1f1',
-  backgroundColor: '#304974',
-  borderRadius: '20px',
-  padding: '10px 15px',
-  fontWeight: 'bold',
-  marginTop: '20px',
-  cursor: 'pointer',
-  width: '130px',
   fontSize: '20px'
 };
 
@@ -70,10 +42,6 @@ function ShowProcess() {
     updateProc();
     // eslint-disable-next-line
   }, []);
-
-  function afterOpenModal() {
-    // references are now sync'd and can be accessed.
-  }
 
   function closeModal() {
     setOpenNextStageModal(false);
@@ -188,27 +156,32 @@ function ShowProcess() {
 
   const renderNextStageModal = () => {
     return (
-      <Modal
-        isOpen={openNextStageModal}
-        onAfterOpen={afterOpenModal}
-        onRequestClose={closeModal}
-        style={customStyles}
-        contentLabel="avançar etapa"
-      >
-        <ModalHeader close={closeModal}>Avançar etapa</ModalHeader>
-        <ModalBody>
-          <textarea
-            className="observation-field"
-            placeholder="Observações sobre a etapa atual..."
-            style={textAreaStyle}
-            value={observation}
-            onChange={(e) => handleObservation(e.target.value)}
-          />
-          <button style={btnStyle} onClick={nextStage}>
-            Avançar
-          </button>
-        </ModalBody>
-      </Modal>
+      <>
+        {openNextStageModal && (
+          <Modal title="avançar etapa">
+            <textarea
+              className="observation-field"
+              placeholder="Observações sobre a etapa atual..."
+              style={textAreaStyle}
+              value={observation}
+              onChange={(e) => handleObservation(e.target.value)}
+            />
+            <div>
+              <Button
+                onClick={() => {
+                  nextStage;
+                  closeModal;
+                }}
+              >
+                Avançar
+              </Button>
+              <Button onClick={closeModal} background="#DE5353">
+                Cancelar
+              </Button>
+            </div>
+          </Modal>
+        )}
+      </>
     );
   };
 
@@ -231,73 +204,80 @@ function ShowProcess() {
 
   const renderNewObservationModal = () => {
     return (
-      <Modal
-        isOpen={newObservationModal}
-        onAfterOpen={afterOpenModal}
-        onRequestClose={() => setNewObservationModal(false)}
-        style={customStyles}
-        contentLabel="nova anotação"
-      >
-        <ModalHeader close={() => setNewObservationModal(false)}>
-          Nova Anotação
-        </ModalHeader>
-        <ModalBody>
-          <textarea
-            className="observation-field"
-            placeholder="Observações sobre a etapa."
-            style={textAreaStyle}
-            value={
-              observation === '+ Adicionar nova notificação' ? '' : observation
-            }
-            onChange={(e) => handleObservation(e.target.value)}
-          />
-          <button style={btnStyle} onClick={() => newObservation(observation)}>
-            Salvar
-          </button>
-        </ModalBody>
-      </Modal>
+      <>
+        {newObservationModal && (
+          <Modal title="nova anotação">
+            <textarea
+              className="observation-field"
+              placeholder="Observações sobre a etapa."
+              style={textAreaStyle}
+              value={
+                observation === '+ Adicionar nova notificação'
+                  ? ''
+                  : observation
+              }
+              onChange={(e) => handleObservation(e.target.value)}
+            />
+            <div>
+              <Button
+                onClick={() => {
+                  newObservation(observation);
+                  closeModal;
+                }}
+              >
+                Salvar
+              </Button>
+              <Button onClick={closeModal} background="#DE5353">
+                Cancelar
+              </Button>
+            </div>
+          </Modal>
+        )}
+      </>
     );
   };
 
   const renderEditObservationModal = () => {
     return (
-      <Modal
-        isOpen={editObservationModal}
-        onAfterOpen={afterOpenModal}
-        onRequestClose={() => setEditObservationModal(false)}
-        style={customStyles}
-        contentLabel="Editar anotação"
-      >
-        <ModalHeader close={() => setEditObservationModal(false)}>
-          Editar Anotação
-        </ModalHeader>
-        <ModalBody>
-          <textarea
-            className="observation-field"
-            placeholder="Observações sobre a etapa."
-            style={textAreaStyle}
-            value={observation}
-            onChange={(e) => handleObservation(e.target.value)}
-          />
-          <div>
-            <button
-              style={btnStyle}
-              onClick={() => setEditObservationModal(false)}
-            >
-              Cancelar
-            </button>
-            <button
-              style={btnStyle}
-              onClick={() => newObservation(observation)}
-            >
-              Salvar
-            </button>
-            <button style={btnStyle} onClick={() => deleteObservation()}>
-              Excluir
-            </button>
-          </div>
-        </ModalBody>
-      </Modal>
+      <>
+        {editObservationModal && (
+          <Modal title="Editar anotação">
+            <textarea
+              className="observation-field"
+              placeholder="Observações sobre a etapa."
+              style={textAreaStyle}
+              value={observation}
+              onChange={(e) => handleObservation(e.target.value)}
+            />
+            <div>
+              <Button
+                onClick={() => {
+                  setEditObservationModal(false);
+                  closeModal;
+                }}
+              >
+                Cancelar
+              </Button>
+              <Button
+                onClick={() => {
+                  newObservation(observation);
+                  closeModal;
+                }}
+              >
+                Salvar
+              </Button>
+              <Button
+                onClick={() => {
+                  deleteObservation();
+                  closeModal;
+                }}
+              >
+                Excluir
+              </Button>
+            </div>
+          </Modal>
+        )}
+      </>
     );
   };
 
