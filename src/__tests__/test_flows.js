@@ -124,7 +124,7 @@ test('Testando editar fluxo no componente Flows', async () => {
 
   const editIcon = screen.queryAllByTestId('EditIcon');
   fireEvent.click(editIcon[0]);
-  const editModal = screen.getByText('Editar fluxo');
+  const editModal = screen.getByText('Editar Fluxo');
   const input = screen.getByDisplayValue('fluxo 1');
   const button = screen.getByText('Salvar');
   const dropdown = screen.queryAllByTestId('react-select-mock');
@@ -152,7 +152,7 @@ test('Testando editar fluxo no componente Flows', async () => {
     target: { value: '62fd4acb006730249d33b18b' }
   });
   fireEvent.click(add[1]);
-  expect(editModal).toHaveTextContent('Editar fluxo');
+  expect(editModal).toHaveTextContent('Editar Fluxo');
   expect(retreat).toHaveTextContent('Retroceder');
   fireEvent.click(button);
   await waitFor(() => expect(scopeEditar.isDone()).toBe(true));

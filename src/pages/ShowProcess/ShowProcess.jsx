@@ -158,7 +158,7 @@ function ShowProcess() {
     return (
       <>
         {openNextStageModal && (
-          <Modal title="avançar etapa">
+          <Modal title="Avançar Etapa">
             <textarea
               className="observation-field"
               placeholder="Observações sobre a etapa atual..."
@@ -167,14 +167,7 @@ function ShowProcess() {
               onChange={(e) => handleObservation(e.target.value)}
             />
             <div>
-              <Button
-                onClick={() => {
-                  nextStage;
-                  closeModal;
-                }}
-              >
-                Avançar
-              </Button>
+              <Button onClick={nextStage}>Avançar</Button>
               <Button onClick={closeModal} background="#DE5353">
                 Cancelar
               </Button>
@@ -222,7 +215,6 @@ function ShowProcess() {
               <Button
                 onClick={() => {
                   newObservation(observation);
-                  closeModal;
                 }}
               >
                 Salvar
@@ -253,7 +245,6 @@ function ShowProcess() {
               <Button
                 onClick={() => {
                   setEditObservationModal(false);
-                  closeModal;
                 }}
               >
                 Cancelar
@@ -261,7 +252,6 @@ function ShowProcess() {
               <Button
                 onClick={() => {
                   newObservation(observation);
-                  closeModal;
                 }}
               >
                 Salvar
@@ -269,7 +259,6 @@ function ShowProcess() {
               <Button
                 onClick={() => {
                   deleteObservation();
-                  closeModal;
                 }}
               >
                 Excluir
