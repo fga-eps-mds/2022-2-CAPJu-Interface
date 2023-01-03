@@ -90,9 +90,9 @@ test('teste processos', async () => {
   await screen.findByText('1111');
 
   // criando processo
-  const createButton = screen.getByText('+ Adicionar Processo');
+  const createButton = await screen.getByText('+ Adicionar Processo');
   fireEvent.click(createButton);
-  let modalHeader = screen.queryByText('Criar Processo');
+  let modalHeader = await screen.getByText('Criar Processo');
   expect(modalHeader).toBeInTheDocument();
   let fluxoInput = screen.getByTestId('react-select-mock');
   let registroInput = screen.getByPlaceholderText('registro');
