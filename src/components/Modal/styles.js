@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 
 export const ModalStyle = styled.div`
-  position: absolute;
+  position: fixed;
   backdrop-filter: blur(5px);
   box-shadow: 0 0 0 100px rgba(0, 0, 0, 0.5);
   justify-content: center;
@@ -25,7 +25,7 @@ export const ContentHeader = styled.div`
   flex-direction: row;
   font-size: 32px;
   height: 15vh;
-  width: 50%;
+  width: 100%;
   padding: 5px;
   span {
     color: #f1f1f1;

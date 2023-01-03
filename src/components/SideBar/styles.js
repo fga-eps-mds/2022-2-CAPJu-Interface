@@ -9,6 +9,7 @@ export const Container = styled.div`
   padding: 0 30px;
   box-sizing: border-box;
   position: relative;
+  z-index: 4;
 
   hr {
     display: block;
