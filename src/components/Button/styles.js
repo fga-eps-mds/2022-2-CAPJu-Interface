@@ -21,9 +21,7 @@ export const Container = styled.button.attrs((props) => ({
   }
 `;
 
-export const ButtonEdge = styled.button.attrs((props) => ({
-  background: props.background || '#304974'
-}))`
+export const ButtonEdge = styled.button`
   display: flex;
   background: #304974;
   border: 1px solid #fff;

@@ -10,10 +10,12 @@ jest.mock('./services/config.js', () => {
 });
 
 jest.mock('react-dropdown', () => ({ options, value, onChange }) => {
+  const notNull = value || '';
+
   return (
     <select
       data-testid="react-select-mock"
-      value={value}
+      value={notNull}
       onChange={(e) => onChange(e.target)}
     >
       {options.map(({ label, value }) => (
