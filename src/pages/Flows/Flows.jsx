@@ -1,6 +1,5 @@
 import toast from 'react-hot-toast';
 import React, { useCallback, useEffect, useState } from 'react';
-import { ArrowRight } from '@styled-icons/bootstrap/ArrowRight';
 
 import api from 'services/api';
 import user from 'services/user';
@@ -14,10 +13,6 @@ import {
   Area,
   Modal,
   Content,
-  SelectorWrapper,
-  StageName,
-  SequencesWrapper,
-  SequenceItem,
   ContentHeader,
   CloseModalGeneral
 } from './styles';
@@ -35,9 +30,6 @@ function Flows() {
   const [flowStages, setFlowStages] = useState([]);
   const [flowUsers, setFlowUsers] = useState([]);
   const [flowSequences, setFlowSequences] = useState([]);
-
-  const [to, setTo] = useState('');
-  const [from, setFrom] = useState('');
 
   const [isModalOpen, setModalOpen] = useState(false);
   const [showFlow, setShowFlow] = useState(false);
@@ -81,7 +73,7 @@ function Flows() {
         duration: 3000
       });
     } else {
-      toast.error('Erro ao remover fluxo');
+      toast.error('Não foi possível executar a ação');
     }
   }
 
@@ -166,21 +158,25 @@ function Flows() {
     [responseHandler]
   );
 
-  const addSequence = useCallback(() => {
-    setFlowSequences([...flowSequences, { from, to }]);
-  }, [flowSequences, from, to]);
+  const addSequence = useCallback(
+    (from, to) => {
+      if (
+        flowSequences.find(
+          (sequence) => sequence.from == from && sequence.to == to
+        )
+      ) {
+        return toast.error('Sequencia já existe');
+      } else if (from == to) {
+        return toast.error('Origem e destino não podem ser iguais');
+      }
+      setFlowSequences([...flowSequences, { from, to }]);
+    },
+    [flowSequences]
+  );
 
   const removeSequence = useCallback(() => {
     setFlowSequences(flowSequences.slice(0, -1));
   }, [flowSequences]);
-
-  const selectedOptions = stages
-    .filter((stage) => {
-      return flowStages.includes(stage._id);
-    })
-    .map((stage) => {
-      return { label: <>{stage.name}</>, value: stage._id };
-    });
 
   function getFlow(flowId) {
     return flowList.find((flow) => flow._id == flowId);
@@ -306,7 +302,7 @@ function Flows() {
                 data-testid="flowName"
               />
               <SelectionList
-                label="Usuários"
+                label="Notificar"
                 placeholder="Selecione o usuário"
                 options={users}
                 selectedOptions={flowUsers}
@@ -319,33 +315,13 @@ function Flows() {
                 selectedOptions={flowStages}
                 addSelectedOption={setFlowStages}
               />
-              {flowStages.length > 0 && (
-                <>
-                  <>Sequências</>
-                  <SelectorWrapper>
-                    <AddSequenceInFlow
-                      value={from}
-                      setValue={setFrom}
-                      options={selectedOptions}
-                    />
-                    <ArrowRight size={25} />
-                    <AddSequenceInFlow
-                      value={to}
-                      setValue={setTo}
-                      options={selectedOptions}
-                    />
-                    <Button
-                      buttonType={'add'}
-                      onClick={addSequence}
-                      text={'Adicionar'}
-                    />
-                    <Button
-                      background="#de5353"
-                      onClick={removeSequence}
-                      text={'Remover'}
-                    />
-                  </SelectorWrapper>
-                </>
+              {flowStages.length > 1 && (
+                <AddSequenceInFlow
+                  addSequence={addSequence}
+                  removeSequence={removeSequence}
+                  options={flowStages}
+                  stages={stages}
+                />
               )}
               <FlowViewer
                 flow={{
@@ -396,50 +372,24 @@ function Flows() {
               selectedOptions={flowStages}
               addSelectedOption={setFlowStages}
             />
-            {flowStages.length > 0 && (
-              <>
-                <>Sequências</>
-                <SelectorWrapper>
-                  <AddSequenceInFlow
-                    value={from}
-                    setValue={setFrom}
-                    options={selectedOptions}
-                  />
-                  <ArrowRight size={25} />
-                  <AddSequenceInFlow
-                    value={to}
-                    setValue={setTo}
-                    options={selectedOptions}
-                  />
-                  <div className="addStage" onClick={addSequence}>
-                    <Button buttonType={'add'} text={'Adicionar'} />
-                  </div>
-                </SelectorWrapper>
-                <SequencesWrapper>
-                  {flowSequences.map((sequence) => {
-                    return (
-                      <SequenceItem key={sequence.id}>
-                        <StageName>
-                          {
-                            stages.find((stage) => {
-                              return sequence.from == stage._id;
-                            }).name
-                          }
-                        </StageName>
-                        <ArrowRight size={25} />
-                        <StageName>
-                          {
-                            stages.find((stage) => {
-                              return sequence.to == stage._id;
-                            }).name
-                          }
-                        </StageName>
-                      </SequenceItem>
-                    );
-                  })}
-                </SequencesWrapper>
-              </>
+            {flowStages.length > 1 && (
+              <AddSequenceInFlow
+                addSequence={addSequence}
+                removeSequence={removeSequence}
+                options={flowStages}
+                stages={stages}
+              />
             )}
+            <FlowViewer
+              flow={{
+                name: flowName,
+                stages: flowStages,
+                sequences: flowSequences,
+                users: flowUsers
+              }}
+              disabled={true}
+              stages={stages || []}
+            />
             <div>
               <Button
                 onClick={() => {

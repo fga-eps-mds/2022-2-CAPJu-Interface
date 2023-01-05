@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import toast from 'react-hot-toast';
 import PropTypes from 'prop-types';
 import Dropdown from 'react-dropdown';
 
@@ -18,8 +19,9 @@ function SelectionLit({
   });
 
   function addItem(item) {
-    !selectedOptions.some((op) => op === item.value) &&
-      addSelectedOption([...selectedOptions, item.value]);
+    return selectedOptions.some((op) => op === item.value)
+      ? toast.error(`${label.slice(0, -1)} já existe.`)
+      : addSelectedOption([...selectedOptions, item.value]);
   }
 
   function removeItem(stageIndex) {

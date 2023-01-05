@@ -47,25 +47,6 @@ export const Area = styled.div`
   flex-direction: row;
 `;
 
-export const FlowItem = styled.div`
-  display: flex;
-  flex-direction: column;
-  min-width: 100px;
-  max-height: 100px;
-  background-color: #1b9454;
-  color: white;
-  padding: 20px;
-  border-radius: 10px;
-  justify-content: center;
-  align-items: center;
-
-  span.title-flow {
-    font-size: 24px;
-    font-weight: 900;
-    margin-bottom: 5%;
-  }
-`;
-
 export const Modal = styled.div`
   position: absolute;
   backdrop-filter: blur(5px);
@@ -83,51 +64,6 @@ export const Modal = styled.div`
   }
 `;
 
-export const ModalDelete = styled.div`
-  position: absolute;
-  backdrop-filter: blur(5px);
-  justify-content: center;
-  align-items: center;
-  width: 100%;
-  height: 100%;
-  display: flex;
-  flex-direction: row;
-  font-size: 20px;
-  background-color: rgba(0, 0, 0, 0.1);
-`;
-
-export const ContentDelete = styled.div`
-  display: flex;
-  background-color: white;
-  min-width: 600px;
-  height: 28vh;
-  min-height: 150px;
-  justify-content: space-between;
-  align-items: center;
-  flex-direction: column;
-  font-size: 24px;
-  border-radius: 10px;
-  gap: 25px;
-  padding: 10px;
-  font-weight: bold;
-  overflow-x: scroll;
-
-  div.closeModal {
-    display: flex;
-    flex-direction: row-reverse;
-    min-width: 600px;
-  }
-`;
-
-export const CloseModalDelete = styled(CloseOutline)`
-  color: #de5353;
-  height: 5vh;
-  width: 5vh;
-  min-widht: 30px;
-  min-height: 30px;
-  cursor: pointer;
-`;
-
 export const Content = styled.div`
   display: flex;
   background-color: white;
@@ -140,63 +76,7 @@ export const Content = styled.div`
   gap: 10px;
   font-size: 20px;
   border-radius: 10px;
-  overflow-x: scroll;
-`;
-
-export const SelectorWrapper = styled.div`
-  background-color: #eee;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 5px 10px;
-  flex-direction: row;
-  gap: 10px;
-  font-size: 20px;
-  border-radius: 20px;
-`;
-
-export const StageName = styled.div`
-  background-color: #fbe304;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 10px 20px;
-  gap: 10px;
-  font-size: 20px;
-  border-radius: 20px;
-`;
-
-export const StagesWrapper = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 5px 10px;
-  flex-direction: row;
-  gap: 10px;
-  font-size: 20px;
-  border-radius: 20px;
-`;
-
-export const SequencesWrapper = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 5px 10px;
-  flex-direction: column;
-  gap: 10px;
-  font-size: 20px;
-  border-radius: 20px;
-`;
-
-export const SequenceItem = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 5px 10px;
-  flex-direction: row;
-  gap: 10px;
-  font-size: 20px;
-  border-radius: 20px;
+  overflow-x: auto;
 `;
 
 export const ContentHeader = styled.div`
@@ -225,14 +105,4 @@ export const CloseModalGeneral = styled(CloseOutline)`
   // margin-left: 95%;
   min-widht: 35px;
   min-height: 35px;
-`;
-
-export const FlowsButtons = styled.div`
-  display: flex;
-  flex-direction: rows;
-  min-width: 100px;
-  color: white;
-  justify-content: center;
-  align-items: center;
-  gap: 20px;
 `;

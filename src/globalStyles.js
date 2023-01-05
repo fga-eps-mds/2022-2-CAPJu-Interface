@@ -60,6 +60,7 @@ const GlobalStyle = createGlobalStyle`
     margin: 0 auto;
     left: -2px;
     top: -2px;
+    transform: rotate(0deg);
 
     .Dropdown-option {
       width: auto;
