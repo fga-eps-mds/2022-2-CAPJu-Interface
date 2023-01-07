@@ -52,6 +52,17 @@ function AccessProfile() {
     setUsers(response.data.user);
   }, [authHeader]);
 
+  function systemError(error, errorMessage) {
+    if (error.response.status == 401) {
+      toast(error.response.data.message, {
+        icon: '⚠️',
+        duration: 3000
+      });
+    } else {
+      toast.error(errorMessage);
+    }
+  }
+
   const editRole = useCallback(async () => {
     try {
       const response = await api.put(
@@ -66,14 +77,7 @@ function AccessProfile() {
         toast.error('Erro ao alterar o perfil');
       }
     } catch (error) {
-      if (error.response.status == 401) {
-        toast(error.response.data.message, {
-          icon: '⚠️',
-          duration: 3000
-        });
-      } else {
-        toast.error('Erro ao tentar alterar o perfil');
-      }
+      systemError(error, 'Erro ao tentar alterar o perfil');
     }
   }, [authHeader, newRole, selectedUser]);
 
@@ -114,19 +118,9 @@ function AccessProfile() {
           toast.error('Erro ao deletar o usuário');
         }
       } catch (error) {
-        if (error.response.status == 401) {
-          toast(error.response.data.message, {
-            icon: '⚠️',
-            duration: 3000
-          });
-        } else {
-          toast.error(
-            'Erro ao deletar usuário!' + error.response.data.message,
-            {
-              duration: 3000
-            }
-          );
-        }
+        const erroMessage =
+          'Erro ao deletar usuário: ' + error.response.data.message;
+        systemError(error, erroMessage);
       }
     },
     [authHeader]
