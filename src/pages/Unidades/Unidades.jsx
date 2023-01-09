@@ -84,6 +84,17 @@ function Unidades() {
     );
   }
 
+  function systemError(error, errorMessage) {
+    if (error.response.status == 401) {
+      toast(error.response.data.message, {
+        icon: '⚠️',
+        duration: 3000
+      });
+    } else {
+      toast.error(errorMessage);
+    }
+  }
+
   async function addUnity() {
     try {
       const response = await api.post('/newUnity', {
@@ -96,16 +107,9 @@ function Unidades() {
       } else {
         toast.error('Erro ao adicionar a unidade');
       }
-    } catch (e) {
-      if (e.response.status == 401) {
-        toast(e.response.data.message, {
-          icon: '⚠️',
-          duration: 3000
-        });
-      } else {
-        toast.error('Erro ao adicionar a unidade');
-      }
-      if (e instanceof AxiosError) toast.error('Unidade já existe');
+    } catch (error) {
+      systemError(error, 'Erro ao adicionar a unidade');
+      if (error instanceof AxiosError) toast.error('Unidade já existe');
     }
   }
 
