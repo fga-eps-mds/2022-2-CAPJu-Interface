@@ -99,6 +99,16 @@ function ShowProcess() {
       setFlow(response.data);
     }
   }
+  function systemError(error, errorMessage) {
+    if (error.response.status == 401) {
+      toast(error.response.data.message, {
+        icon: '⚠️',
+        duration: 3000
+      });
+    } else {
+      toast.error(errorMessage);
+    }
+  }
 
   async function nextStage() {
     try {
@@ -125,16 +135,9 @@ function ShowProcess() {
 
       toast.success('Etapa avançada!', { duration: 4000 });
     } catch (error) {
-      if (error.response.status == 401) {
-        toast(error.response.data.message, {
-          icon: '⚠️',
-          duration: 3000
-        });
-      } else {
-        toast.error('Erro ao avançar etapa \n ' + error.response.data.message, {
-          duration: 3000
-        });
-      }
+      const errorMessage =
+        'Erro ao avançar etapa: ' + error.response.data.message;
+      systemError(error, errorMessage);
     }
   }
 
@@ -153,19 +156,9 @@ function ShowProcess() {
 
       toast.success('Notificação alterada com sucesso!', { duration: 4000 });
     } catch (error) {
-      if (error.response.status == 401) {
-        toast(error.response.data.message, {
-          icon: '⚠️',
-          duration: 3000
-        });
-      } else {
-        toast.error(
-          'Erro ao alterar notificação \n ' + error.response.data.message,
-          {
-            duration: 3000
-          }
-        );
-      }
+      const errorMessage =
+        'Erro ao alterar notificação: ' + error.response.data.message;
+      systemError(error, errorMessage);
     }
   }
 
