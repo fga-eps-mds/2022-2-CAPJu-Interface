@@ -66,23 +66,26 @@ function Processes() {
     });
   };
 
+  function systemError(error, errorMessage) {
+    if (error.response.status == 401) {
+      toast(error.response.data.message, {
+        icon: '⚠️',
+        duration: 3000
+      });
+    } else {
+      toast.error(errorMessage);
+    }
+  }
+
   async function deleteProcess(registro) {
     try {
       await api.delete(`/deleteProcess/${registro}`);
       toast.success('Processo Removido com Sucesso', { duration: 4000 });
       updateProcesses();
     } catch (error) {
-      if (error.response.status == 401) {
-        toast(error.response.data.message, {
-          icon: '⚠️',
-          duration: 3000
-        });
-      } else {
-        toast.error(
-          'Erro ao deletar processo \n ' + error.response.data.message,
-          { duration: 3000 }
-        );
-      }
+      const errorMessage =
+        'Erro ao deletar processo: ' + error.response.data.message;
+      systemError(error, errorMessage);
     }
   }
 
@@ -117,17 +120,9 @@ function Processes() {
       else toast.error('Registro vazio', { duration: 3000 });
       toast.success('Processo Alterado com Sucesso', { duration: 4000 });
     } catch (error) {
-      if (error.response.status == 401) {
-        toast(error.response.data.message, {
-          icon: '⚠️',
-          duration: 3000
-        });
-      } else {
-        toast.error(
-          'Erro ao alterar processo \n ' + error.response.data.message,
-          { duration: 3000 }
-        );
-      }
+      const errorMessage =
+        'Erro ao alterar processo: ' + error.response.data.mesage;
+      systemError(error, errorMessage);
     }
   }
 
@@ -151,17 +146,9 @@ function Processes() {
 
       toast.success('Processo Registrado com Sucesso', { duration: 4000 });
     } catch (error) {
-      if (error.response.status == 401) {
-        toast(error.response.data.message, {
-          icon: '⚠️',
-          duration: 3000
-        });
-      } else {
-        toast.error(
-          'Erro ao registrar processo \n ' + error.response.data.message,
-          { duration: 3000 }
-        );
-      }
+      const errorMessage =
+        'Erro ao registrar processo: ' + error.response.data.message;
+      systemError(error, errorMessage);
     }
   }
 
