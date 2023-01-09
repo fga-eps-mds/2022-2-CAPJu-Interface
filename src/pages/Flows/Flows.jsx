@@ -67,6 +67,17 @@ function Flows() {
     }
   }, []);
 
+  function systemError(error, errorMessage) {
+    if (error.response.status == 401) {
+      toast(error.response.data.message, {
+        icon: '⚠️',
+        duration: 3000
+      });
+    } else {
+      toast.error(errorMessage);
+    }
+  }
+
   const addFlow = useCallback(async () => {
     setModalOpen(!isModalOpen);
     try {
@@ -78,15 +89,8 @@ function Flows() {
         'Fluxo Adicionado com sucesso',
         'Erro ao adicionar fluxo'
       );
-    } catch (e) {
-      if (e.response.status == 401) {
-        toast(e.response.data.message, {
-          icon: '⚠️',
-          duration: 3000
-        });
-      } else {
-        toast.error('Erro ao adicionar fluxo');
-      }
+    } catch (error) {
+      systemError(error, 'Erro ao adicionar fluxo');
     }
   }, [isModalOpen, newFlow, responseHandler]);
 
@@ -101,15 +105,8 @@ function Flows() {
           'Fluxo Deletada com sucesso',
           'Erro ao deletar fluxo'
         );
-      } catch (e) {
-        if (e.response.status == 401) {
-          toast(e.response.data.message, {
-            icon: '⚠️',
-            duration: 3000
-          });
-        } else {
-          toast.error('Erro ao remover fluxo');
-        }
+      } catch (error) {
+        systemError(error, 'Erro ao deletar fluxo');
       }
     },
     [responseHandler]
@@ -143,15 +140,8 @@ function Flows() {
           'Fluxo Editado com sucesso',
           'Erro ao Editar fluxo'
         );
-      } catch (e) {
-        if (e.response.status == 401) {
-          toast(e.response.data.message, {
-            icon: '⚠️',
-            duration: 3000
-          });
-        } else {
-          toast.error('Erro ao Editar fluxo');
-        }
+      } catch (error) {
+        systemError(error, 'Erro ao Editar fluxo');
       }
     },
     [newFlow, responseHandler, showFlow]
