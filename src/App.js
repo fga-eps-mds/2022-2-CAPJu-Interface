@@ -11,12 +11,10 @@ import Recovery from 'pages/Recovery/Login';
 import { Container, Content } from './styles';
 import Unidades from 'pages/Unidades/Unidades';
 import Processes from 'pages/Processes/Processes';
-import Statistics from 'pages/Statistics/Statistics';
 import SideBar from 'components/SideBar/ModalHeader';
 import ShowProcess from 'pages/ShowProcess/ShowProcess';
 import EditAccount from 'pages/EditAccount/EditAccount';
 import AccessProfile from 'pages/AccessProfile/AccessProfile';
-import StatisticsProcesses from 'pages/StatisticsProcesses/Processes';
 import EditAccountEmail from 'pages/EditAccountEmail/EditAccountEmail';
 import EditAccountPassword from 'pages/EditAccountPassword/EditAccountPassword';
 import SolicitacoesCadastro from 'pages/SolicitacoesCadastro/SolicitacoesCadastro';
@@ -69,11 +67,6 @@ function App() {
             <Route path="unidades" element={<Unidades />} />
             <Route path="processes" element={<Processes />} />
             <Route path="processes/showProcess" element={<ShowProcess />} />
-            <Route path="statistics" element={<Statistics />} />
-            <Route
-              path="statistics/stageProcesses"
-              element={<StatisticsProcesses />}
-            />
             <Route
               path="statistics/stageProcesses/showProcess"
               element={<ShowProcess />}

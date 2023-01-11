@@ -49,20 +49,19 @@ function Login() {
             value={newPassword}
             placeholder="Crie uma nova senha"
             type="password"
-          ></TextInput>
+          />
           <TextInput
             set={setNewPassword2}
             value={newPassword2}
             placeholder="Confirme a senha"
             type="password"
-          ></TextInput>
+          />
           <Button
             onClick={() => {
               setModalOpen(true);
             }}
-          >
-            Cadastrar
-          </Button>
+            text={'Cadastrar'}
+          />
         </>
         {isModalOpen && (
           <Modal>
@@ -73,17 +72,15 @@ function Login() {
                   updatePassword();
                   setModalOpen(false);
                 }}
-              >
-                Confirmar
-              </Button>
+                text={'Confirmar'}
+              />
               <Button
                 onClick={() => {
                   setModalOpen(false);
                 }}
                 background="#DE5353"
-              >
-                Cancelar
-              </Button>
+                text={'Cancelar'}
+              />
             </Content>
           </Modal>
         )}

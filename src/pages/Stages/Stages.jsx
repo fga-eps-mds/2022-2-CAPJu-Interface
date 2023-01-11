@@ -125,14 +125,14 @@ function Stages() {
                 set={setStageName}
                 value={stageName}
                 placeholder="Nome da etapa"
-              ></TextInput>
+              />
               <p> Duração </p>
 
               <TextInput
                 set={setStageTime}
                 value={stageTime}
                 placeholder="Duração (dias)"
-              ></TextInput>
+              />
             </div>
 
             <div>
@@ -141,17 +141,15 @@ function Stages() {
                   addStage();
                   setModalOpen(false);
                 }}
-              >
-                Salvar
-              </Button>
+                text={'Salvar'}
+              />
               <Button
                 onClick={() => {
                   setModalOpen(false);
                 }}
                 background="#DE5353"
-              >
-                Cancelar
-              </Button>
+                text={'Cancelar'}
+              />
             </div>
           </Content>
         </Modal>
@@ -170,17 +168,15 @@ function Stages() {
                   deleteStage(currentStage._id);
                   setModalConfDelete(false);
                 }}
-              >
-                Excluir
-              </Button>
+                text={'Excluir'}
+              />
               <Button
                 onClick={() => {
                   setModalConfDelete(false);
                 }}
                 background="#DE5353"
-              >
-                Cancelar
-              </Button>
+                text={'Cancelar'}
+              />
             </div>
           </Content>
         </Modal>

@@ -17,6 +17,8 @@ import {
 import { Content } from 'pages/Stages/styles';
 import Button from 'components/Button/Button';
 import TextInput from 'components/TextInput/TextInput';
+import { Input } from 'components/TextInput/styles';
+import { validateCPF, validateName } from 'validators/registryValidator';
 
 function Login() {
   const [isModalOpen, setModalOpen] = useState(false);
@@ -25,11 +27,15 @@ function Login() {
   const [password, setPassword] = useState('');
   const [newRole, setNewRole] = useState('');
   const [newName, setNewName] = useState('');
+  const [nameValidate, setNameValidate] = useState(false);
   const [newEmail, setNewEmail] = useState('');
   const [newPassword, setNewPassword] = useState('');
   const [newPassword2, setNewPassword2] = useState('');
   const [unitys, setUnitys] = useState([]);
   const [newUnity, setNewUnity] = useState('');
+  const [newCpf, setNewCpf] = useState('');
+  const [loginCpf, setLoginCpf] = useState('');
+  const [validateCpf, setValidateCpf] = useState(false);
 
   const [selectedTab, setSelectedTab] = useState('login');
 
@@ -40,6 +46,10 @@ function Login() {
   async function register() {
     const re = /^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/;
     const pass = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z$*&@#]{6,}$/;
+    if (!nameValidate) {
+      toast.error('Nome invalido');
+      return;
+    }
     if (!re.test(newEmail)) {
       toast.error('E-mail Inválido');
       return;
@@ -52,6 +62,10 @@ function Login() {
       toast.error('Senha invalida');
       return;
     }
+    if (!validateCpf) {
+      toast.error('CPF inválido');
+      return;
+    }
 
     try {
       const response = await user.post('/newUser', {
@@ -59,7 +73,8 @@ function Login() {
         email: newEmail,
         password: newPassword,
         role: newRole,
-        unity: newUnity
+        unity: newUnity,
+        cpf: newCpf
       });
       response.status = 200;
       toast.success('Usuário cadastrado com  sucesso');
@@ -70,6 +85,7 @@ function Login() {
       setSelectedTab('login');
       setNewRole('');
       setNewUnity('');
+      setNewCpf('');
     } catch (error) {
       toast.error('Erro ao cadastrar \n' + error.response.data.message);
     }
@@ -78,7 +94,7 @@ function Login() {
   async function login() {
     try {
       const response = await user.post('/login', {
-        email: email,
+        cpf: loginCpf,
         password: password
       });
 
@@ -91,6 +107,28 @@ function Login() {
     } catch (error) {
       toast.error('Erro no login: ' + error.response.data.message);
     }
+  }
+
+  function onHandleName(event) {
+    setNewName(event.target.value);
+    setNameValidate(validateName(event.target.value));
+  }
+  function cpfMask(strCpf) {
+    return strCpf
+      .replace(/\D/g, '') // substitui qualquer caracter que nao seja numero por nada
+      .replace(/(\d{3})(\d)/, '$1.$2') // captura 2 grupos de numero o primeiro de 3 e o segundo de 1, apos capturar o primeiro grupo ele adiciona um ponto antes do segundo grupo de numero
+      .replace(/(\d{3})(\d)/, '$1.$2')
+      .replace(/(\d{3})(\d{1,2})/, '$1-$2')
+      .replace(/(-\d{2})\d+?$/, '$1'); // captura 2 numeros seguidos de um traço e não deixa ser digitado mais nada
+  }
+
+  function onHandleLoginCPF(event) {
+    setLoginCpf(cpfMask(event.target.value));
+  }
+
+  function onHandleCPF(event) {
+    setNewCpf(cpfMask(event.target.value));
+    setValidateCpf(validateCPF(event.target.value));
   }
 
   async function requestNewPassword() {
@@ -148,19 +186,20 @@ function Login() {
               login();
             }}
           >
-            <TextInput
-              set={setEmail}
-              value={email}
-              placeholder="Email"
-            ></TextInput>
-            <br></br>
-            <br></br>
+            <Input
+              placeholder="CPF"
+              maxLength={14}
+              onChange={onHandleLoginCPF}
+              value={loginCpf}
+            />
+            <br />
+            <br />
             <TextInput
               set={setPassword}
               value={password}
               placeholder="Senha"
               type="password"
-            ></TextInput>
+            />
             <ForgotPassword
               onClick={() => {
                 setModalOpen(true);
@@ -168,7 +207,7 @@ function Login() {
             >
               Esqueceu a senha?
             </ForgotPassword>
-            <Button type="submit">Entrar</Button>
+            <Button type="submit" text={'Entrar'} />
           </form>
         </>
       ) : (
@@ -179,31 +218,67 @@ function Login() {
           }}
         >
           <h1>Cadastre-se </h1>
-          <TextInput
+          <Input
             set={setNewName}
+            onChange={onHandleName}
             value={newName}
             placeholder="Nome completo"
-          ></TextInput>
-          <br></br>
-          <TextInput
-            set={setNewEmail}
-            value={newEmail}
-            placeholder="Email"
-          ></TextInput>
-          <br></br>
+          />
+          {!newName ||
+            (!nameValidate && (
+              <>
+                <br />
+                <span
+                  style={{
+                    color: 'red',
+                    fontSize: '0.6em',
+                    fontWeight: 'bold',
+                    marginRight: '17em'
+                  }}
+                >
+                  Nome inválido
+                </span>
+              </>
+            ))}
+          <br />
+          <Input
+            placeholder="CPF"
+            maxLength={14}
+            onChange={onHandleCPF}
+            value={newCpf}
+          />
+          {!newCpf ||
+            (!validateCpf && (
+              <React.Fragment>
+                <br />
+                <span
+                  style={{
+                    color: 'red',
+                    fontSize: '0.6em',
+                    fontWeight: 'bold',
+                    marginRight: '17em'
+                  }}
+                >
+                  CPF Inválido!
+                </span>
+              </React.Fragment>
+            ))}
+          <br />
+          <TextInput set={setNewEmail} value={newEmail} placeholder="Email" />
+          <br />
           <TextInput
             set={setNewPassword}
             value={newPassword}
             placeholder="Crie uma senha"
             type="password"
-          ></TextInput>
-          <br></br>
+          />
+          <br />
           <TextInput
             set={setNewPassword2}
             value={newPassword2}
             placeholder="Confirme a senha"
             type="password"
-          ></TextInput>
+          />
           <EditDrop>
             <Dropdown
               options={OptionsRoles}
@@ -244,7 +319,7 @@ function Login() {
               </h6>
             </ul>
           </Criterios>
-          <Button type="submit">Cadastrar</Button>
+          <Button type="submit" text={'Cadastrar'} />
         </form>
       )}
       {isModalOpen && (
@@ -256,23 +331,21 @@ function Login() {
               set={setEmail}
               value={email}
               placeholder="Digite seu email"
-            ></TextInput>
+            />
             <Button
               onClick={() => {
                 requestNewPassword();
                 setModalOpen(false);
               }}
-            >
-              Solicitar recuperação
-            </Button>
+              text={'Soliciar recuperação'}
+            />
             <Button
               onClick={() => {
                 setModalOpen(false);
               }}
               background="#DE5353"
-            >
-              Cancelar
-            </Button>
+              text={'Cancelar'}
+            />
           </Content>
         </Modal>
       )}

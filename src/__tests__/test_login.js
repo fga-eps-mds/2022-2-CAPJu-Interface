@@ -17,7 +17,7 @@ delete window.location;
 window.location = { reload: jest.fn() };
 
 test('Testando criar Login no componente Login', async () => {
-  const loginData = { email: 'test@test.com', password: '123456' };
+  const loginData = { cpf: '413.411.140-40', password: 'Senha@123456789' };
 
   const scopeLogin = nock(userURL)
     .defaultReplyHeaders({
@@ -29,7 +29,7 @@ test('Testando criar Login no componente Login', async () => {
     .reply(200, {
       _id: 'askljsf',
       name: 'test',
-      email: loginData.email,
+      cpf: loginData.email,
       token: 'Bearer sdlksadkçlfdjalo'
     });
 
@@ -59,12 +59,12 @@ test('Testando criar Login no componente Login', async () => {
   );
 
   const title = screen.getByRole('heading', { level: 1 });
-  const inputEmail = screen.getByPlaceholderText('Email');
+  const inputCpf = screen.getByPlaceholderText('CPF');
   const inputPassword = screen.getByPlaceholderText('Senha');
   const button1 = screen.getByText('Entrar');
 
-  fireEvent.change(inputEmail, { target: { value: 'test@test.com' } });
-  fireEvent.change(inputPassword, { target: { value: '123456' } });
+  fireEvent.change(inputCpf, { target: { value: '413.411.140-40' } });
+  fireEvent.change(inputPassword, { target: { value: 'Senha@123456789' } });
   expect(title).toHaveTextContent('Login');
   fireEvent.click(button1);
   await waitFor(() => expect(scopeLogin.isDone()).toBe(true), {

@@ -1,5 +1,5 @@
 import toast from 'react-hot-toast';
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import Dropdown from 'react-dropdown';
 import Button from 'components/Button/Button';
 
@@ -22,24 +22,37 @@ function AccessProfile() {
   const [deleteModal, setDeleteModal] = useState(false);
   const [selectedUser, setSelectedUser] = useState(0);
 
-  const handleChange = (event) => {
-    setSearchUser(event.target.value);
-  };
   const authHeader = authConfig()?.headers;
 
-  useEffect(() => {
-    updateUser();
-    // eslint-disable-next-line
-  }, []);
+  const roles = useMemo(
+    () => [
+      { label: 'Diretor', value: 1 },
+      { label: 'Juiz', value: 2 },
+      { label: 'Servidor', value: 3 },
+      { label: 'Estagiario', value: 4 }
+    ],
+    []
+  );
 
-  async function updateUser() {
+  const getUserRole = useCallback(
+    (user) => {
+      return roles.find((role) => role.value == user.role).label;
+    },
+    [roles]
+  );
+
+  const getSelectedUser = useCallback(() => {
+    return users.find((user) => user._id == selectedUser);
+  }, [users, selectedUser]);
+
+  const updateUser = useCallback(async () => {
     const response = await api.get('/allUser', {
       headers: authHeader
     });
     setUsers(response.data.user);
-  }
+  }, [authHeader]);
 
-  async function editRole() {
+  const editRole = useCallback(async () => {
     try {
       const response = await api.put(
         '/updateRole',
@@ -62,29 +75,68 @@ function AccessProfile() {
         toast.error('Erro ao tentar alterar o perfil');
       }
     }
-  }
+  }, [authHeader, newRole, selectedUser]);
 
-  async function deleteUser(userId) {
-    try {
-      const response = await api.delete(`/deleteRequest/${userId}`, {
-        headers: authHeader
-      });
-      if (response.status == 200) {
-        toast.success('Usuário deletado com sucesso!', { duration: 3000 });
-      }
-    } catch (error) {
-      if (error.response.status == 401) {
-        toast(error.response.data.message, {
-          icon: '⚠️',
-          duration: 3000
+  const handleChange = useCallback((event) => {
+    setSearchUser(event.target.value);
+  }, []);
+
+  const handleChangeRole = useCallback((e) => setNewRole(e.value), []);
+
+  const handleEditRole = useCallback(async () => {
+    await editRole();
+    await updateUser();
+    setRoleModal(false);
+  }, [editRole, updateUser, setRoleModal]);
+
+  const handleRoleModal = useCallback(() => {
+    setRoleModal(!roleModal);
+  }, [roleModal]);
+
+  const handleDeleteModal = useCallback(() => {
+    setDeleteModal(!deleteModal);
+  }, [deleteModal]);
+
+  useEffect(() => {
+    updateUser();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  const deleteUser = useCallback(
+    async (userId) => {
+      try {
+        const response = await api.delete(`/deleteRequest/${userId}`, {
+          headers: authHeader
         });
-      } else {
-        toast.error('Erro ao deletar usuário!' + error.response.data.message, {
-          duration: 3000
-        });
+        if (response.status == 200) {
+          toast.success('Usuário deletado com sucesso!', { duration: 3000 });
+        } else {
+          toast.error('Erro ao deletar o usuário');
+        }
+      } catch (error) {
+        if (error.response.status == 401) {
+          toast(error.response.data.message, {
+            icon: '⚠️',
+            duration: 3000
+          });
+        } else {
+          toast.error(
+            'Erro ao deletar usuário!' + error.response.data.message,
+            {
+              duration: 3000
+            }
+          );
+        }
       }
-    }
-  }
+    },
+    [authHeader]
+  );
+
+  const handleDeleteUser = useCallback(async () => {
+    await deleteUser(getSelectedUser()._id);
+    await updateUser();
+    setDeleteModal(false);
+  }, [deleteUser, updateUser, setDeleteModal, getSelectedUser]);
 
   const filterUser = (arr) => {
     const user = JSON.parse(localStorage.getItem('user'));
@@ -117,28 +169,16 @@ function AccessProfile() {
     }
   ];
 
-  const roles = [
-    { label: 'Diretor', value: 1 },
-    { label: 'Juiz', value: 2 },
-    { label: 'Servidor', value: 3 },
-    { label: 'Estagiario', value: 4 }
-  ];
-
-  function getUserRole(user) {
-    return roles.find((role) => role.value == user.role).label;
-  }
-
-  function getSelectedUser() {
-    return users.find((user) => user._id == selectedUser);
-  }
-
-  function getAttributesForDisplay(user) {
-    return [
-      user.name,
-      getUserRole(user),
-      user.accepted ? 'Aceito' : 'Pendente'
-    ];
-  }
+  const getAttributesForDisplay = useCallback(
+    (user) => {
+      return [
+        user.name,
+        getUserRole(user),
+        user.accepted ? 'Aceito' : 'Pendente'
+      ];
+    },
+    [getUserRole]
+  );
 
   const columnHeaders = ['Nome', 'Perfil', 'Status'];
   return (
@@ -167,7 +207,7 @@ function AccessProfile() {
               <span>Escolha um Perfil</span>
               <Dropdown
                 options={roles}
-                onChange={(e) => setNewRole(e.value)}
+                onChange={handleChangeRole}
                 value={getUserRole(getSelectedUser())}
                 placeholder="Selecione o perfil"
                 className="dropdown"
@@ -177,42 +217,12 @@ function AccessProfile() {
                 arrowClassName="dropdown-arrow"
               />
               <div>
+                <Button onClick={handleEditRole} text={'Salvar'} />
                 <Button
-                  onClick={async () => {
-                    await editRole();
-                    await updateUser();
-                    setRoleModal(false);
-                  }}
-                  value={
-                    roles.find(({ value }) => value === getSelectedUser().role)
-                      .label
-                  }
-                  placeholder="Selecione o perfil"
-                  className="dropdown"
-                  controlClassName="dropdown-control"
-                  placeholderClassName="dropdown-placeholder"
-                  menuClassName="dropdown-menu"
-                  arrowClassName="dropdown-arrow"
+                  onClick={handleRoleModal}
+                  background="#DE5353"
+                  text={'Cancelar'}
                 />
-                <div>
-                  <Button
-                    onClick={async () => {
-                      await editRole();
-                      await updateUser();
-                      setRoleModal(false);
-                    }}
-                  >
-                    Salvar
-                  </Button>
-                  <Button
-                    onClick={() => {
-                      setRoleModal(false);
-                    }}
-                    background="#DE5353"
-                  >
-                    Cancelar
-                  </Button>
-                </div>
               </div>
             </Content>
           </Modal>
@@ -226,23 +236,12 @@ function AccessProfile() {
               <span>Deseja realmente excluir Usuário?</span>
               {getSelectedUser().name}
               <div>
+                <Button onClick={handleDeleteUser} text={'Confirmar'} />
                 <Button
-                  onClick={async () => {
-                    await deleteUser(getSelectedUser()._id);
-                    await updateUser();
-                    setDeleteModal(false);
-                  }}
-                >
-                  Confirmar
-                </Button>
-                <Button
-                  onClick={() => {
-                    setDeleteModal(false);
-                  }}
+                  onClick={handleDeleteModal}
                   background="#DE5353"
-                >
-                  Cancelar
-                </Button>
+                  text={'Cancelar'}
+                />
               </div>
             </Content>
           </Modal>

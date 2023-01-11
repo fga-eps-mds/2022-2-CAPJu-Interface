@@ -34,7 +34,7 @@ function Processes() {
   const location = useLocation();
   const flow = location.state;
   const [flows, setFlows] = useState([]);
-  const [flowId, setFlowId] = useState(flow ? flow._id : '');
+  const [flowId, setFlowId] = useState(flow && flow._id);
   const [stages, setStages] = useState([]);
 
   useEffect(() => {
@@ -181,7 +181,7 @@ function Processes() {
     <Container>
       <div className="processes">
         {flow && <BackButton />}
-        <h1>Processos {flow ? '- ' + flow.name : ''}</h1>
+        <h1>Processos {flow && '- ' + flow.name}</h1>
         <div className="processSearch">
           <InputSearch
             value={searchTerm}
@@ -191,7 +191,7 @@ function Processes() {
         </div>
         {processes.length == 0 && (
           <>
-            Nenhum processo foi encontrado <br></br> <br></br>{' '}
+            Nenhum processo foi encontrado <br /> <br />{' '}
           </>
         )}
         <Table>
@@ -199,13 +199,11 @@ function Processes() {
             <tr>
               <th>Registro</th>
               <th>Apelido</th>
-              {flow && stages ? (
+              {flow && stages && (
                 <>
                   <th>Etapa Atual</th>
                   <th>Última Etapa</th>
                 </>
-              ) : (
-                <></>
               )}
               <th>Ações</th>
             </tr>
@@ -241,7 +239,7 @@ function Processes() {
                     <td>{proc.registro}</td>
                     <td>{proc.apelido}</td>
 
-                    {flow && stages ? (
+                    {flow && stages && (
                       <>
                         <td>
                           {CurrentStagePos}. {CurrentStage?.name}
@@ -250,8 +248,6 @@ function Processes() {
                           {FinalStagePos}. {FinalStage?.name}
                         </td>
                       </>
-                    ) : (
-                      <></>
                     )}
                     <td className="action-column">
                       <Tooltip title="Visualizar processo">
@@ -324,12 +320,13 @@ function Processes() {
                     await updateProcesses();
                     closeModal();
                   }}
-                >
-                  Confirmar
-                </Button>
-                <Button onClick={closeModal} background="#DE5353">
-                  Cancelar
-                </Button>
+                  text={'Confirmar'}
+                />
+                <Button
+                  onClick={closeModal}
+                  background="#DE5353"
+                  text={'Cancelar'}
+                />
               </div>
             </Content>
           </Modal>
@@ -351,17 +348,15 @@ function Processes() {
                     setDeleteProcessModal(-1);
                     deleteProcess(processes[deleteProcessModal].registro);
                   }}
-                >
-                  Confirmar
-                </Button>
+                  text={'Confirmar'}
+                />
                 <Button
                   onClick={() => {
                     setDeleteProcessModal(-1);
                   }}
                   background="#DE5353"
-                >
-                  Cancelar
-                </Button>
+                  text={'Cancelar'}
+                />
               </div>
             </Content>
           </Modal>

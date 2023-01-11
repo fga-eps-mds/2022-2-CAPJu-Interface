@@ -90,9 +90,9 @@ test('teste processos', async () => {
   await screen.findByText('1111');
 
   // criando processo
-  const createButton = screen.getByText('+ Adicionar Processo');
+  const createButton = await screen.getByText('+ Adicionar Processo');
   fireEvent.click(createButton);
-  let modalHeader = screen.queryByText('Criar Processo');
+  let modalHeader = await screen.getByText('Criar Processo');
   expect(modalHeader).toBeInTheDocument();
   let fluxoInput = screen.getByTestId('react-select-mock');
   let registroInput = screen.getByPlaceholderText('registro');
@@ -103,6 +103,14 @@ test('teste processos', async () => {
   fireEvent.change(apelidoInput, { target: { value: newProcess.apelido } });
   fireEvent.click(submit);
   await waitFor(() => expect(scopePost.isDone()).toBe(true));
+
+  const processGet = nock(baseURL)
+    .defaultReplyHeaders({
+      'access-control-allow-origin': '*',
+      'access-control-allow-credentials': 'true'
+    })
+    .get(/\/getOneProcess\/(.+)?/)
+    .reply(200, processResponse.processes[0]);
 
   //editando processo
   const putURL = `/updateProcess/${process._id}`;
@@ -164,6 +172,7 @@ test('teste processos', async () => {
     .reply(200, null)
     .get(`/getOneProcess/${process._id}`)
     .reply(200, process);
+
   const nextButton = screen.getByText('Avançar etapa');
   fireEvent.click(nextButton);
   const obsInput = screen.getByPlaceholderText(
@@ -178,6 +187,7 @@ test('teste processos', async () => {
   const backButton = screen.getByText('Voltar');
   fireEvent.click(backButton);
   screen.getByText(`Processos - ${flow.name}`);
+  await waitFor(() => expect(processGet.isDone()).toBe(true));
 
   // deletando o processo
   const deleteURL = `/deleteProcess/${process.registro}`;

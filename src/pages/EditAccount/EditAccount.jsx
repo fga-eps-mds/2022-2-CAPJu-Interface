@@ -22,14 +22,10 @@ function EditAccount() {
       <NameTitle>{user.name}</NameTitle>
       <ContainerMenu>
         <Link to="email">
-          <Button>
-            <span>Email</span>
-          </Button>
+          <Button text={'Email'} />
         </Link>
         <Link to="senha">
-          <Button>
-            <span>Senha</span>
-          </Button>
+          <Button text={'Senha'} />
         </Link>
       </ContainerMenu>
     </Container>

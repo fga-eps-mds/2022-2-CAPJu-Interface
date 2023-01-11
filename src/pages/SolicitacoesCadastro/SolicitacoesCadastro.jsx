@@ -139,17 +139,15 @@ function SolicitacoesCadastro() {
                   await updateSolicitacoes();
                   setAcceptModal(false);
                 }}
-              >
-                Confirmar
-              </Button>
+                text={'Confirmar'}
+              />
               <Button
                 onClick={() => {
                   setAcceptModal(false);
                 }}
                 background="red"
-              >
-                Cancelar
-              </Button>
+                text={'Cancelar'}
+              />
             </div>
           </Content>
         </Modal>
@@ -169,17 +167,15 @@ function SolicitacoesCadastro() {
                   await updateSolicitacoes();
                   setDeleteModal(false);
                 }}
-              >
-                Confirmar
-              </Button>
+                text={'Confirmar'}
+              />
               <Button
                 onClick={() => {
                   setDeleteModal(false);
                 }}
                 background="red"
-              >
-                Cancelar
-              </Button>
+                text={'Cancelar'}
+              />
             </div>
           </Content>
         </Modal>
