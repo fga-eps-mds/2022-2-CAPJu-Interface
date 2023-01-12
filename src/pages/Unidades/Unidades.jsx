@@ -220,9 +220,8 @@ function Unidades() {
                   setAddAdminsModalOpen(false);
                 }}
                 background="rgb(222,83,83)"
-              >
-                Voltar
-              </Button>
+                text={'Voltar'}
+              />
             </div>
           </div>
         </Modal>

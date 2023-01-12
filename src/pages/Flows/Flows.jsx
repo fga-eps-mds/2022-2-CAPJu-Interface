@@ -14,15 +14,11 @@ import {
   AddFlowButton,
   Area,
   SelectorWrapper,
-  StageName,
-  SequencesWrapper,
-  SequenceItem,
   CloseModalGeneral
 } from './styles';
 import FlowViewer from 'components/FlowViewer/FlowViewer';
 import Table from 'components/Tables/Table';
 import Modal from 'components/Modal/Modal';
-import ButtonAdd from 'components/ButtonAdd/ButtonAdd';
 
 function Flows() {
   const [flows, setFlows] = useState([]);
@@ -234,15 +230,6 @@ function Flows() {
     }*/
   ];
 
-  const handleAddFlow = useCallback(() => {
-    setShowFlow(!showFlow);
-    setNewFlow({
-      name: '',
-      stages: [],
-      sequences: []
-    });
-  }, [showFlow]);
-
   const handleDeleteFlow = useCallback(() => {
     deleteFlow(selectedFlow);
     setDeleteModal(!deleteModal);
@@ -301,8 +288,7 @@ function Flows() {
         )}
         {/* Modal de editar fluxo */}
         {showFlow && newFlow && (
-          <Modal title="Editar Fluxo">
-            <CloseModalGeneral onClick={handleAddFlow} />
+          <Modal title="Editar fluxo">
             <span>Nome</span>
             <TextInput
               set={updateFlowName}
@@ -341,44 +327,54 @@ function Flows() {
                     setValue={setTo}
                     options={selectedOptions}
                   />
-                  <ButtonAdd onClickProps={addSequence} />
+                  <Button
+                    buttonType={'add'}
+                    onClick={addSequence}
+                    text={'Adicionar'}
+                  />
                 </SelectorWrapper>
-                <Button background="#de5353" onClick={removeSequence}>
-                  <span>Retroceder</span>
-                </Button>
+                <Button
+                  background="#de5353"
+                  onClick={removeSequence}
+                  text={'Retroceder'}
+                />
               </>
             )}
-            <Button onClick={editFlow}>
-              <span>Salvar</span>
-            </Button>
-            <Button onClick={handleShowFlowModal} background="#DE5353">
-              Cancelar
-            </Button>
+            <Button onClick={editFlow} text={'Salvar'} />
+            <Button
+              onClick={handleShowFlowModal}
+              background="#DE5353"
+              text={'Cancelar'}
+            />
           </Modal>
         )}
       </Container>
       {isModalOpen && (
-        <Modal title="Novo Fluxo">
+        <Modal>
+          <span>Novo Fluxo</span>
           <CloseModalGeneral onClick={clearFlowModal} data-testid="close" />
           <TextInput
-            placeholder={'Nome do fluxo'}
             set={updateFlowName}
             value={newFlow.name}
             maxLength={40}
+            data-testid="flowName"
           />
-          <span>Etapas</span>
-          <AddStageInFlow
-            selectedStage={selectedStage}
-            setSelectedStage={setSelectedStage}
-            options={allOptions}
-            onClick={addStage}
-            flow={newFlow}
-          />
+          <label>
+            <span>Etapas</span>
+            <AddStageInFlow
+              selectedStage={selectedStage}
+              setSelectedStage={setSelectedStage}
+              options={allOptions}
+              onClick={addStage}
+              flow={newFlow}
+            />
+          </label>
           <StagesInFlow
             flow={newFlow}
             stageList={stages}
             setNewFlow={setNewFlow}
           />
+          <FlowViewer flow={newFlow} disabled={true} stages={stages || []} />
           {newFlow.stages.length > 0 && (
             <>
               <>Sequências</>
@@ -395,32 +391,12 @@ function Flows() {
                   options={selectedOptions}
                 />
                 <div className="addStage" onClick={addSequence}>
-                  <ButtonAdd />
+                  <Button buttonType={'add'} text={'Adicionar'} />
                 </div>
               </SelectorWrapper>
-              <SequencesWrapper>
-                {newFlow.sequences.map((sequence) => {
-                  return (
-                    <SequenceItem key={sequence.id}>
-                      <StageName>
-                        {
-                          stages.find((stage) => {
-                            return sequence.from == stage._id;
-                          }).name
-                        }
-                      </StageName>
-                      <ArrowRight size={25} />
-                      <StageName>
-                        {
-                          stages.find((stage) => {
-                            return sequence.to == stage._id;
-                          }).name
-                        }
-                      </StageName>
-                    </SequenceItem>
-                  );
-                })}
-              </SequencesWrapper>
+              <Button background="#de5353" onClick={removeSequence}>
+                <span>Retroceder</span>
+              </Button>
             </>
           )}
           <div>
@@ -428,12 +404,13 @@ function Flows() {
               onClick={() => {
                 addFlow();
               }}
-            >
-              <span>Salvar</span>
-            </Button>
-            <Button onClick={handleNewFlowModal} background="#DE5353">
-              Cancelar
-            </Button>
+              text={'Salvar'}
+            />
+            <Button
+              onClick={handleNewFlowModal}
+              background="#DE5353"
+              text={'Cancelar'}
+            />
           </div>
         </Modal>
       )}

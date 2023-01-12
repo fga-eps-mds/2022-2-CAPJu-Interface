@@ -1,22 +1,30 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import { Container } from './styles';
+import { Container, ButtonEdge, BtnStyle, ButtonAdd } from './styles';
 
-function Button({ background, onClick, children, className }) {
+const buttonTypeToComponent = {
+  edge: ButtonEdge,
+  add: ButtonAdd,
+  showProcess: BtnStyle
+};
+
+function Button({ background, onClick, children, buttonType, text }) {
+  const ButtonComponent = buttonTypeToComponent[buttonType] || Container;
   return (
-    <Container background={background} onClick={onClick} className={className}>
+    <ButtonComponent background={background} onClick={onClick}>
+      {text}
       {children}
-    </Container>
+    </ButtonComponent>
   );
 }
 
 Button.propTypes = {
-  className: PropTypes.string,
-  teste: PropTypes.string,
+  buttonType: PropTypes.string,
   onClick: PropTypes.func,
   background: PropTypes.string,
-  children: PropTypes.any
+  children: PropTypes.any,
+  text: PropTypes.string
 };
 
 export default Button;

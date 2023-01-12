@@ -145,6 +145,23 @@ function AccessProfile() {
     });
   };
 
+  function openDeleteModal(user) {
+    setSelectedUser(user._id);
+    const modal = (
+      <Modal title="Excluir Usuário">
+        <span>Deseja realmente excluir Usuário?</span>
+        {getSelectedUser().name}
+        <div>
+          <Button onClick={handleDeleteUser}>Confirmar</Button>
+          <Button onClick={handleDeleteModal} background="#DE5353">
+            Cancelar
+          </Button>
+        </div>
+      </Modal>
+    );
+    Modal.open(modal);
+  }
+
   const actionList = [
     {
       tooltip: 'Editar perfil',
@@ -156,10 +173,7 @@ function AccessProfile() {
     },
     {
       tooltip: 'Deletar Perfil',
-      action: (user) => {
-        setDeleteModal(true);
-        setSelectedUser(user._id);
-      },
+      action: (user) => openDeleteModal(user),
       type: 'delete'
     }
   ];
@@ -210,18 +224,6 @@ function AccessProfile() {
             <div>
               <Button onClick={handleEditRole}>Salvar</Button>
               <Button onClick={handleRoleModal} background="#DE5353">
-                Cancelar
-              </Button>
-            </div>
-          </Modal>
-        )}
-        {deleteModal && (
-          <Modal title="Excluir Usuário">
-            <span>Deseja realmente excluir Usuário?</span>
-            {getSelectedUser().name}
-            <div>
-              <Button onClick={handleDeleteUser}>Confirmar</Button>
-              <Button onClick={handleDeleteModal} background="#DE5353">
                 Cancelar
               </Button>
             </div>

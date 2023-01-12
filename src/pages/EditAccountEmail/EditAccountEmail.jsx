@@ -72,7 +72,7 @@ function EditAccountEmail() {
             </ul>
           </Criterios>
         </ContainerMenu>
-        <Button type="submit">Salvar</Button>
+        <Button type="submit" text={'Salvar'} />
       </form>
     </Container>
   );

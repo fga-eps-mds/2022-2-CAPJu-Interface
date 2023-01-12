@@ -72,11 +72,7 @@ function SideBar() {
           <MenuItem href={'/solicitacoes'}>
             <UserPlus size={35} />
             Solicitações
-            {users.length >= 1 ? (
-              <Notification>{users.length}</Notification>
-            ) : (
-              ''
-            )}
+            {users.length >= 1 && <Notification>{users.length}</Notification>}
           </MenuItem>
           <hr />
 
@@ -100,9 +96,8 @@ function SideBar() {
               localStorage.removeItem('user');
               navigate('Login');
             }}
-          >
-            Sair
-          </Button>
+            text={'Sair'}
+          />
         </LogoutButton>
       )}
     </Container>
