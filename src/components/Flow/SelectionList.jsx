@@ -4,7 +4,13 @@ import PropTypes from 'prop-types';
 import Dropdown from 'react-dropdown';
 
 import Button from 'components/Button/Button';
-import { Container, LineContainer, ListContainer, Item } from './styles';
+import {
+  Container,
+  LineContainer,
+  ListContainer,
+  Item,
+  ButtonStyle
+} from './styles';
 
 function SelectionLit({
   label,
@@ -33,21 +39,6 @@ function SelectionLit({
 
   return (
     <LineContainer>
-      <text>{label}</text>
-      <Container>
-        <Container>
-          <Dropdown
-            options={optionList}
-            value={placeholder}
-            onChange={(e) => setSelectedOption(e)}
-          />
-        </Container>
-        <Button
-          onClick={() => addItem(selectedOption)}
-          buttonType="add"
-          text="Adicionar"
-        />
-      </Container>
       <ListContainer>
         {label}
         {selectedOptions?.length > 0 ? (
@@ -66,6 +57,20 @@ function SelectionLit({
           <text>{`Ainda não há ${label}`}</text>
         )}
       </ListContainer>
+      <Container>
+        <ButtonStyle>
+          <Dropdown
+            options={optionList}
+            value={placeholder}
+            onChange={(e) => setSelectedOption(e)}
+          />
+        </ButtonStyle>
+        <Button
+          onClick={() => addItem(selectedOption)}
+          buttonType="add"
+          text="Adicionar"
+        />
+      </Container>
     </LineContainer>
   );
 }

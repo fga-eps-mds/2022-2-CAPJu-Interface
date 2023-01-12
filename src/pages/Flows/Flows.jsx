@@ -14,7 +14,9 @@ import {
   Modal,
   Content,
   ContentHeader,
-  CloseModalGeneral
+  CloseModalGeneral,
+  Exemplo,
+  LabelDiv
 } from './styles';
 import FlowViewer from 'components/Flow/FlowViewer';
 import Table from 'components/Tables/Table';
@@ -294,27 +296,32 @@ function Flows() {
                 <span>Editar fluxo</span>
                 <CloseModalGeneral onClick={handleAddFlow} />
               </ContentHeader>
-              <span>Nome</span>
-              <TextInput
-                set={setFlowName}
-                value={flowName}
-                maxLength={40}
-                data-testid="flowName"
-              />
-              <SelectionList
-                label="Notificar"
-                placeholder="Selecione o usuário"
-                options={users}
-                selectedOptions={flowUsers}
-                addSelectedOption={setFlowUsers}
-              />
-              <SelectionList
-                label="Etapas"
-                placeholder="Selecione uma etapa"
-                options={stages}
-                selectedOptions={flowStages}
-                addSelectedOption={setFlowStages}
-              />
+              <LabelDiv>
+                <label>Nome</label>
+                <TextInput
+                  set={setFlowName}
+                  value={flowName}
+                  maxLength={40}
+                  data-testid="flowName"
+                />
+              </LabelDiv>
+              <Exemplo>
+                <SelectionList
+                  label="Notificar"
+                  placeholder="Selecione o usuário"
+                  options={users}
+                  selectedOptions={flowUsers}
+                  addSelectedOption={setFlowUsers}
+                />
+                <SelectionList
+                  label="Etapas"
+                  placeholder="Selecione uma etapa"
+                  options={stages}
+                  selectedOptions={flowStages}
+                  addSelectedOption={setFlowStages}
+                />
+              </Exemplo>
+              <span>Sequências</span>
               {flowStages.length > 1 && (
                 <AddSequenceInFlow
                   addSequence={addSequence}
@@ -352,26 +359,28 @@ function Flows() {
               <span>Novo Fluxo</span>
               <CloseModalGeneral onClick={clearFlowModal} data-testid="close" />
             </ContentHeader>
-            <TextInput
-              placeholder={'Nome do fluxo'}
-              set={setFlowName}
-              value={flowName}
-              maxLength={40}
-            />
-            <SelectionList
-              label="Usuários"
-              placeholder="Selecione o usuário"
-              options={users}
-              selectedOptions={flowUsers}
-              addSelectedOption={setFlowUsers}
-            />
-            <SelectionList
-              label="Etapas"
-              placeholder="Selecione uma etapa"
-              options={stages}
-              selectedOptions={flowStages}
-              addSelectedOption={setFlowStages}
-            />
+
+            <LabelDiv>
+              <label>Nome</label>
+              <TextInput set={setFlowName} value={flowName} maxLength={40} />
+            </LabelDiv>
+            <Exemplo>
+              <SelectionList
+                label="Usuários"
+                placeholder="Selecione o usuário"
+                options={users}
+                selectedOptions={flowUsers}
+                addSelectedOption={setFlowUsers}
+              />
+              <SelectionList
+                label="Etapas"
+                placeholder="Selecione uma etapa"
+                options={stages}
+                selectedOptions={flowStages}
+                addSelectedOption={setFlowStages}
+              />
+            </Exemplo>
+            <span>Sequências</span>
             {flowStages.length > 1 && (
               <AddSequenceInFlow
                 addSequence={addSequence}

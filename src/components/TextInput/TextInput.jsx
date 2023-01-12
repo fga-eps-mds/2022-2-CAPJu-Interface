@@ -9,13 +9,15 @@ function TextInput(props) {
   }
 
   return (
-    <Input
-      placeholder={props.placeholder}
-      onChange={handleUpdateElem}
-      value={props.value}
-      type={props.type}
-      maxLength={props.maxLength}
-    />
+    <>
+      <Input
+        placeholder={props.placeholder}
+        onChange={handleUpdateElem}
+        value={props.value}
+        type={props.type}
+        maxLength={props.maxLength}
+      />
+    </>
   );
 }
 

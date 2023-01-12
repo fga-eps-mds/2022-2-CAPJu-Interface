@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import Dropdown from 'react-dropdown';
 import { ArrowRight } from '@styled-icons/bootstrap/ArrowRight';
 
-import { Container, SequenceContainer } from './styles';
+import { SequenceContainer, ButtonStyle } from './styles';
 import Button from 'components/Button/Button';
 function AddSequenceInFlow({ options, stages, addSequence, removeSequence }) {
   const [originStage, setOriginStage] = useState('');
@@ -18,24 +18,23 @@ function AddSequenceInFlow({ options, stages, addSequence, removeSequence }) {
 
   return (
     <SequenceContainer>
-      <text>{'Sequências'}</text>
-      <Container>
+      <ButtonStyle>
         <Dropdown
           options={stagesInFlow}
           onChange={(e) => setOriginStage(e.value)}
           value={originStage}
           placeholder="Selecione a etapa"
         />
-      </Container>
+      </ButtonStyle>
       <ArrowRight size={25} />
-      <Container>
+      <ButtonStyle>
         <Dropdown
           options={stagesInFlow}
           onChange={(e) => setDestinationStage(e.value)}
           value={destinationStage}
           placeholder="Selecione a etapa"
         />
-      </Container>
+      </ButtonStyle>
       <Button
         buttonType={'add'}
         onClick={() => addSequence(originStage, destinationStage)}

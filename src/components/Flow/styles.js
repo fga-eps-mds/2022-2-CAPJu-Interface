@@ -51,8 +51,9 @@ export const Item = styled.div`
 export const LineContainer = styled.div`
   display: flex;
   align-items: center;
-  justify-content: flex-end;
-  width: 95%;
+  flex-direction: column;
+  justify-content: center;
+  width: 100%;
 
   text {
     margin-right: 15px;
@@ -63,15 +64,40 @@ export const Container = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
+  width: 90%;
+  justify-content: space-between;
+  background-color: #d9d9d9;
+  border-bottom: solid #9b8f8f 2px;
+  border-right: solid #9b8f8f 2px;
+  border-left: solid #9b8f8f 2px;
+  border-radius: 0px 0px 11px 11px;
+  padding: 8px;
+  margin: 0px 10px 0px 10px;
+  color: black;
+  font-size: 20px;
+  word-wrap: break-all;
+  z-index: 1;
+  position: relative;
+
+  div {
+    font-size: 15px;
+    width: 215px;
+    text-overflow: ellipsis;
+  }
+`;
+
+export const ButtonStyle = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
   width: 48%;
   justify-content: space-between;
-  filter: drop-shadow(3px 2px 0px #00000040);
   background-color: #d9d9d9;
   border: solid #9b8f8f 2px;
-  padding: 8px;
-  margin: 0px 10px 0px 0px;
-  color: black;
   border-radius: 11px;
+  padding: 8px;
+  margin: 0px 10px 0px 10px;
+  color: black;
   font-size: 20px;
   word-wrap: break-all;
   z-index: 1;
@@ -89,15 +115,16 @@ export const ListContainer = styled.div`
   flex-direction: column;
   justify-content: start;
   align-items: center;
-  width: 30%;
+  width: 90%;
   height: 130px;
-  filter: drop-shadow(3px 2px 0px #00000040);
+  border-radius: 11px 11px 0px 0px;
   background-color: #d9d9d9;
-  border: solid #9b8f8f 2px;
+  border-top: solid #9b8f8f 2px;
+  border-right: solid #9b8f8f 2px;
+  border-left: solid #9b8f8f 2px;
   padding: 8px;
   margin: 0px 10px 0px 10px;
   color: black;
-  border-radius: 11px;
   font-size: 20px;
   overflow-y: auto;
   scrollbar-width: none;
