@@ -77,7 +77,7 @@ export const Container = styled.div`
   color: black;
   font-size: 20px;
   word-wrap: break-all;
-  z-index: 1;
+  z-index: 2001;
   position: relative;
 
   div {
