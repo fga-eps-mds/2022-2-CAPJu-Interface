@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import toast from 'react-hot-toast';
 import PropTypes from 'prop-types';
 import Dropdown from 'react-dropdown';
+import { QuestionCircleFill } from '@styled-icons/bootstrap/QuestionCircleFill';
 
 import Button from 'components/Button/Button';
 import {
@@ -9,7 +10,9 @@ import {
   LineContainer,
   ListContainer,
   Item,
-  ButtonStyle
+  ButtonStyle,
+  DivFlex,
+  QuestionBox
 } from './styles';
 
 function SelectionLit({
@@ -17,8 +20,10 @@ function SelectionLit({
   options,
   selectedOptions,
   addSelectedOption,
-  placeholder
+  placeholder,
+  hintText
 }) {
+  const [showTextBox, setShowTextBox] = useState(false);
   const [selectedOption, setSelectedOption] = useState(null);
   const optionList = options.map((option) => {
     return { label: option.name, value: option._id };
@@ -40,7 +45,20 @@ function SelectionLit({
   return (
     <LineContainer>
       <ListContainer>
-        {label}
+        <DivFlex>
+          <div>{label}</div>
+          <div
+            onClick={() => setShowTextBox(!showTextBox)}
+            style={{ cursor: 'pointer' }}
+          >
+            <QuestionCircleFill size={20} />
+          </div>
+          {showTextBox && (
+            <>
+              <QuestionBox>{hintText}</QuestionBox>
+            </>
+          )}
+        </DivFlex>
         {selectedOptions?.length > 0 ? (
           selectedOptions.map((option, index) => {
             const { name } = options.find((item) => item._id === option);
@@ -80,7 +98,8 @@ SelectionLit.propTypes = {
   placeholder: PropTypes.string.isRequired,
   options: PropTypes.arrayOf(PropTypes.object).isRequired,
   selectedOptions: PropTypes.arrayOf(PropTypes.object).isRequired,
-  addSelectedOption: PropTypes.func.isRequired
+  addSelectedOption: PropTypes.func.isRequired,
+  hintText: PropTypes.string
 };
 
 export default SelectionLit;

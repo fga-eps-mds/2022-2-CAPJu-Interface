@@ -15,7 +15,7 @@ import {
   Content,
   ContentHeader,
   CloseModalGeneral,
-  Exemplo,
+  DivFlex,
   LabelDiv
 } from './styles';
 import FlowViewer from 'components/Flow/FlowViewer';
@@ -305,22 +305,24 @@ function Flows() {
                   data-testid="flowName"
                 />
               </LabelDiv>
-              <Exemplo>
+              <DivFlex>
                 <SelectionList
-                  label="Notificar"
-                  placeholder="Selecione o usuário"
-                  options={users}
-                  selectedOptions={flowUsers}
-                  addSelectedOption={setFlowUsers}
-                />
-                <SelectionList
-                  label="Etapas"
+                  label="Etapas do Fluxo"
                   placeholder="Selecione uma etapa"
                   options={stages}
                   selectedOptions={flowStages}
                   addSelectedOption={setFlowStages}
+                  hintText="Etapas presentes em um fluxo"
                 />
-              </Exemplo>
+                <SelectionList
+                  label="Usuários Notificados"
+                  placeholder="Selecione o usuário"
+                  options={users}
+                  selectedOptions={flowUsers}
+                  addSelectedOption={setFlowUsers}
+                  hintText="Usuários notificados por email, quando processos deste fluxo estiverem atrasado."
+                />
+              </DivFlex>
               <span>Sequências</span>
               {flowStages.length > 1 && (
                 <AddSequenceInFlow
@@ -364,30 +366,34 @@ function Flows() {
               <label>Nome</label>
               <TextInput set={setFlowName} value={flowName} maxLength={40} />
             </LabelDiv>
-            <Exemplo>
+            <DivFlex>
               <SelectionList
-                label="Usuários"
-                placeholder="Selecione o usuário"
-                options={users}
-                selectedOptions={flowUsers}
-                addSelectedOption={setFlowUsers}
-              />
-              <SelectionList
-                label="Etapas"
+                label="Etapas do Fluxo"
                 placeholder="Selecione uma etapa"
                 options={stages}
                 selectedOptions={flowStages}
                 addSelectedOption={setFlowStages}
+                hintText="Etapas presentes em um fluxo"
               />
-            </Exemplo>
-            <span>Sequências</span>
+              <SelectionList
+                label="Usuários Notificados"
+                placeholder="Selecione o usuário"
+                options={users}
+                selectedOptions={flowUsers}
+                addSelectedOption={setFlowUsers}
+                hintText="Usuários notificados por email, quando processos deste fluxo estiverem atrasado."
+              />
+            </DivFlex>
             {flowStages.length > 1 && (
-              <AddSequenceInFlow
-                addSequence={addSequence}
-                removeSequence={removeSequence}
-                options={flowStages}
-                stages={stages}
-              />
+              <>
+                <span>Sequências</span>
+                <AddSequenceInFlow
+                  addSequence={addSequence}
+                  removeSequence={removeSequence}
+                  options={flowStages}
+                  stages={stages}
+                />
+              </>
             )}
             <FlowViewer
               flow={{

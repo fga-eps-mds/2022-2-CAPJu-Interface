@@ -40,6 +40,7 @@ const GlobalStyle = createGlobalStyle`
     width: 100%;
     max-width: 300px;
     top: 45%;
+    z-index: 100000;
     transition: all .2s ease;
   }
 

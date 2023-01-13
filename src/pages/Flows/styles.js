@@ -107,12 +107,9 @@ export const CloseModalGeneral = styled(CloseOutline)`
   min-height: 35px;
 `;
 
-export const Exemplo = styled.div`
+export const DivFlex = styled.div`
   display: flex;
   flex-direction: row;
-  height: 500px;
-  margin: 0;
-  padding: 0;
 `;
 
 export const LabelDiv = styled.div`

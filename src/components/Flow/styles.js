@@ -5,6 +5,7 @@ export const FlowContainer = styled.div`
   font-size: 20px;
   height: 500px;
   width: 500px;
+  z-index: 0;
 
   .react-flow__attribution {
     display: none;
@@ -207,6 +208,7 @@ export const SequenceContainer = styled.div`
   border-radius: 11px;
   font-size: 20px;
   word-wrap: break-all;
+  z-index: 1000;
 
   div {
     width: 150px;
@@ -217,4 +219,22 @@ export const SequenceContainer = styled.div`
   text {
     margin-right: 15px;
   }
+`;
+
+export const DivFlex = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  width: 90%;
+  position: relative;
+`;
+
+export const QuestionBox = styled.div`
+  background-color: #d9d9d9;
+  border: solid black 2px;
+  border-radius: 11px;
+  padding: 8px;
+  z-index: 2000;
+  position: absolute;
+  top: 1.6em;
 `;
