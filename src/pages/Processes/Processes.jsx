@@ -299,14 +299,14 @@ function Processes() {
                 arrowClassName="dropdown-arrow"
               />
               <div>
-                <p> Registro </p>
                 <TextInput
+                  label="Registro"
                   value={registro}
                   set={setRegistro}
                   placeholder="registro"
                 />
-                <p> Apelido</p>
                 <TextInput
+                  label="Apelido"
                   value={apelido}
                   set={setApelido}
                   placeholder="apelido"

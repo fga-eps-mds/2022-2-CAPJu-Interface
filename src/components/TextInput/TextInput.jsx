@@ -9,13 +9,16 @@ function TextInput(props) {
   }
 
   return (
-    <Input
-      placeholder={props.placeholder}
-      onChange={handleUpdateElem}
-      value={props.value}
-      type={props.type}
-      maxLength={props.maxLength}
-    />
+    <div>
+      <label> {props.label} </label>
+      <Input
+        placeholder={props.placeholder}
+        onChange={handleUpdateElem}
+        value={props.value}
+        type={props.type}
+        maxLength={props.maxLength}
+      />
+    </div>
   );
 }
 
@@ -24,7 +27,8 @@ TextInput.propTypes = {
   placeholder: PropTypes.string,
   set: PropTypes.func,
   type: PropTypes.string,
-  maxLength: PropTypes.number
+  maxLength: PropTypes.number,
+  label: PropTypes.string
 };
 
 export default TextInput;

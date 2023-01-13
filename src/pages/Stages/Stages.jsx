@@ -119,16 +119,14 @@ function Stages() {
               <span>Criar Etapa</span>
             </ContentHeader>
             <div>
-              <p> Nome </p>
-
               <TextInput
+                label="Nome"
                 set={setStageName}
                 value={stageName}
                 placeholder="Nome da etapa"
               />
-              <p> Duração </p>
-
               <TextInput
+                label="Duração"
                 set={setStageTime}
                 value={stageTime}
                 placeholder="Duração (dias)"

@@ -152,9 +152,10 @@ function Unidades() {
               <span>Criar Unidade</span>
             </ContentHeader>
             <div>
-              <p> Nome </p>
+              {/* <p> Nome </p> */}
 
               <TextInput
+                label="Nome"
                 set={setUnityName}
                 value={UnityName}
                 placeholder="Nome da unidade"

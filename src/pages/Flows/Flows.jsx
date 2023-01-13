@@ -316,12 +316,12 @@ function Flows() {
                 <span>Editar fluxo</span>
                 <CloseModalGeneral onClick={handleAddFlow} />
               </ContentHeader>
-              <span>Nome</span>
               <TextInput
+                label="Nome"
                 set={updateFlowName}
                 value={newFlow.name}
                 maxLength={40}
-                data-testid="flowName"
+                data-testid={'flowName'}
               />
               <label>
                 <span>Etapas</span>

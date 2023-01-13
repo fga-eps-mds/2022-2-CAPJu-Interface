@@ -10,6 +10,7 @@ export const Input = styled.input`
   border-radius: 10px;
   font-size: 15px;
   box-sizing: border-box;
+  margin: 20px;
 
   :focus {
     outline: none;
