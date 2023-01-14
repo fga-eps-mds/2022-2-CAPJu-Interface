@@ -76,7 +76,7 @@ export const Content = styled.div`
   gap: 10px;
   font-size: 20px;
   border-radius: 10px;
-  overflow-x: auto;
+  overflow-x: hidden;
 `;
 
 export const ContentHeader = styled.div`
@@ -110,6 +110,9 @@ export const CloseModalGeneral = styled(CloseOutline)`
 export const DivFlex = styled.div`
   display: flex;
   flex-direction: row;
+  justify-content: space-around;
+  max-width: 50em;
+  width: 47.5%;
 `;
 
 export const LabelDiv = styled.div`

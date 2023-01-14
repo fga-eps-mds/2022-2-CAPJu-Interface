@@ -65,7 +65,7 @@ export const Container = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 90%;
+  width: 80%;
   justify-content: space-between;
   background-color: #d9d9d9;
   border-bottom: solid #9b8f8f 2px;
@@ -91,7 +91,7 @@ export const ButtonStyle = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 48%;
+  max-width: 50%;
   justify-content: space-between;
   background-color: #d9d9d9;
   border: solid #9b8f8f 2px;
@@ -99,15 +99,18 @@ export const ButtonStyle = styled.div`
   padding: 8px;
   margin: 0px 10px 0px 10px;
   color: black;
-  font-size: 20px;
   word-wrap: break-all;
   z-index: 1;
   position: relative;
+  align-self: center;
 
   div {
-    font-size: 15px;
-    width: 215px;
-    text-overflow: ellipsis;
+    justify-content: center;
+    align-items: center;
+    font-size: 13px;
+    width: 84.5%;
+    margin-left: -2px;
+    margin-top: 2px;
   }
 `;
 
@@ -116,7 +119,7 @@ export const ListContainer = styled.div`
   flex-direction: column;
   justify-content: start;
   align-items: center;
-  width: 90%;
+  width: 80%;
   height: 130px;
   border-radius: 11px 11px 0px 0px;
   background-color: #d9d9d9;
@@ -227,6 +230,10 @@ export const DivFlex = styled.div`
   justify-content: center;
   width: 90%;
   position: relative;
+
+  div {
+    font-size: 18px;
+  }
 `;
 
 export const QuestionBox = styled.div`
