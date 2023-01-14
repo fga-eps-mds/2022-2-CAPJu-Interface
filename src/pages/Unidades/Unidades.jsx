@@ -156,7 +156,7 @@ function Unidades() {
 
               <TextInput
                 label="Nome"
-                set={setUnityName}
+                onChange={setUnityName}
                 value={UnityName}
                 placeholder="Nome da unidade"
               />
@@ -218,7 +218,7 @@ function Unidades() {
               </ContentHeader>
               <h3>Administradores - {currentUnity.name}</h3>
               <TextInput
-                set={setAdminSearchName}
+                onChange={setAdminSearchName}
                 value={adminSearchName}
                 placeholder="Nome do usuário"
               />

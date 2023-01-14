@@ -57,19 +57,19 @@ function EditAccountPassword() {
       >
         <ContainerMenu>
           <TextInput
-            set={setOldPassword}
+            onChange={setOldPassword}
             value={oldPassword}
             placeholder={'Senha Atual'}
             type="password"
           />
           <TextInput
-            set={setNewPassword}
+            onChange={setNewPassword}
             value={newPassword}
             placeholder={'Nova Senha'}
             type="password"
           />
           <TextInput
-            set={setNewPassword2}
+            onChange={setNewPassword2}
             value={newPassword2}
             placeholder={'Confirmar Senha'}
             type="password"

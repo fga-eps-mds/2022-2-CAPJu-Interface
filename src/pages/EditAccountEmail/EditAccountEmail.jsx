@@ -54,12 +54,12 @@ function EditAccountEmail() {
       >
         <ContainerMenu>
           <TextInput
-            set={setOldEmail}
+            onChange={setOldEmail}
             value={oldEmail}
             placeholder="Email Atual"
           />
           <TextInput
-            set={setNewEmail}
+            onChange={setNewEmail}
             value={newEmail}
             placeholder="Email Novo"
           />

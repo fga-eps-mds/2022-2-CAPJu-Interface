@@ -121,13 +121,13 @@ function Stages() {
             <div>
               <TextInput
                 label="Nome"
-                set={setStageName}
+                onChange={setStageName}
                 value={stageName}
                 placeholder="Nome da etapa"
               />
               <TextInput
                 label="Duração"
-                set={setStageTime}
+                onChange={setStageTime}
                 value={stageTime}
                 placeholder="Duração (dias)"
               />

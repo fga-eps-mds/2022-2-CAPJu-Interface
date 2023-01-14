@@ -45,13 +45,13 @@ function Login() {
         <>
           <h1>Cadastre sua nova senha </h1>
           <TextInput
-            set={setNewPassword}
+            onChange={setNewPassword}
             value={newPassword}
             placeholder="Crie uma nova senha"
             type="password"
           />
           <TextInput
-            set={setNewPassword2}
+            onChange={setNewPassword2}
             value={newPassword2}
             placeholder="Confirme a senha"
             type="password"

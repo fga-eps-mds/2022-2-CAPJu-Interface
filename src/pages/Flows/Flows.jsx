@@ -318,7 +318,7 @@ function Flows() {
               </ContentHeader>
               <TextInput
                 label="Nome"
-                set={updateFlowName}
+                onChange={updateFlowName}
                 value={newFlow.name}
                 maxLength={40}
                 data-testid={'flowName'}
@@ -390,7 +390,7 @@ function Flows() {
             </ContentHeader>
             <TextInput
               placeholder={'Nome do fluxo'}
-              set={updateFlowName}
+              onChange={updateFlowName}
               value={newFlow.name}
               maxLength={40}
             />

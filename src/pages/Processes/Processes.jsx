@@ -302,13 +302,13 @@ function Processes() {
                 <TextInput
                   label="Registro"
                   value={registro}
-                  set={setRegistro}
+                  onChange={setRegistro}
                   placeholder="registro"
                 />
                 <TextInput
                   label="Apelido"
                   value={apelido}
-                  set={setApelido}
+                  onChange={setApelido}
                   placeholder="apelido"
                 />
               </div>

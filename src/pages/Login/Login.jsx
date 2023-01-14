@@ -195,7 +195,7 @@ function Login() {
             <br />
             <br />
             <TextInput
-              set={setPassword}
+              onChange={setPassword}
               value={password}
               placeholder="Senha"
               type="password"
@@ -219,7 +219,6 @@ function Login() {
         >
           <h1>Cadastre-se </h1>
           <Input
-            set={setNewName}
             onChange={onHandleName}
             value={newName}
             placeholder="Nome completo"
@@ -264,17 +263,21 @@ function Login() {
               </React.Fragment>
             ))}
           <br />
-          <TextInput set={setNewEmail} value={newEmail} placeholder="Email" />
+          <TextInput
+            onChange={setNewEmail}
+            value={newEmail}
+            placeholder="Email"
+          />
           <br />
           <TextInput
-            set={setNewPassword}
+            onChange={setNewPassword}
             value={newPassword}
             placeholder="Crie uma senha"
             type="password"
           />
           <br />
           <TextInput
-            set={setNewPassword2}
+            onChange={setNewPassword2}
             value={newPassword2}
             placeholder="Confirme a senha"
             type="password"
@@ -328,7 +331,7 @@ function Login() {
             <h3>Recuperação de senha</h3>
             <h5>Você receberá um link via e-mail para criar sua nova senha</h5>
             <TextInput
-              set={setEmail}
+              onChange={setEmail}
               value={email}
               placeholder="Digite seu email"
             />
