@@ -110,9 +110,9 @@ export const CloseModalGeneral = styled(CloseOutline)`
 export const DivFlex = styled.div`
   display: flex;
   flex-direction: row;
-  justify-content: space-around;
+  justify-content: center;
   max-width: 50em;
-  width: 47.5%;
+  width: 47%;
 `;
 
 export const LabelDiv = styled.div`

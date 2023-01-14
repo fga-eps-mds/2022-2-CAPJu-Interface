@@ -14,6 +14,7 @@ import {
   DivFlex,
   QuestionBox
 } from './styles';
+import { FontSize } from 'styled-icons/boxicons-regular';
 
 function SelectionLit({
   label,
@@ -72,12 +73,13 @@ function SelectionLit({
             );
           })
         ) : (
-          <text>{`Ainda não há ${label}`}</text>
+          <text style={{ fontSize: '18px' }}>{`Ainda não há ${label}`}</text>
         )}
       </ListContainer>
       <Container>
         <ButtonStyle>
           <Dropdown
+            className="dropdown"
             options={optionList}
             value={placeholder}
             onChange={(e) => setSelectedOption(e)}

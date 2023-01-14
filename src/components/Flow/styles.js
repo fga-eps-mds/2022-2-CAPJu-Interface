@@ -54,6 +54,8 @@ export const LineContainer = styled.div`
   align-items: center;
   flex-direction: column;
   justify-content: center;
+  margin-right: 7px;
+  margin-left: 7px;
   width: 100%;
 
   text {
@@ -65,25 +67,23 @@ export const Container = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 80%;
+  width: 95.8%;
   justify-content: space-between;
   background-color: #d9d9d9;
   border-bottom: solid #9b8f8f 2px;
   border-right: solid #9b8f8f 2px;
   border-left: solid #9b8f8f 2px;
   border-radius: 0px 0px 11px 11px;
-  padding: 8px;
   margin: 0px 10px 0px 10px;
+  padding-bottom: 6px;
+  padding-right: 6px;
   color: black;
   font-size: 20px;
-  word-wrap: break-all;
   z-index: 2001;
-  position: relative;
 
   div {
     font-size: 15px;
     width: 215px;
-    text-overflow: ellipsis;
   }
 `;
 
@@ -91,7 +91,7 @@ export const ButtonStyle = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  max-width: 50%;
+  max-width: 210px;
   justify-content: space-between;
   background-color: #d9d9d9;
   border: solid #9b8f8f 2px;
@@ -99,18 +99,21 @@ export const ButtonStyle = styled.div`
   padding: 8px;
   margin: 0px 10px 0px 10px;
   color: black;
-  word-wrap: break-all;
   z-index: 1;
-  position: relative;
   align-self: center;
+  height: 1.5em;
+  position: relative;
+  width: auto;
 
+  .dropdown {
+    overflow: hidden;
+    break-word: break-all;
+    background-color: #d9d9d9;
+    width: 84.5%;
+  }
   div {
     justify-content: center;
     align-items: center;
-    font-size: 13px;
-    width: 84.5%;
-    margin-left: -2px;
-    margin-top: 2px;
   }
 `;
 
@@ -119,19 +122,22 @@ export const ListContainer = styled.div`
   flex-direction: column;
   justify-content: start;
   align-items: center;
-  width: 80%;
+  width: 100%;
+  max-width: 393px;
+  min-width: 393px;
   height: 130px;
   border-radius: 11px 11px 0px 0px;
   background-color: #d9d9d9;
   border-top: solid #9b8f8f 2px;
   border-right: solid #9b8f8f 2px;
   border-left: solid #9b8f8f 2px;
-  padding: 8px;
   margin: 0px 10px 0px 10px;
+  padding-right: 6px;
   color: black;
   font-size: 20px;
   overflow-y: auto;
   scrollbar-width: none;
+  height: 12em;
 
   ::-webkit-scrollbar {
     background-color: white;
@@ -200,12 +206,10 @@ export const SequenceContainer = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  width: auto;
+  width: 95%;
   justify-content: space-between;
-  filter: drop-shadow(3px 2px 0px #00000040);
   background-color: #d9d9d9;
   border: solid #9b8f8f 2px;
-  padding: 8px;
   margin: 0px 5px 0px 5px;
   color: black;
   border-radius: 11px;
@@ -214,7 +218,6 @@ export const SequenceContainer = styled.div`
   z-index: 1000;
 
   div {
-    width: 150px;
     text-overflow: ellipsis;
     font-size: 15px;
   }

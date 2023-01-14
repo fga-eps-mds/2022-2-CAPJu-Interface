@@ -10,7 +10,7 @@ export const Container = styled.button.attrs((props) => ({
   color: white;
   border-radius: 20px;
   margin: 10px;
-  font-size: 20px;
+  font-size: 18px;
 
   :hover {
     background-color: rgba(255, 255, 255, 0.8);
@@ -60,7 +60,7 @@ export const ButtonAdd = styled.button.attrs((props) => ({
   border: 2px solid #18ab29;
   cursor: pointer;
   color: #ffffff;
-  font-size: 20px;
+  font-size: 18px;
   padding: 12px;
 
   :hover {

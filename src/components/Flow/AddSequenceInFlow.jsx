@@ -20,6 +20,7 @@ function AddSequenceInFlow({ options, stages, addSequence, removeSequence }) {
     <SequenceContainer>
       <ButtonStyle>
         <Dropdown
+          className="dropdown"
           options={stagesInFlow}
           onChange={(e) => setOriginStage(e.value)}
           value={originStage}
@@ -29,6 +30,7 @@ function AddSequenceInFlow({ options, stages, addSequence, removeSequence }) {
       <ArrowRight size={25} />
       <ButtonStyle>
         <Dropdown
+          className="dropdown"
           options={stagesInFlow}
           onChange={(e) => setDestinationStage(e.value)}
           value={destinationStage}
