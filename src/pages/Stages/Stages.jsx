@@ -55,8 +55,6 @@ function Stages() {
       systemError(error, 'Erro ao adicionar a etapa');
       if (error.response.data.message.lenght != 0)
         toast.error('Etapa já existe');
-      console.log(error.response.data.message);
-      console.log(error);
     }
   }
 

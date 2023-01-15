@@ -101,7 +101,6 @@ function Unidades() {
       systemError(error, 'Erro ao adicionar a unidade');
       if (error.response.data.message.lenght != 0)
         toast.error('Unidade já existe');
-      console.log(error.response.data.message);
     }
   }
 
