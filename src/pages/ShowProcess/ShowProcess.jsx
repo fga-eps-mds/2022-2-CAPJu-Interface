@@ -11,6 +11,7 @@ import Button from 'components/Button/Button';
 import FlowViewer from 'components/FlowViewer/FlowViewer';
 import ModalHeader from 'components/ModalHeader/ModalHeader';
 import ModalBody from 'components/ModalBody/ModalBody';
+import systemError from 'util/Errors';
 
 Modal.setAppElement('body');
 
@@ -99,17 +100,6 @@ function ShowProcess() {
       setFlow(response.data);
     }
   }
-  function systemError(error, errorMessage) {
-    if (error.response.status == 401) {
-      toast(error.response.data.message, {
-        icon: '⚠️',
-        duration: 3000
-      });
-    } else {
-      toast.error(errorMessage);
-    }
-  }
-
   async function nextStage() {
     try {
       let stageTo = '';

@@ -6,6 +6,7 @@ import React, { useEffect, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import Visibility from '@mui/icons-material/Visibility';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
+import systemError from 'util/Errors';
 
 import {
   Container,
@@ -65,17 +66,6 @@ function Processes() {
       }
     });
   };
-
-  function systemError(error, errorMessage) {
-    if (error.response.status == 401) {
-      toast(error.response.data.message, {
-        icon: '⚠️',
-        duration: 3000
-      });
-    } else {
-      toast.error(errorMessage);
-    }
-  }
 
   async function deleteProcess(registro) {
     try {

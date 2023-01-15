@@ -6,6 +6,7 @@ import Table from 'components/Tables/Table';
 import api from 'services/user';
 import authConfig from 'services/config.js';
 import Button from 'components/Button/Button';
+import systemError from 'util/Errors';
 
 function SolicitacoesCadastro() {
   const [users, setUsers] = useState([]);
@@ -42,17 +43,6 @@ function SolicitacoesCadastro() {
       }
     }
     setUsers(targetUsers);
-  }
-
-  function systemError(error, errorMessage) {
-    if (error.response.status == 401) {
-      toast(error.response.data.message, {
-        icon: '⚠️',
-        duration: 3000
-      });
-    } else {
-      toast.error(errorMessage);
-    }
   }
 
   async function acceptRequest(userId) {

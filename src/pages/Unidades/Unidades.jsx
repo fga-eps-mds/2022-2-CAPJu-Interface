@@ -14,6 +14,7 @@ import api from 'services/api';
 import userApi from 'services/user';
 import Button from 'components/Button/Button';
 import TextInput from 'components/TextInput/TextInput';
+import systemError from 'util/Errors';
 
 function Unidades() {
   const [unitList, setUnitList] = useState([{ name: '', time: '', _id: '' }]);
@@ -84,17 +85,6 @@ function Unidades() {
     );
   }
 
-  function systemError(error, errorMessage) {
-    if (error.response.status == 401) {
-      toast(error.response.data.message, {
-        icon: '⚠️',
-        duration: 3000
-      });
-    } else {
-      toast.error(errorMessage);
-    }
-  }
-
   async function addUnity() {
     try {
       const response = await api.post('/newUnity', {
@@ -109,7 +99,9 @@ function Unidades() {
       }
     } catch (error) {
       systemError(error, 'Erro ao adicionar a unidade');
-      if (error instanceof AxiosError) toast.error('Unidade já existe');
+      if (error.response.data.message.lenght != 0)
+        toast.error('Unidade já existe');
+      console.log(error.response.data.message);
     }
   }
 

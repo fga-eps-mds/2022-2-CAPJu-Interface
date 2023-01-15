@@ -13,6 +13,7 @@ import {
 } from './sytles.js';
 import Table from 'components/Tables/Table';
 import authConfig from 'services/config';
+import systemError from 'util/Errors';
 
 function AccessProfile() {
   const [users, setUsers] = useState([]);
@@ -51,17 +52,6 @@ function AccessProfile() {
     });
     setUsers(response.data.user);
   }, [authHeader]);
-
-  function systemError(error, errorMessage) {
-    if (error.response.status == 401) {
-      toast(error.response.data.message, {
-        icon: '⚠️',
-        duration: 3000
-      });
-    } else {
-      toast.error(errorMessage);
-    }
-  }
 
   const editRole = useCallback(async () => {
     try {

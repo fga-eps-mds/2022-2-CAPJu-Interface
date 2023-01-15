@@ -1,6 +1,7 @@
 import toast from 'react-hot-toast';
 import React, { useCallback, useEffect, useState } from 'react';
 import { ArrowRight } from '@styled-icons/bootstrap/ArrowRight';
+import systemError from 'util/Errors';
 
 import api from 'services/api';
 import Button from 'components/Button/Button';
@@ -66,17 +67,6 @@ function Flows() {
       toast.error(errorMsg);
     }
   }, []);
-
-  function systemError(error, errorMessage) {
-    if (error.response.status == 401) {
-      toast(error.response.data.message, {
-        icon: '⚠️',
-        duration: 3000
-      });
-    } else {
-      toast.error(errorMessage);
-    }
-  }
 
   const addFlow = useCallback(async () => {
     setModalOpen(!isModalOpen);

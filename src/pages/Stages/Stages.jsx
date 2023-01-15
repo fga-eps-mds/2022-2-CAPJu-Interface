@@ -14,6 +14,7 @@ import api from 'services/api';
 import Table from 'components/Tables/Table';
 import Button from 'components/Button/Button';
 import TextInput from 'components/TextInput/TextInput';
+import systemError from 'util/Errors';
 
 function Stages() {
   const [stages, setStages] = useState([{ name: '', time: '', _id: '' }]);
@@ -37,17 +38,6 @@ function Stages() {
     setStages(response.data.Stages);
   }
 
-  function systemError(error, errorMessage) {
-    if (error.response.status == 401) {
-      toast(error.response.data.message, {
-        icon: '⚠️',
-        duration: 3000
-      });
-    } else {
-      toast.error(errorMessage);
-    }
-  }
-
   async function addStage() {
     try {
       const response = await api.post('/newStage', {
@@ -63,7 +53,10 @@ function Stages() {
       }
     } catch (error) {
       systemError(error, 'Erro ao adicionar a etapa');
-      if (error instanceof AxiosError) toast.error('Etapa já existe');
+      if (error.response.data.message.lenght != 0)
+        toast.error('Etapa já existe');
+      console.log(error.response.data.message);
+      console.log(error);
     }
   }
 
