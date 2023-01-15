@@ -1,6 +1,5 @@
 import toast from 'react-hot-toast';
 import React, { useEffect, useState } from 'react';
-import AxiosError from 'axios/lib/core/AxiosError';
 
 import {
   Container,
