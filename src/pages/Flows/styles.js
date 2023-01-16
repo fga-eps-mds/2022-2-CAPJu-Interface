@@ -33,6 +33,12 @@ export const AddFlowButton = styled.button`
   font-size: 24px;
   border: none;
   border-radius: 20px;
+  ${(props) =>
+    props.disabled &&
+    `
+    pointer-events: none;
+    opacity: 0.5;
+  `}
 `;
 
 export const Area = styled.div`
