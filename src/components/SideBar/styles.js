@@ -53,6 +53,11 @@ export const MenuItem = styled.a`
   }
 `;
 
+export const Disable = styled.a`
+  pointer-events: none;
+  opacity: 0.5;
+`;
+
 export const Notification = styled.div`
   position: absolute;
   left: 7px;

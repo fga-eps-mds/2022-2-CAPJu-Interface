@@ -11,9 +11,11 @@ import { ClipboardTaskListLtr } from '@styled-icons/fluentui-system-regular/Clip
 import api from 'services/user';
 import Button from 'components/Button/Button';
 import authConfig from 'services/config';
+import verifyRole from 'util/permissionChecker';
 import {
   Container,
   MenuItem,
+  Disable,
   Menu,
   LogoutButton,
   Notification
@@ -36,6 +38,26 @@ function SideBar() {
     setUsers(response.data.user);
   }
 
+  /*   const permissionsArray = [
+    { name: 'DIRETOR', id: 1, permissions: [1, 2, 3] },
+    { name: 'JUIZ', id: 2, permissions: [1, 2, 3] },
+    { name: 'SERVIDOR', id: 3, permissions: [1, 2, 3] },
+    { name: 'ESTAGIARIO', id: 4, permissions: [] }
+  ];
+
+  function verifyRole(user) {
+    if (user == null) {
+      return true;
+    } else {
+      const profile = permissionsArray.find((p) => p.id === user.role);
+      const hasPermission = profile.permissions.includes(1);
+      console.log(hasPermission);
+      return hasPermission;
+    }
+  } */
+
+  const user = JSON.parse(localStorage.getItem('user'));
+
   const userLogout = JSON.parse(localStorage.getItem('user'));
   return (
     <Container>
@@ -44,7 +66,6 @@ function SideBar() {
       </a>
       <Menu>
         <hr />
-
         <MenuItem href={'/unidades'}>
           <GroupWork size={35} />
           Unidades
@@ -76,10 +97,23 @@ function SideBar() {
           </MenuItem>
           <hr />
 
-          <MenuItem href={'/accessProfile'}>
-            <PersonFill size={35} /> Perfil de Acesso
-          </MenuItem>
-          <hr />
+          {verifyRole(user, 'visualizar-usuario') ? (
+            <>
+              <MenuItem href={'/accessProfile'}>
+                <PersonFill size={35} /> Perfil de Acesso
+              </MenuItem>
+              <hr />
+            </>
+          ) : (
+            <>
+              <Disable href={'/accessProfile'}>
+                <MenuItem href={'/accessProfile'}>
+                  <PersonFill size={35} /> Perfil de Acesso
+                </MenuItem>
+              </Disable>
+              <hr />
+            </>
+          )}
 
           <MenuItem href="/editAccount">
             <UserCircle size={35} />
