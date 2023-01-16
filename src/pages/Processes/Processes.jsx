@@ -180,8 +180,6 @@ function Processes() {
   }
 
   const user = JSON.parse(localStorage.getItem('user'));
-  const disableEditProcess = verifyRole(user, 'editar-processo');
-  const disableDeleteProcess = verifyRole(user, 'apagar-processo');
 
   return (
     <Container>
