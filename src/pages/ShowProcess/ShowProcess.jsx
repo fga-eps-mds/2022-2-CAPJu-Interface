@@ -11,6 +11,7 @@ import Button from 'components/Button/Button';
 import FlowViewer from 'components/FlowViewer/FlowViewer';
 import ModalHeader from 'components/ModalHeader/ModalHeader';
 import ModalBody from 'components/ModalBody/ModalBody';
+import verifyRole from 'util/permissionChecker';
 
 Modal.setAppElement('body');
 
@@ -293,6 +294,8 @@ function ShowProcess() {
     );
   };
 
+  const user = JSON.parse(localStorage.getItem('user'));
+  const disableAdvanceStage = verifyRole(user, 'avançar-etapa');
   return (
     proc && (
       <Container>
@@ -327,7 +330,10 @@ function ShowProcess() {
         {renderNextStageModal()}
         {renderNewObservationModal()}
         {renderEditObservationModal()}
-        <Button onClick={() => checkExistAnnotation()}>
+        <Button
+          onClick={() => checkExistAnnotation()}
+          disabled={!disableAdvanceStage}
+        >
           <SkipNextIcon />
           <span>Avançar etapa</span>
         </Button>
