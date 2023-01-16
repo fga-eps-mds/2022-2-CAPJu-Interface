@@ -15,7 +15,6 @@ import verifyRole from 'util/permissionChecker';
 import {
   Container,
   MenuItem,
-  Disable,
   Menu,
   LogoutButton,
   Notification
@@ -38,25 +37,13 @@ function SideBar() {
     setUsers(response.data.user);
   }
 
-  /*   const permissionsArray = [
-    { name: 'DIRETOR', id: 1, permissions: [1, 2, 3] },
-    { name: 'JUIZ', id: 2, permissions: [1, 2, 3] },
-    { name: 'SERVIDOR', id: 3, permissions: [1, 2, 3] },
-    { name: 'ESTAGIARIO', id: 4, permissions: [] }
-  ];
-
-  function verifyRole(user) {
-    if (user == null) {
-      return true;
-    } else {
-      const profile = permissionsArray.find((p) => p.id === user.role);
-      const hasPermission = profile.permissions.includes(1);
-      console.log(hasPermission);
-      return hasPermission;
-    }
-  } */
-
   const user = JSON.parse(localStorage.getItem('user'));
+  const disableUnity = verifyRole(user, 'visualizar-unidade');
+  const disableStage = verifyRole(user, 'visualizar-etapa');
+  const disableFlow = verifyRole(user, 'visualizar-fluxo');
+  const disableProcess = verifyRole(user, 'visualizar-processo');
+  const disableAcceptUser = verifyRole(user, 'aceitar-usuario');
+  const disableAccessProfile = verifyRole(user, 'visualizar-usuario');
 
   const userLogout = JSON.parse(localStorage.getItem('user'));
   return (
@@ -66,54 +53,53 @@ function SideBar() {
       </a>
       <Menu>
         <hr />
-        <MenuItem href={'/unidades'}>
+        <MenuItem
+          href={'/unidades'}
+          className={!disableUnity && 'disable-item'}
+        >
           <GroupWork size={35} />
           Unidades
         </MenuItem>
         <hr />
 
-        <MenuItem href={'/stages'}>
+        <MenuItem href={'/stages'} className={!disableStage && 'disable-item'}>
           <Flow size={35} />
           Etapas
         </MenuItem>
         <hr />
 
-        <MenuItem href={'/'}>
+        <MenuItem href={'/'} className={!disableFlow && 'disable-item'}>
           <FlowCascade size={35} />
           Fluxos
         </MenuItem>
         <hr />
 
-        <MenuItem href="/processes">
+        <MenuItem
+          href="/processes"
+          className={!disableProcess && 'disable-item'}
+        >
           <ClipboardTaskListLtr size={35} />
           Processos
         </MenuItem>
         <hr />
         <Menu>
-          <MenuItem href={'/solicitacoes'}>
+          <MenuItem
+            href={'/solicitacoes'}
+            className={!disableAcceptUser && 'disable-item'}
+          >
             <UserPlus size={35} />
             Solicitações
             {users.length >= 1 && <Notification>{users.length}</Notification>}
           </MenuItem>
           <hr />
 
-          {verifyRole(user, 'visualizar-usuario') ? (
-            <>
-              <MenuItem href={'/accessProfile'}>
-                <PersonFill size={35} /> Perfil de Acesso
-              </MenuItem>
-              <hr />
-            </>
-          ) : (
-            <>
-              <Disable href={'/accessProfile'}>
-                <MenuItem href={'/accessProfile'}>
-                  <PersonFill size={35} /> Perfil de Acesso
-                </MenuItem>
-              </Disable>
-              <hr />
-            </>
-          )}
+          <MenuItem
+            href={'/accessProfile'}
+            className={!disableAccessProfile && 'disable-item'}
+          >
+            <PersonFill size={35} /> Perfil de Acesso
+          </MenuItem>
+          <hr />
 
           <MenuItem href="/editAccount">
             <UserCircle size={35} />

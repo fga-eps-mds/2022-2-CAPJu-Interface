@@ -51,11 +51,11 @@ export const MenuItem = styled.a`
     text-decoration: none;
     color: black;
   }
-`;
 
-export const Disable = styled.a`
-  pointer-events: none;
-  opacity: 0.5;
+  &disable-item {
+    pointer-events: none;
+    opacity: 0.5;
+  }
 `;
 
 export const Notification = styled.div`
