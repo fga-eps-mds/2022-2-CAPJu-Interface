@@ -19,6 +19,13 @@ export const Container = styled.button.attrs((props) => ({
     transition: 0.4s;
     border: solid black 2px;
   }
+
+  ${(props) =>
+    props.disabled &&
+    `
+    pointer-events: none;
+    opacity: 0.5;
+  `}
 `;
 
 export const ButtonEdge = styled.button`
