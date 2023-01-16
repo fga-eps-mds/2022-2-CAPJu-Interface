@@ -280,6 +280,8 @@ function Flows() {
   }, [setNewFlow, setModalOpen, isModalOpen]);
 
   const disableAddFlow = verifyRole(user, 'criar-fluxo');
+  const disableRegressStage = verifyRole(user, 'retroceder-etapa');
+
   return (
     <>
       <Container>
@@ -376,6 +378,7 @@ function Flows() {
                     background="#de5353"
                     onClick={removeSequence}
                     text={'Retroceder'}
+                    disabled={!disableRegressStage}
                   />
                 </>
               )}
