@@ -24,6 +24,7 @@ import {
 } from './styles';
 import FlowViewer from 'components/FlowViewer/FlowViewer';
 import Table from 'components/Tables/Table';
+import verifyRole from 'util/permissionChecker';
 
 function Flows() {
   const [flows, setFlows] = useState([]);
@@ -203,6 +204,10 @@ function Flows() {
     return flows.find((flow) => flow._id == flowId);
   }
 
+  const user = JSON.parse(localStorage.getItem('user'));
+  const disableEditFlow = verifyRole(user, 'editar-fluxo');
+  const disableDeleteFlow = verifyRole(user, 'apagar-fluxo');
+
   const actionList = [
     {
       tooltip: 'Visualizar processos',
@@ -216,7 +221,8 @@ function Flows() {
         setShowFlow(!showFlow);
         setNewFlow(getFlow(flow._id));
       },
-      type: 'edit'
+      type: 'edit',
+      className: !disableEditFlow && 'action-button'
     },
     {
       tooltip: 'Deletar fluxo',
@@ -224,7 +230,8 @@ function Flows() {
         setDeleteModal(!deleteModal);
         setSelectedFlow(flow._id);
       },
-      type: 'delete'
+      type: 'delete',
+      className: !disableDeleteFlow && 'action-button'
     }
     /*,
     {
@@ -272,6 +279,7 @@ function Flows() {
     setModalOpen(!isModalOpen);
   }, [setNewFlow, setModalOpen, isModalOpen]);
 
+  const disableAddFlow = verifyRole(user, 'criar-fluxo');
   return (
     <>
       <Container>
@@ -284,7 +292,7 @@ function Flows() {
             actionList={actionList}
           />
         </Area>
-        <AddFlowButton onClick={handleNewFlowModal}>
+        <AddFlowButton onClick={handleNewFlowModal} disabled={!disableAddFlow}>
           <span>+ Adicionar Fluxo</span>
         </AddFlowButton>
         {/* {Modal para confirmar exclusão do fluxo} */}
