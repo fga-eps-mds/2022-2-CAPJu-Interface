@@ -14,6 +14,7 @@ import api from 'services/api';
 import userApi from 'services/user';
 import Button from 'components/Button/Button';
 import TextInput from 'components/TextInput/TextInput';
+import verifyRole from 'util/permissionChecker';
 
 function Unidades() {
   const [unitList, setUnitList] = useState([{ name: '', time: '', _id: '' }]);
@@ -127,6 +128,8 @@ function Unidades() {
     { tooltip: 'Visualizar Admins', action: updateUnityAdmins, type: 'eye' },
     { tooltip: 'Adicionar Admins', action: searchUsers, type: 'addUser' }
   ];
+  const user = JSON.parse(localStorage.getItem('user'));
+  const disableAddUnity = verifyRole(user, 'criar-unidade');
   return (
     <>
       <Container>
@@ -141,6 +144,7 @@ function Unidades() {
           onClick={() => {
             setModalOpen(true);
           }}
+          disabled={!disableAddUnity}
         >
           + Adicionar Unidade
         </AddUnityButton>
