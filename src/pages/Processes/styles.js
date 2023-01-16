@@ -192,3 +192,8 @@ export const InputSearch = styled.input`
     background-color: rgba(0, 0, 0, 0);
   }
 `;
+
+export const Disable = styled.a`
+  pointer-events: none;
+  opacity: 0.5;
+`;

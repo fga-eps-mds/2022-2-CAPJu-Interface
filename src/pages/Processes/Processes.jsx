@@ -14,13 +14,15 @@ import {
   Table,
   Content,
   ContentHeader,
-  Modal
+  Modal,
+  Disable
 } from './styles';
 import BackButton from 'components/BackButton/BackButton';
 import api from 'services/api';
 import Button from 'components/Button/Button';
 import TextInput from 'components/TextInput/TextInput';
 import { isLate } from 'components/IsLate/index.js';
+import verifyRole from 'util/permissionChecker';
 
 function Processes() {
   const [processes, setProcesses] = useState([]);
@@ -177,6 +179,8 @@ function Processes() {
     }
   }
 
+  const user = JSON.parse(localStorage.getItem('user'));
+
   return (
     <Container>
       <div className="processes">
@@ -255,18 +259,48 @@ function Processes() {
                           <Visibility className="see-process"></Visibility>
                         </Link>
                       </Tooltip>
-                      <Tooltip title="Editar processo">
-                        <EditIcon
-                          className="edit-process"
-                          onClick={() => openEditModal(proc)}
-                        />
-                      </Tooltip>
-                      <Tooltip title="Deletar processo">
-                        <DeleteForeverIcon
-                          className="delete-process"
-                          onClick={() => setDeleteProcessModal(idx)}
-                        />
-                      </Tooltip>
+                      {verifyRole(user, 'editar-processo') ? (
+                        <>
+                          <Tooltip title="Editar processo">
+                            <EditIcon
+                              className="edit-process"
+                              onClick={() => openEditModal(proc)}
+                            />
+                          </Tooltip>
+                        </>
+                      ) : (
+                        <>
+                          <Disable>
+                            <Tooltip title="Editar processo">
+                              <EditIcon
+                                className="edit-process"
+                                onClick={() => openEditModal(proc)}
+                              />
+                            </Tooltip>
+                          </Disable>
+                        </>
+                      )}
+                      {verifyRole(user, 'apagar-processo') ? (
+                        <>
+                          <Tooltip title="Deletar processo">
+                            <DeleteForeverIcon
+                              className="delete-process"
+                              onClick={() => setDeleteProcessModal(idx)}
+                            />
+                          </Tooltip>
+                        </>
+                      ) : (
+                        <>
+                          <Disable>
+                            <Tooltip title="Deletar processo">
+                              <DeleteForeverIcon
+                                className="delete-process"
+                                onClick={() => setDeleteProcessModal(idx)}
+                              />
+                            </Tooltip>
+                          </Disable>
+                        </>
+                      )}
                     </td>
                   </tr>
                 );
@@ -362,13 +396,29 @@ function Processes() {
           </Modal>
         )}
       </div>
-      <AddProcess
-        onClick={() => {
-          openEditModal(false);
-        }}
-      >
-        + Adicionar Processo
-      </AddProcess>
+      {verifyRole(user, 'criar-processo') ? (
+        <>
+          <AddProcess
+            onClick={() => {
+              openEditModal(false);
+            }}
+          >
+            + Adicionar Processo
+          </AddProcess>
+        </>
+      ) : (
+        <>
+          <Disable>
+            <AddProcess
+              onClick={() => {
+                openEditModal(false);
+              }}
+            >
+              + Adicionar Processo
+            </AddProcess>
+          </Disable>
+        </>
+      )}
     </Container>
   );
 }
