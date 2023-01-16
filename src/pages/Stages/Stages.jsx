@@ -86,6 +86,9 @@ function Stages() {
     }
   }
 
+  const user = JSON.parse(localStorage.getItem('user'));
+  const disableDeleteStage = verifyRole(user, 'apagar-etapa');
+
   const actionList = [
     {
       tooltip: 'Deletar etapa',
@@ -93,11 +96,10 @@ function Stages() {
         setModalConfDelete(true);
         setCurrentStage(stage);
       },
-      type: 'delete'
+      type: 'delete',
+      className: !disableDeleteStage && 'action-button'
     }
   ];
-
-  const user = JSON.parse(localStorage.getItem('user'));
 
   const columnHeaders = ['Nome', 'Duração'];
   return (
