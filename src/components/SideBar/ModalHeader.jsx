@@ -44,6 +44,7 @@ function SideBar() {
   const disableProcess = verifyRole(user, 'visualizar-processo');
   const disableAcceptUser = verifyRole(user, 'aceitar-usuario');
   const disableAccessProfile = verifyRole(user, 'visualizar-usuario');
+  const disableEditAccount = verifyRole(user, 'editar-conta');
 
   const userLogout = JSON.parse(localStorage.getItem('user'));
   return (
@@ -101,7 +102,10 @@ function SideBar() {
           </MenuItem>
           <hr />
 
-          <MenuItem href="/editAccount">
+          <MenuItem
+            href="/editAccount"
+            className={!disableEditAccount && 'disable-item'}
+          >
             <UserCircle size={35} />
             Editar Conta
           </MenuItem>

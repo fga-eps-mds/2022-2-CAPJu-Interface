@@ -52,7 +52,7 @@ export const MenuItem = styled.a`
     color: black;
   }
 
-  &disable-item {
+  &.disable-item {
     pointer-events: none;
     opacity: 0.5;
   }
