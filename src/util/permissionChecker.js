@@ -125,6 +125,16 @@ const permissionsArray = [
     ]
   },
   {
+    name: 'editar-conta',
+    users: [
+      Permissions.ESTAGIARIO,
+      Permissions.DIRETOR,
+      Permissions.JUIZ,
+      Permissions.SERVIDOR,
+      Permissions.ADMINISTRADOR
+    ]
+  },
+  {
     name: 'editar-unidade',
     users: [Permissions.ADMINISTRADOR]
   },
@@ -196,7 +206,7 @@ const permissionsArray = [
 
 export default function verifyRole(user, permissionName) {
   if (user == null) {
-    return true;
+    return false;
   } else {
     const permission = permissionsArray.find((p) => p.name === permissionName);
     const hasPermission = permission.users.includes(user.role);
