@@ -8,12 +8,14 @@ import {
   Area,
   Modal,
   Content,
-  ContentHeader
+  ContentHeader,
+  Disable
 } from './styles';
 import api from 'services/api';
 import Table from 'components/Tables/Table';
 import Button from 'components/Button/Button';
 import TextInput from 'components/TextInput/TextInput';
+import verifyRole from 'util/permissionChecker';
 
 function Stages() {
   const [stages, setStages] = useState([{ name: '', time: '', _id: '' }]);
@@ -95,6 +97,8 @@ function Stages() {
     }
   ];
 
+  const user = JSON.parse(localStorage.getItem('user'));
+
   const columnHeaders = ['Nome', 'Duração'];
   return (
     <>
@@ -108,9 +112,21 @@ function Stages() {
             attributeList={(stage) => [stage.name, stage.time]}
           />
         </Area>
-        <AddStageButton onClick={() => setModalOpen(true)}>
-          + Adicionar Etapa
-        </AddStageButton>
+        {verifyRole(user, 'criar-etapa') ? (
+          <>
+            <AddStageButton onClick={() => setModalOpen(true)}>
+              + Adicionar Etapa
+            </AddStageButton>
+          </>
+        ) : (
+          <>
+            <Disable>
+              <AddStageButton onClick={() => setModalOpen(true)}>
+                + Adicionar Etapa
+              </AddStageButton>
+            </Disable>
+          </>
+        )}
       </Container>
       {isModalOpen && (
         <Modal>

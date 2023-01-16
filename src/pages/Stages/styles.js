@@ -100,3 +100,8 @@ export const Content = styled.div`
   border-radius: 10px;
   overflow-x: hidden;
 `;
+
+export const Disable = styled.a`
+  pointer-events: none;
+  opacity: 0.5;
+`;
