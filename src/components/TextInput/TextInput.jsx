@@ -10,7 +10,7 @@ function TextInput({ label, placeholder, onChange, value, type, maxLength }) {
 
   return (
     <div>
-      <label> {label} </label>
+      <label>{label}</label>
       <Input
         placeholder={placeholder}
         onChange={handleUpdateElem}
