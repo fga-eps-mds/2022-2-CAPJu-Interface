@@ -13,6 +13,7 @@ import {
 } from './sytles.js';
 import Table from 'components/Tables/Table';
 import authConfig from 'services/config';
+import verifyRole from 'util/permissionChecker';
 
 function AccessProfile() {
   const [users, setUsers] = useState([]);
@@ -150,6 +151,10 @@ function AccessProfile() {
     });
   };
 
+  const user = JSON.parse(localStorage.getItem('user'));
+  const disableEditUser = verifyRole(user, 'editar-usuario');
+  const disableDeleteUser = verifyRole(user, 'apagar-usuario');
+
   const actionList = [
     {
       tooltip: 'Editar perfil',
@@ -157,7 +162,8 @@ function AccessProfile() {
         setRoleModal(true);
         setSelectedUser(user._id);
       },
-      type: 'edit'
+      type: 'edit',
+      className: !disableEditUser && 'action-button'
     },
     {
       tooltip: 'Deletar Perfil',
@@ -165,7 +171,8 @@ function AccessProfile() {
         setDeleteModal(true);
         setSelectedUser(user._id);
       },
-      type: 'delete'
+      type: 'delete',
+      className: !disableDeleteUser && 'action-button'
     }
   ];
 
