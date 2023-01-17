@@ -6,6 +6,7 @@ import Table from 'components/Tables/Table';
 import api from 'services/user';
 import authConfig from 'services/config.js';
 import Button from 'components/Button/Button';
+import verifyRole from 'util/permissionChecker';
 
 function SolicitacoesCadastro() {
   const [users, setUsers] = useState([]);
@@ -92,6 +93,10 @@ function SolicitacoesCadastro() {
     return users.find((user) => user._id == userId);
   }
 
+  const user = JSON.parse(localStorage.getItem('user'));
+  const disableAcceptUserSolicitation = verifyRole(user, 'aceitar-usuario');
+  const disableRefuseUserSolicitation = verifyRole(user, 'apagar-usuario');
+
   const actionList = [
     {
       tooltip: 'Aceitar solicitação',
@@ -100,7 +105,11 @@ function SolicitacoesCadastro() {
         setSelectedUser(user._id);
       },
       type: 'check',
-      className: 'accept-button'
+      //className: 'accept-button'
+      //className: !disableAcceptUserSolicitation && 'action-button'
+      className:
+        (!disableAcceptUserSolicitation && 'accept-button action-button') ||
+        'accept-button'
     },
     {
       tooltip: 'Recusar solicitação',
@@ -109,7 +118,11 @@ function SolicitacoesCadastro() {
         setSelectedUser(user._id);
       },
       type: 'deny',
-      className: 'deny-button'
+      //className: 'deny-button'
+      //className: !disableRefuseUserSolicitation && 'action-button'
+      className:
+        (!disableRefuseUserSolicitation && 'deny-button action-button') ||
+        'deny-button'
     }
   ];
 
