@@ -69,11 +69,11 @@ function Login() {
 
     try {
       const response = await user.post('/newUser', {
-        name: newName,
+        fullName: newName,
         email: newEmail,
         password: newPassword,
-        role: newRole,
-        unity: newUnity,
+        idRole: newRole,
+        idUnit: newUnity,
         cpf: newCpf
       });
       response.status = 200;
@@ -142,11 +142,11 @@ function Login() {
     }
   }
   async function updateUnitys() {
-    const response = await api.get('/unitys');
-    setUnitys(response.data.Unitys);
+    const response = await api.get('/units');
+    setUnitys(response.data);
   }
   const allOptions = unitys.map((unitys) => {
-    return { label: <>{unitys.name}</>, value: unitys._id };
+    return { label: unitys.name, value: unitys.idUnit };
   });
 
   const OptionsRoles = [
@@ -297,9 +297,7 @@ function Login() {
           <EditDrop>
             <Dropdown
               options={allOptions}
-              onChange={(e) => {
-                setNewUnity(e.value);
-              }}
+              onChange={(e) => setNewUnity(e.value)}
               value={newUnity}
               placeholder="Selecione a unidade"
               className="dropdown"

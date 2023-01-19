@@ -72,7 +72,7 @@ function Unidades() {
   }
 
   async function updateUnitys() {
-    const response = await api.get('/unitys');
+    const response = await api.get('/units');
     setUnitList(response.data.Unitys);
   }
 

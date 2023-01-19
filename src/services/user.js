@@ -3,7 +3,7 @@ import axios from 'axios';
 import authConfig from './config';
 
 export const userURL = process.env.REACT_APP_DEV
-  ? 'https://localhost:3334'
+  ? 'https://localhost:3333'
   : 'https://capju-user.herokuapp.com/';
 
 const api = axios.create({
