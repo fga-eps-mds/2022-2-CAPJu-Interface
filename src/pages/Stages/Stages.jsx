@@ -16,10 +16,12 @@ import Button from 'components/Button/Button';
 import TextInput from 'components/TextInput/TextInput';
 
 function Stages() {
-  const [stages, setStages] = useState([{ name: '', time: '', _id: '' }]);
+  const [stages, setStages] = useState([
+    { name: '', duration: '', idStage: '' }
+  ]);
   const [stageName, setStageName] = useState('');
   const [stageTime, setStageTime] = useState('');
-  const [currentStage, setCurrentStage] = useState({ name: '', _id: '' });
+  const [currentStage, setCurrentStage] = useState({ name: '', idStage: '' });
   const [isModalOpen, setModalOpen] = useState(false);
   const [isModalConfDelete, setModalConfDelete] = useState(false);
 
@@ -30,18 +32,20 @@ function Stages() {
   async function updateStages() {
     const response = await api.get('/stages');
     function compara(a, b) {
-      if (a.time > b.time) return a.name > b.name ? 1 : 0;
+      if (a.duration > b.duration) return a.name > b.name ? 1 : 0;
       return -1;
     }
+    console.log(response.data);
     response.data.Stages.sort(compara);
     setStages(response.data.Stages);
   }
 
+  // TODO: Como conseguir o idUnit?
   async function addStage() {
     try {
       const response = await api.post('/newStage', {
         name: stageName,
-        time: stageTime
+        duration: stageTime
       });
 
       if (response.status == 200) {
@@ -65,9 +69,7 @@ function Stages() {
 
   async function deleteStage(id) {
     try {
-      const response = await api.post('/deleteStage', {
-        stageId: id
-      });
+      const response = await api.delete(`/deleteStage/${id}`);
       if (response.status == 200) {
         toast.success('Etapa Deletada com sucesso');
         updateStages();
@@ -105,7 +107,7 @@ function Stages() {
             columnList={columnHeaders}
             itemList={stages}
             actionList={actionList}
-            attributeList={(stage) => [stage.name, stage.time]}
+            attributeList={(stage) => [stage.name, stage.duration]}
           />
         </Area>
         <AddStageButton onClick={() => setModalOpen(true)}>
@@ -163,7 +165,7 @@ function Stages() {
             <div>
               <Button
                 onClick={() => {
-                  deleteStage(currentStage._id);
+                  deleteStage(currentStage.idStage);
                   setModalConfDelete(false);
                 }}
                 text={'Excluir'}
