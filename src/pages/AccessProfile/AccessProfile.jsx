@@ -104,7 +104,6 @@ function AccessProfile() {
     async (cpf) => {
       try {
         const body = { headers: authHeader };
-        console.log(body);
         const response = await api.delete(`/deleteUser/${cpf}`, body);
         if (response.status == 200) {
           toast.success('Usuário deletado com sucesso!', { duration: 3000 });
