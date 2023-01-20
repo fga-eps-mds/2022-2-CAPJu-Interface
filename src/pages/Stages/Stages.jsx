@@ -35,18 +35,21 @@ function Stages() {
       if (a.duration > b.duration) return a.name > b.name ? 1 : 0;
       return -1;
     }
-    console.log(response.data);
     response.data.Stages.sort(compara);
     setStages(response.data.Stages);
   }
 
-  // TODO: Como conseguir o idUnit?
   async function addStage() {
     try {
-      const response = await api.post('/newStage', {
+      const cpf = JSON.parse(localStorage.getItem('user')).cpf;
+      const userBody = { cpf: cpf };
+      const user = await api.get(`/user/${cpf}`);
+      const body = {
         name: stageName,
-        duration: stageTime
-      });
+        duration: stageTime,
+        idUnit: user.data.idUnit
+      };
+      const response = await api.post('/newStage', body);
 
       if (response.status == 200) {
         toast.success('Etapa Adicionada com sucesso');
