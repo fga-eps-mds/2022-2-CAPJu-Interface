@@ -42,13 +42,13 @@ function Unidades() {
     setAddAdminsModalOpen(true);
   }
 
-  // TODO: _id?
-  async function setAdmin({ _id: userId }) {
+  async function setAdmin(obj) {
     setAddAdminsModalOpen(true);
-    const response = await userApi.put('setUnitAdmin/', {
+    const body = {
       idUnit: currentUnity.idUnit,
-      cpf: userId
-    });
+      cpf: obj.cpf
+    };
+    const response = await userApi.put('setUnitAdmin/', body);
     if (response.status == 200) {
       toast.success('Administrador de unidade adicionado com sucesso');
     }
@@ -63,11 +63,12 @@ function Unidades() {
     setSeeAdminsModalOpen(true);
   }
 
-  async function removeAdmin(adminId) {
-    const response = await userApi.post('/removeUnityAdmin', {
-      unityId: currentUnity.idUnit,
-      adminId: adminId
-    });
+  async function removeAdmin(cpf) {
+    const body = {
+      idUnit: currentUnity.idUnit,
+      cpf
+    };
+    const response = await userApi.put('/removeUnitAdmin', body);
     if (response.status == 200) {
       toast.success('Administrador removido com sucesso');
       updateUnityAdmins(currentUnity);
@@ -80,11 +81,13 @@ function Unidades() {
   }
 
   function filterUsers() {
-    return foundUsers.filter(
-      (user) =>
+    return foundUsers.filter((user) => {
+      return (
         user.fullName.includes(adminSearchName) &&
-        !(user.idUnit === currentUnity.idUnit)
-    );
+        user.idUnit === currentUnity.idUnit &&
+        user.idRole != 5
+      );
+    });
   }
 
   async function addUnity() {
@@ -122,7 +125,7 @@ function Unidades() {
   const removeAdminsActions = [
     {
       tooltip: 'Remover Admin',
-      action: (user) => removeAdmin(user._id),
+      action: (user) => removeAdmin(user.cpf),
       type: 'delete'
     }
   ];
