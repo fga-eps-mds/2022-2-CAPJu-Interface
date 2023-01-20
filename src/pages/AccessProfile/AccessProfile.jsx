@@ -43,7 +43,7 @@ function AccessProfile() {
   );
 
   const getSelectedUser = useCallback(() => {
-    return users.find((user) => user._id == selectedUser);
+    return users.find((user) => user.cpf == selectedUser);
   }, [users, selectedUser]);
 
   const updateUser = useCallback(async () => {
@@ -55,13 +55,8 @@ function AccessProfile() {
 
   const editRole = useCallback(async () => {
     try {
-      console.log(getSelectedUser());
-      console.log(newRole);
-      const response = await api.put(
-        '/updateRole',
-        { _id: selectedUser, role: newRole },
-        { headers: authHeader }
-      );
+      const body = { cpf: selectedUser, idRole: newRole, headers: authHeader };
+      const response = await api.put('/updateUserRole', body);
 
       if (response.status == 200) {
         toast.success('Perfil alterado com sucesso');
@@ -106,11 +101,11 @@ function AccessProfile() {
   }, []);
 
   const deleteUser = useCallback(
-    async (userId) => {
+    async (cpf) => {
       try {
-        const response = await api.delete(`/deleteRequest/${userId}`, {
-          headers: authHeader
-        });
+        const body = { headers: authHeader };
+        console.log(body);
+        const response = await api.delete(`/deleteUser/${cpf}`, body);
         if (response.status == 200) {
           toast.success('Usuário deletado com sucesso!', { duration: 3000 });
         } else {
@@ -136,7 +131,7 @@ function AccessProfile() {
   );
 
   const handleDeleteUser = useCallback(async () => {
-    await deleteUser(getSelectedUser()._id);
+    await deleteUser(getSelectedUser().cpf);
     await updateUser();
     setDeleteModal(false);
   }, [deleteUser, updateUser, setDeleteModal, getSelectedUser]);
@@ -160,15 +155,15 @@ function AccessProfile() {
       tooltip: 'Editar perfil',
       action: (user) => {
         setRoleModal(true);
-        setSelectedUser(user._id);
+        setSelectedUser(user.cpf);
       },
       type: 'edit'
     },
     {
-      tooltip: 'Deletar Perfil',
+      tooltip: 'Deletar Usuário',
       action: (user) => {
         setDeleteModal(true);
-        setSelectedUser(user._id);
+        setSelectedUser(user.cpf);
       },
       type: 'delete'
     }
