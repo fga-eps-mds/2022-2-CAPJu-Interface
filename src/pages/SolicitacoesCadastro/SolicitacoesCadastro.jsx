@@ -25,8 +25,8 @@ function SolicitacoesCadastro() {
     });
     const idUser = JSON.parse(localStorage.getItem('user'));
     for (let user of allUser.data.user) {
-      if (user._id == idUser._id)
-        localStorage.setItem('unitys', JSON.stringify(user.unity));
+      if (user.cpf == idUser.cpf)
+        localStorage.setItem('unitys', JSON.stringify(user.idUnit));
     }
     const unidade = localStorage.getItem('unitys');
     const trataUnidade = unidade?.replace(/"/g, '');
@@ -37,7 +37,7 @@ function SolicitacoesCadastro() {
     const targetUsers = [];
     const pendingUsers = response.data.user;
     for (let users of pendingUsers) {
-      if (users.unity == trataUnidade) {
+      if (users.idUnit == trataUnidade) {
         targetUsers.push(users);
       }
     }
@@ -135,7 +135,7 @@ function SolicitacoesCadastro() {
             <div>
               <Button
                 onClick={async () => {
-                  await acceptRequest(getUser(selectedUser)._id);
+                  await acceptRequest(getUser(selectedUser).cpf);
                   await updateSolicitacoes();
                   setAcceptModal(false);
                 }}
@@ -163,7 +163,7 @@ function SolicitacoesCadastro() {
             <div>
               <Button
                 onClick={async () => {
-                  await deleteRequest(getUser(selectedUser)._id);
+                  await deleteRequest(getUser(selectedUser).cpf);
                   await updateSolicitacoes();
                   setDeleteModal(false);
                 }}
