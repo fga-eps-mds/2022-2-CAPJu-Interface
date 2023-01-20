@@ -16,12 +16,14 @@ import Button from 'components/Button/Button';
 import TextInput from 'components/TextInput/TextInput';
 
 function Unidades() {
-  const [unitList, setUnitList] = useState([{ name: '', time: '', _id: '' }]);
+  const [unitList, setUnitList] = useState([
+    { name: '', time: '', idUnit: '' }
+  ]);
   const [UnityName, setUnityName] = useState('');
   const [adminSearchName, setAdminSearchName] = useState('');
   const [currentUnity, setCurrentUnity] = useState({
     name: '',
-    _id: '',
+    idUnit: '',
     admins: []
   });
   const [isModalOpen, setModalOpen] = useState(false);
@@ -35,16 +37,17 @@ function Unidades() {
 
   async function searchUsers(unit) {
     setCurrentUnity({ ...unit, admins: [] });
-    const response = await userApi.get('searchUsers/');
-    setFoundUsers(response.data.user);
+    const response = await userApi.get('users');
+    setFoundUsers(response.data.users);
     setAddAdminsModalOpen(true);
   }
 
+  // TODO: _id?
   async function setAdmin({ _id: userId }) {
     setAddAdminsModalOpen(true);
-    const response = await userApi.post('setUnityAdmin/', {
-      unityId: currentUnity._id,
-      userId
+    const response = await userApi.put('setUnitAdmin/', {
+      idUnit: currentUnity.idUnit,
+      cpf: userId
     });
     if (response.status == 200) {
       toast.success('Administrador de unidade adicionado com sucesso');
@@ -53,7 +56,7 @@ function Unidades() {
 
   async function updateUnityAdmins(unit) {
     setCurrentUnity({ ...unit, admins: [] });
-    const response = await api.get('unityAdmins/' + unit._id);
+    const response = await api.get('unitAdmins/' + unit.idUnit);
     let existingUnity = { ...unit };
     existingUnity.admins = response.data.admins || [];
     setCurrentUnity(existingUnity);
@@ -62,7 +65,7 @@ function Unidades() {
 
   async function removeAdmin(adminId) {
     const response = await userApi.post('/removeUnityAdmin', {
-      unityId: currentUnity._id,
+      unityId: currentUnity.idUnit,
       adminId: adminId
     });
     if (response.status == 200) {
@@ -73,20 +76,20 @@ function Unidades() {
 
   async function updateUnitys() {
     const response = await api.get('/units');
-    setUnitList(response.data.Unitys);
+    setUnitList(response.data.units);
   }
 
   function filterUsers() {
     return foundUsers.filter(
       (user) =>
-        user.name.includes(adminSearchName) &&
-        !(user.unityAdmin === currentUnity._id)
+        user.fullName.includes(adminSearchName) &&
+        !(user.idUnit === currentUnity.idUnit)
     );
   }
 
   async function addUnity() {
     try {
-      const response = await api.post('/newUnity', {
+      const response = await api.post('/newUnit', {
         name: UnityName
       });
 
@@ -192,7 +195,7 @@ function Unidades() {
               <Table
                 itemList={currentUnity.admins}
                 columnList={['Nome']}
-                attributeList={(admin) => [admin.name]}
+                attributeList={(admin) => [admin.fullName]}
                 actionList={removeAdminsActions}
               />
             </div>
@@ -225,7 +228,7 @@ function Unidades() {
               <Table
                 itemList={filterUsers()}
                 columnList={['Nome']}
-                attributeList={(admin) => [admin.name]}
+                attributeList={(admin) => [admin.fullName]}
                 actionList={newAdminActions}
               />
             </div>
