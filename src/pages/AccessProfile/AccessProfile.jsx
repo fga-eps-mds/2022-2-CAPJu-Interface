@@ -29,14 +29,15 @@ function AccessProfile() {
       { label: 'Diretor', value: 1 },
       { label: 'Juiz', value: 2 },
       { label: 'Servidor', value: 3 },
-      { label: 'Estagiario', value: 4 }
+      { label: 'Estagiario', value: 4 },
+      { label: 'Administrador', value: 5 }
     ],
     []
   );
 
   const getUserRole = useCallback(
     (user) => {
-      return roles.find((role) => role.value == user.role).label;
+      return roles.find((role) => role.value == user.idRole).label;
     },
     [roles]
   );
@@ -54,6 +55,8 @@ function AccessProfile() {
 
   const editRole = useCallback(async () => {
     try {
+      console.log(getSelectedUser());
+      console.log(newRole);
       const response = await api.put(
         '/updateRole',
         { _id: selectedUser, role: newRole },
@@ -142,8 +145,10 @@ function AccessProfile() {
     const user = JSON.parse(localStorage.getItem('user'));
     return arr.filter((users) => {
       if (
-        (users.name.toLowerCase().includes(searchUser.toLocaleLowerCase()) ||
-          users.name.includes(searchUser)) &&
+        (users.fullName
+          .toLowerCase()
+          .includes(searchUser.toLocaleLowerCase()) ||
+          users.fulName.includes(searchUser)) &&
         users.email !== user.email
       )
         return users;
@@ -172,7 +177,7 @@ function AccessProfile() {
   const getAttributesForDisplay = useCallback(
     (user) => {
       return [
-        user.name,
+        user.fullName,
         getUserRole(user),
         user.accepted ? 'Aceito' : 'Pendente'
       ];
