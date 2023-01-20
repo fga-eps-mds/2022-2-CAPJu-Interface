@@ -121,7 +121,7 @@ function SolicitacoesCadastro() {
           columnList={['Nome']}
           itemList={users}
           actionList={actionList}
-          attributeList={(user) => [user.name]}
+          attributeList={(user) => [user.fullName]}
         />
       </Area>
       {acceptModal && (
@@ -131,7 +131,7 @@ function SolicitacoesCadastro() {
               <span>Aceitar Solicitação</span>
             </ContentHeader>
             <span>Deseja realmente aceitar esta solicitação?</span>
-            {getUser(selectedUser).name}
+            {getUser(selectedUser).fullName}
             <div>
               <Button
                 onClick={async () => {
@@ -159,7 +159,7 @@ function SolicitacoesCadastro() {
               <span>Recusar Solicitação</span>
             </ContentHeader>
             <span>Deseja realmente recusar esta solicitação?</span>
-            {getUser(selectedUser).name}
+            {getUser(selectedUser).fullName}
             <div>
               <Button
                 onClick={async () => {
