@@ -31,7 +31,7 @@ function Login() {
   const [newEmail, setNewEmail] = useState('');
   const [newPassword, setNewPassword] = useState('');
   const [newPassword2, setNewPassword2] = useState('');
-  const [unitys, setUnitys] = useState([]);
+  const [units, setUnits] = useState([]);
   const [newUnity, setNewUnity] = useState('');
   const [newCpf, setNewCpf] = useState('');
   const [loginCpf, setLoginCpf] = useState('');
@@ -143,10 +143,10 @@ function Login() {
   }
   async function updateUnitys() {
     const response = await api.get('/units');
-    setUnitys(response.data);
+    setUnits(response.data.units);
   }
-  const allOptions = unitys.map((unitys) => {
-    return { label: unitys.name, value: unitys.idUnit };
+  const allOptions = units.map((units) => {
+    return { label: units.name, value: units.idUnit };
   });
 
   const OptionsRoles = [
