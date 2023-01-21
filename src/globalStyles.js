@@ -36,6 +36,7 @@ const GlobalStyle = createGlobalStyle`
   .dropdown-menu {
     background: #ccc;
 
+    position: static !important;
     border-radius: 12px;
     width: 100%;
     max-width: 300px;

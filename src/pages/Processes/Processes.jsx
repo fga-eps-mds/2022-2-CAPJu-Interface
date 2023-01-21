@@ -291,9 +291,7 @@ function Processes() {
                 options={flows.map((flow) => {
                   return { label: flow.name, value: flow._id };
                 })}
-                onChange={(e) => {
-                  setFlowId(e.value);
-                }}
+                onChange={(e) => setFlowId(e.value)}
                 value={flowId}
                 placeholder="Selecione o fluxo"
                 className="dropdown"
