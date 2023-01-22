@@ -294,7 +294,10 @@ function Flows() {
             <Content>
               <ContentHeader>
                 <span>Editar fluxo</span>
-                <CloseModalGeneral onClick={handleAddFlow} />
+                <CloseModalGeneral
+                  onClick={handleAddFlow}
+                  data-testid="close"
+                />
               </ContentHeader>
               <LabelDiv>
                 <label>Nome</label>
@@ -303,6 +306,7 @@ function Flows() {
                   value={flowName}
                   maxLength={40}
                   data-testid="flowName"
+                  placeholder="Nome do fluxo"
                 />
               </LabelDiv>
               <DivFlex>
@@ -364,7 +368,12 @@ function Flows() {
 
             <LabelDiv>
               <label>Nome</label>
-              <TextInput set={setFlowName} value={flowName} maxLength={40} />
+              <TextInput
+                set={setFlowName}
+                value={flowName}
+                maxLength={40}
+                placeholder="Nome do fluxo"
+              />
             </LabelDiv>
             <DivFlex>
               <SelectionList

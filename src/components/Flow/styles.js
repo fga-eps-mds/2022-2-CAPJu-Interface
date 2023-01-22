@@ -68,7 +68,7 @@ export const Container = styled.div`
   justify-content: center;
   align-items: center;
   width: 95.8%;
-  justify-content: space-between;
+  justify-content: space-around;
   background-color: #d9d9d9;
   border-bottom: solid #9b8f8f 2px;
   border-right: solid #9b8f8f 2px;
@@ -83,7 +83,7 @@ export const Container = styled.div`
 
   div {
     font-size: 15px;
-    width: 215px;
+    width: 100%;
   }
 `;
 
@@ -109,7 +109,7 @@ export const ButtonStyle = styled.div`
     overflow: hidden;
     break-word: break-all;
     background-color: #d9d9d9;
-    width: 84.5%;
+    width: 100%;
   }
   div {
     justify-content: center;

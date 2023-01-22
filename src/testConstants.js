@@ -21,6 +21,7 @@ export const flowsResponse = {
         '62fd4ac5006730249d33b188',
         '62fd4acb006730249d33b18b'
       ],
+      users: [],
       updatedAt: '2022-08-17T20:09:58.530Z'
     },
     {
@@ -39,10 +40,11 @@ export const flowsResponse = {
           to: '62fd4acb006730249d33b18b'
         }
       ],
+      users: [],
       stages: [
-        '62fd4ac0006730249d33b185',
-        '62fd4ac5006730249d33b188',
-        '62fd4acb006730249d33b18b'
+        { value: '62fd4ac0006730249d33b185', label: 'etpa c1' },
+        { value: '62fd4ac5006730249d33b188', label: 'etpa c2' },
+        { value: '62fd4acb006730249d33b18b', label: 'etpa c3' }
       ],
       updatedAt: '2022-08-19T20:50:05.831Z'
     }

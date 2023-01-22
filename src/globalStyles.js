@@ -74,8 +74,8 @@ const GlobalStyle = createGlobalStyle`
 
   .Dropdown-control {
     cursor: pointer;
+    width: 100%;
     min-width: 200px;
-    min-height: 1.5rem;
   }
 
   .Dropdown-option {

@@ -14,9 +14,8 @@ import {
   DivFlex,
   QuestionBox
 } from './styles';
-import { FontSize } from 'styled-icons/boxicons-regular';
 
-function SelectionLit({
+function SelectionList({
   label,
   options,
   selectedOptions,
@@ -31,14 +30,15 @@ function SelectionLit({
   });
 
   function addItem(item) {
-    return selectedOptions.some((op) => op === item.value)
+    if (!item) return;
+    return selectedOptions.some((op) => op === item)
       ? toast.error(`${label.slice(0, -1)} já existe.`)
-      : addSelectedOption([...selectedOptions, item.value]);
+      : addSelectedOption([...selectedOptions, item]);
   }
 
-  function removeItem(stageIndex) {
+  function removeItem(itemIndex) {
     const editedList = selectedOptions.filter(
-      (item, index) => index !== stageIndex
+      (item, index) => index !== itemIndex
     );
     addSelectedOption(editedList);
   }
@@ -60,7 +60,7 @@ function SelectionLit({
             </>
           )}
         </DivFlex>
-        {selectedOptions?.length > 0 ? (
+        {selectedOptions.length > 0 ? (
           selectedOptions.map((option, index) => {
             const { name } = options.find((item) => item._id === option);
             return (
@@ -73,7 +73,7 @@ function SelectionLit({
             );
           })
         ) : (
-          <text style={{ fontSize: '18px' }}>{`Ainda não há ${label}`}</text>
+          <p style={{ fontSize: '18px' }}>{`Ainda não há ${label}`}</p>
         )}
       </ListContainer>
       <Container>
@@ -82,7 +82,7 @@ function SelectionLit({
             className="dropdown"
             options={optionList}
             value={placeholder}
-            onChange={(e) => setSelectedOption(e)}
+            onChange={(e) => setSelectedOption(e.value)}
           />
         </ButtonStyle>
         <Button
@@ -95,13 +95,13 @@ function SelectionLit({
   );
 }
 
-SelectionLit.propTypes = {
+SelectionList.propTypes = {
   label: PropTypes.string.isRequired,
   placeholder: PropTypes.string.isRequired,
   options: PropTypes.arrayOf(PropTypes.object).isRequired,
-  selectedOptions: PropTypes.arrayOf(PropTypes.object).isRequired,
+  selectedOptions: PropTypes.arrayOf(PropTypes.string).isRequired,
   addSelectedOption: PropTypes.func.isRequired,
   hintText: PropTypes.string
 };
 
-export default SelectionLit;
+export default SelectionList;

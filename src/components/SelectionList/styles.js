@@ -33,7 +33,7 @@ export const Container = styled.div`
   word-wrap: break-all;
 
   div {
-    width: 215px;
+    width: 100%;
     text-overflow: ellipsis;
   }
 `;
