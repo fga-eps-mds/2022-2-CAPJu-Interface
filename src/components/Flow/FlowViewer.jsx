@@ -26,26 +26,23 @@ function FlowViewer(props) {
       return props.flow.stages.includes(stage._id);
     })
     .map((stage, idx) => {
-      const deadline = props.proc ? deadlineDate(stage) : null;
+      const deadline = props.proc && deadlineDate(stage);
       return {
         id: stage._id,
         data: {
           label: (
             <>
-              {stage.name} <br /> {deadline ? `Vencimento: ${deadline}` : ``}
+              {stage.name} <br /> {deadline && `Vencimento: ${deadline}`}
             </>
           )
         },
         position: { x: (idx % 2) * 130, y: 140 * idx },
-        style:
-          props.highlight === stage._id
-            ? {
-                backgroundColor: isLate(stage, props.proc, props.flow)
-                  ? 'rgb(222, 83, 83)'
-                  : '#1b9454',
-                color: '#f1f1f1'
-              }
-            : {}
+        style: props.highlight === stage._id && {
+          backgroundColor: isLate(stage, props.proc, props.flow)
+            ? 'rgb(222, 83, 83)'
+            : '#1b9454',
+          color: '#f1f1f1'
+        }
       };
     });
 
