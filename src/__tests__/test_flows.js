@@ -7,10 +7,10 @@ import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 
 import Flows from 'pages/Flows/Flows';
 import { baseURL } from 'services/api';
-import { flowsResponse, stagesResponse } from 'testConstants';
+import { userURL } from 'services/user';
+import { flowsResponse, stagesResponse, usersResponse } from 'testConstants';
 
 axios.defaults.adapter = require('axios/lib/adapters/http');
-
 const mockNavigate = jest.fn();
 
 jest.mock('react-router-dom', () => {
@@ -20,7 +20,7 @@ jest.mock('react-router-dom', () => {
   };
 });
 
-const scopeGet = nock(baseURL)
+const scopeFlows = nock(baseURL)
   .defaultReplyHeaders({
     'access-control-allow-origin': '*',
     'access-control-allow-credentials': 'true'
@@ -31,162 +31,362 @@ const scopeGet = nock(baseURL)
   .get('/stages')
   .reply(200, stagesResponse);
 
-test('Testando criar fluxo no componente Flows', async () => {
-  const scope = nock(baseURL)
-    .defaultReplyHeaders({
-      'access-control-allow-origin': '*',
-      'access-control-allow-credentials': 'true'
-    })
-    .persist()
-    .post('/newFlow')
-    .reply(200, {
-      _id: 'meuIdAleatório',
-      name: 'perito',
-      stages: ['etpa c', 'etpa c2'],
-      sequences: [],
-      createdAt: '2022-08-17T20:11:43.499+00:00',
-      updatedAt: '2022-08-17T20:11:43.499+00:00',
-      __v: 0
+const scopeUsers = nock(userURL)
+  .defaultReplyHeaders({
+    'access-control-allow-origin': '*',
+    'access-control-allow-credentials': 'true'
+  })
+  .persist()
+  .get('/allUser')
+  .reply(200, usersResponse);
+
+describe('Testes da pagina de fluxos', () => {
+  beforeEach(async () => {
+    nock.disableNetConnect();
+    render(
+      <MemoryRouter initialEntries={['/']}>
+        <Routes>
+          <Route path="/" element={<Flows />} />
+        </Routes>
+      </MemoryRouter>
+    );
+
+    await waitFor(() => {
+      expect(scopeFlows.isDone()).toBe(true);
+      expect(scopeUsers.isDone()).toBe(true);
+    });
+  });
+
+  it('Teste cadastro de fluxo', async () => {
+    const scopePost = nock(baseURL)
+      .defaultReplyHeaders({
+        'access-control-allow-origin': '*',
+        'access-control-allow-credentials': 'true'
+      })
+      .post('/newFlow')
+      .reply(200, {
+        message: 'Fluxo cadastrado com sucesso'
+      });
+
+    const newFlowButton = await screen.findByText('+ Adicionar Fluxo');
+    fireEvent.click(newFlowButton);
+
+    const nameInput = screen
+      .getByPlaceholderText('Nome do fluxo')
+      .closest('input');
+    let selectBoxes = await screen.findAllByTestId('react-select-mock');
+    let addToListButtons = screen.getAllByText('Adicionar');
+    const submitButton = screen.getByText('Salvar');
+
+    fireEvent.change(nameInput, {
+      target: { value: 'Fluxo de teste' }
     });
 
-  render(
-    <MemoryRouter initialEntries={['/']}>
-      <Routes>
-        <Route path="/" element={<Flows />} />
-      </Routes>
-    </MemoryRouter>
-  );
+    fireEvent.change(selectBoxes[0], {
+      target: { value: stagesResponse.Stages[3]._id }
+    });
+    fireEvent.click(addToListButtons[0]);
 
-  const buttonFlow = screen.getByText('+ Adicionar Fluxo');
-  fireEvent.click(buttonFlow);
+    fireEvent.change(selectBoxes[0], {
+      target: { value: stagesResponse.Stages[2]._id }
+    });
+    fireEvent.click(addToListButtons[0]);
 
-  const modalName = screen.getByText('Novo Fluxo');
-  const inputFlow = screen.getByPlaceholderText('Nome do fluxo');
-  const button = screen.getByText('Salvar');
-  const close = screen.getByTestId('close');
-  fireEvent.change(inputFlow, { target: { value: 'perito' } });
-  fireEvent.click(button);
-  fireEvent.click(close);
-  expect(modalName).toHaveTextContent('Novo Fluxo');
-  await waitFor(() => expect(scope.isDone()).toBe(true));
-});
+    fireEvent.change(selectBoxes[1], {
+      target: { value: usersResponse.user[2]._id }
+    });
+    fireEvent.click(addToListButtons[1]);
 
-test('Testando editar fluxo no componente Flows', async () => {
-  const scopeEditar = nock(baseURL)
-    .defaultReplyHeaders({
-      'access-control-allow-origin': '*',
-      'access-control-allow-credentials': 'true'
-    })
-    .persist()
-    .options('/editFlow')
-    .reply(200, 'ok')
-    .put('/editFlow')
-    .reply(200, {
-      __v: 0,
-      _id: '62fd4b16006730249d33b19d',
-      createdAt: '2022-08-17T20:09:58.530Z',
-      deleted: false,
-      name: 'flow4',
-      sequences: [
-        {
-          from: '62fd4ac0006730249d33b185',
-          to: '62fd4ac5006730249d33b188'
-        },
-        {
-          from: '62fd4ac5006730249d33b188',
-          to: '62fd4acb006730249d33b18b'
-        },
-        {
-          from: '62fd4acb006730249d33b18b',
-          to: '62fd4acb006730249d33b18c'
-        }
-      ],
-      stages: [
-        '62fd4ac0006730249d33b185',
-        '62fd4ac5006730249d33b188',
-        '62fd4acb006730249d33b18b',
-        '62fd4acb006730249d33b18c'
-      ],
-      updatedAt: '2022-08-17T20:09:58.530Z'
+    selectBoxes = await screen.findAllByTestId('react-select-mock');
+    addToListButtons = screen.getAllByText('Adicionar');
+
+    fireEvent.change(selectBoxes[2], {
+      target: { value: stagesResponse.Stages[3]._id }
+    });
+    fireEvent.change(selectBoxes[3], {
+      target: { value: stagesResponse.Stages[2]._id }
     });
 
-  render(
-    <MemoryRouter initialEntries={['/']}>
-      <Routes>
-        <Route path="/" element={<Flows />} />
-      </Routes>
-    </MemoryRouter>
-  );
+    fireEvent.click(addToListButtons[2]);
+    fireEvent.click(submitButton);
 
-  await waitFor(() => expect(scopeGet.isDone()).toBe(true));
-  const flow = await screen.findByText('fluxo 1');
-  expect(flow).toBeInTheDocument();
+    await waitFor(() => {
+      expect(scopePost.isDone()).toBe(true);
+    });
+  });
 
-  const editIcon = screen.queryAllByTestId('EditIcon');
-  fireEvent.click(editIcon[0]);
-  const editModal = screen.getByText('Editar fluxo');
-  const input = screen.getByDisplayValue('fluxo 1');
-  const button = screen.getByText('Salvar');
-  const dropdown = screen.queryAllByTestId('react-select-mock');
-  const add = screen.queryAllByText('Adicionar');
-  fireEvent.change(input, { target: { value: 'flow4' } });
-  fireEvent.change(dropdown[0], {
-    target: { value: '62fd4acb006730249d33b18c' }
-  });
-  fireEvent.click(add[0]);
-  const stage = screen.getAllByText('etpa c4');
-  expect(stage[1]).toHaveTextContent('etpa c4');
-  fireEvent.change(dropdown[1], {
-    target: { value: '62fd4acb006730249d33b18b' }
-  });
-  fireEvent.change(dropdown[2], {
-    target: { value: '62fd4acb006730249d33b18b' }
-  });
-  fireEvent.click(add[1]);
-  const retreat = screen.getByText('Retroceder');
-  fireEvent.click(retreat);
-  fireEvent.change(dropdown[1], {
-    target: { value: '62fd4acb006730249d33b18b' }
-  });
-  fireEvent.change(dropdown[2], {
-    target: { value: '62fd4acb006730249d33b18b' }
-  });
-  fireEvent.click(add[1]);
-  expect(editModal).toHaveTextContent('Editar fluxo');
-  expect(retreat).toHaveTextContent('Retroceder');
-  fireEvent.click(button);
-  await waitFor(() => expect(scopeEditar.isDone()).toBe(true));
-});
+  it('Teste cadastro de fluxo', async () => {
+    const scopePost = nock(baseURL)
+      .defaultReplyHeaders({
+        'access-control-allow-origin': '*',
+        'access-control-allow-credentials': 'true'
+      })
+      .post('/newFlow')
+      .reply(400, {
+        message: 'Erro ao cadastrar fluxo',
+        status: 400
+      });
 
-test('Testando deletar fluxo no componente Flows', async () => {
-  const scopeDelete = nock(baseURL)
-    .defaultReplyHeaders({
-      'access-control-allow-origin': '*',
-      'access-control-allow-credentials': 'true'
-    })
-    .persist()
-    .post('/deleteFlow')
-    .reply(200, {
-      result: 'Deletado com sucesso'
+    const newFlowButton = await screen.findByText('+ Adicionar Fluxo');
+    fireEvent.click(newFlowButton);
+
+    const submitButton = screen.getByText('Salvar');
+    fireEvent.click(submitButton);
+
+    await waitFor(() => {
+      expect(scopePost.isDone()).toBe(false);
+    });
+  });
+
+  it('Teste cancela criação de fluxo', async () => {
+    const newFlowButton = await screen.findByText('+ Adicionar Fluxo');
+    fireEvent.click(newFlowButton);
+
+    const cancelButton = await screen.findByText('Cancelar');
+    fireEvent.click(cancelButton);
+  });
+
+  it('Teste fecha modal de criação de fluxo', async () => {
+    const newFlowButton = await screen.findByText('+ Adicionar Fluxo');
+    fireEvent.click(newFlowButton);
+
+    const closeButton = await screen.findByTestId('close');
+    fireEvent.click(closeButton);
+  });
+
+  it('Teste edição de fluxo', async () => {
+    const scopePut = nock(baseURL)
+      .defaultReplyHeaders({
+        'access-control-allow-origin': '*',
+        'access-control-allow-credentials': 'true'
+      })
+      .options('/editFlow')
+      .reply(200)
+      .put('/editFlow')
+      .reply(200, {
+        message: 'Fluxo editado com sucesso'
+      });
+
+    const editButtons = await screen.findAllByLabelText('Editar fluxo');
+    fireEvent.click(editButtons[0]);
+
+    let selectBoxes = await screen.findAllByTestId('react-select-mock');
+    let addToListButtons = screen.getAllByText('Adicionar');
+    const submitButton = screen.getByText('Salvar');
+    const removeButtons = screen.getAllByText('x');
+
+    fireEvent.change(selectBoxes[1], {
+      target: { value: usersResponse.user[2]._id }
+    });
+    fireEvent.click(addToListButtons[1]);
+
+    selectBoxes = await screen.findAllByTestId('react-select-mock');
+    addToListButtons = screen.getAllByText('Adicionar');
+
+    fireEvent.change(selectBoxes[2], {
+      target: { value: stagesResponse.Stages[3]._id }
+    });
+    fireEvent.change(selectBoxes[3], {
+      target: { value: stagesResponse.Stages[2]._id }
     });
 
-  render(
-    <MemoryRouter initialEntries={['/']}>
-      <Routes>
-        <Route path="/" element={<Flows />} />
-      </Routes>
-    </MemoryRouter>
-  );
+    fireEvent.click(addToListButtons[2]);
+    fireEvent.click(removeButtons[0].closest('div'));
+    fireEvent.click(submitButton);
 
-  const deleteIcon = await screen.findAllByLabelText('Deletar fluxo');
-  fireEvent.click(deleteIcon[1]);
+    await waitFor(() => {
+      expect(scopePut.isDone()).toBe(true);
+    });
+  });
 
-  const modalName = screen.getByText('Deseja realmente excluir este Fluxo?');
-  const button = screen.getByText('Confirmar');
-  fireEvent.click(button);
-  expect(screen.queryByText('fluxo 2')).toBeNull();
-  expect(modalName).toHaveTextContent('Deseja realmente excluir este Fluxo?');
-  await waitFor(() => expect(scopeDelete.isDone()).toBe(true));
+  it('Teste erro na edição de fluxo', async () => {
+    const scopePut = nock(baseURL)
+      .defaultReplyHeaders({
+        'access-control-allow-origin': '*',
+        'access-control-allow-credentials': 'true'
+      })
+      .options('/editFlow')
+      .reply(200)
+      .put('/editFlow')
+      .reply(400);
+
+    const editButtons = await screen.findAllByLabelText('Editar fluxo');
+    fireEvent.click(editButtons[0]);
+
+    const submitButton = screen.getByText('Salvar');
+    fireEvent.click(submitButton);
+
+    await waitFor(() => {
+      expect(scopePut.isDone()).toBe(false);
+    });
+  });
+
+  it('Teste usuário não possui permissão para editar fluxo', async () => {
+    const scopePut = nock(baseURL)
+      .defaultReplyHeaders({
+        'access-control-allow-origin': '*',
+        'access-control-allow-credentials': 'true'
+      })
+      .options('/editFlow')
+      .reply(200)
+      .put('/editFlow')
+      .reply(401, { message: 'Mensgem de erro' });
+
+    const editButtons = await screen.findAllByLabelText('Editar fluxo');
+    fireEvent.click(editButtons[0]);
+
+    const submitButton = screen.getByText('Salvar');
+    fireEvent.click(submitButton);
+
+    await waitFor(() => {
+      expect(scopePut.isDone()).toBe(false);
+    });
+  });
+
+  it('Teste cancela edição de fluxo', async () => {
+    const editButtons = await screen.findAllByLabelText('Editar fluxo');
+    fireEvent.click(editButtons[0]);
+
+    const cancelButton = await screen.findByText('Cancelar');
+    fireEvent.click(cancelButton);
+  });
+
+  it('Teste fecha modal de edição de fluxo', async () => {
+    const editButtons = await screen.findAllByLabelText('Editar fluxo');
+    fireEvent.click(editButtons[0]);
+
+    const closeButton = await screen.findByTestId('close');
+    fireEvent.click(closeButton);
+  });
+
+  it('Teste exclusão de fluxo', async () => {
+    const scopeDelete = nock(baseURL)
+      .defaultReplyHeaders({
+        'access-control-allow-origin': '*',
+        'access-control-allow-credentials': 'true'
+      })
+      .post('/deleteFlow')
+      .reply(200, {
+        message: 'Fluxo excluído com sucesso'
+      });
+
+    const deleteButtons = await screen.findAllByLabelText('Deletar fluxo');
+    fireEvent.click(deleteButtons[1]);
+
+    const confirmButton = await screen.findByText('Confirmar');
+    fireEvent.click(confirmButton);
+
+    await waitFor(() => {
+      expect(scopeDelete.isDone()).toBe(true);
+    });
+  });
+
+  it('Teste erro na exclusão de fluxo', async () => {
+    const scopeDelete = nock(baseURL)
+      .defaultReplyHeaders({
+        'access-control-allow-origin': '*',
+        'access-control-allow-credentials': 'true'
+      })
+      .post('/deleteFlow')
+      .reply(400);
+
+    const deleteButtons = await screen.findAllByLabelText('Deletar fluxo');
+    fireEvent.click(deleteButtons[1]);
+
+    const confirmButton = await screen.findByText('Confirmar');
+    fireEvent.click(confirmButton);
+
+    await waitFor(() => {
+      expect(scopeDelete.isDone()).toBe(false);
+    });
+  });
+
+  it('Teste cancela exclusão de fluxo', async () => {
+    const scopeDelete = nock(baseURL)
+      .defaultReplyHeaders({
+        'access-control-allow-origin': '*',
+        'access-control-allow-credentials': 'true'
+      })
+      .post('/deleteFlow')
+      .reply(200, {
+        message: 'Fluxo excluído com sucesso'
+      });
+
+    const deleteButtons = await screen.findAllByLabelText('Deletar fluxo');
+    fireEvent.click(deleteButtons[1]);
+
+    const cancelButton = await screen.findByText('Cancelar');
+    fireEvent.click(cancelButton);
+
+    await waitFor(() => {
+      expect(scopeDelete.isDone()).toBe(false);
+    });
+  });
+
+  it('Teste remover sequencia de um fluxo', async () => {
+    const scopePut = nock(baseURL)
+      .defaultReplyHeaders({
+        'access-control-allow-origin': '*',
+        'access-control-allow-credentials': 'true'
+      })
+      .options('/editFlow')
+      .reply(200)
+      .put('/editFlow')
+      .reply(200, {
+        message: 'Fluxo editado com sucesso'
+      });
+
+    const editButtons = await screen.findAllByLabelText('Editar fluxo');
+    fireEvent.click(editButtons[0]);
+
+    const removeSequenceButton = screen.getByText('Remover');
+    fireEvent.click(removeSequenceButton);
+
+    const submitButton = screen.getByText('Salvar');
+    fireEvent.click(submitButton);
+
+    await waitFor(() => {
+      expect(scopePut.isDone()).toBe(true);
+    });
+  });
+
+  it('Adicionar sequências invalidas', async () => {
+    const editButtons = await screen.findAllByLabelText('Editar fluxo');
+    fireEvent.click(editButtons[0]);
+
+    const selectBoxes = await screen.findAllByTestId('react-select-mock');
+    const addToListButtons = screen.getAllByText('Adicionar');
+
+    fireEvent.change(selectBoxes[2], {
+      target: { value: stagesResponse.Stages[3]._id }
+    });
+    fireEvent.change(selectBoxes[3], {
+      target: { value: stagesResponse.Stages[3]._id }
+    });
+    fireEvent.click(addToListButtons[2]);
+
+    await waitFor(() => {
+      const toastr = screen.findByTestId('toastr');
+      expect(toastr).not.toBe(null);
+    });
+
+    fireEvent.change(selectBoxes[2], {
+      target: { value: stagesResponse.Stages[0]._id }
+    });
+    fireEvent.change(selectBoxes[3], {
+      target: { value: stagesResponse.Stages[1]._id }
+    });
+    fireEvent.click(addToListButtons[2]);
+
+    await waitFor(() => {
+      const toastr = screen.findByTestId('toastr');
+      expect(toastr).not.toBe(null);
+    });
+
+    const removeSequenceButton = screen.getByText('Remover');
+    fireEvent.click(removeSequenceButton);
+
+    const submitButton = screen.getByText('Salvar');
+    fireEvent.click(submitButton);
+  });
 });
-
-afterAll(() => nock.restore());
