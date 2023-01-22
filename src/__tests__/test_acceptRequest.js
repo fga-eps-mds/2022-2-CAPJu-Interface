@@ -102,8 +102,9 @@ test('Testando aceitar solicitação', async () => {
 
   const deleteButton = screen.getByLabelText('Recusar solicitação');
   fireEvent.click(deleteButton);
-  const deleteConfirmButton = screen.getByText('Confirmar');
-  fireEvent.click(deleteConfirmButton);
+  const deleteConfirmButton = screen.getAllByText('Confirmar');
+  const confirmButton = deleteConfirmButton.pop();
+  fireEvent.click(confirmButton);
   await waitFor(() => expect(scopeDelete.isDone()).toBe(true));
 
   //Cancelando Confirmação de Aceitação
