@@ -36,10 +36,12 @@ const GlobalStyle = createGlobalStyle`
   .dropdown-menu {
     background: #ccc;
 
+    position: static !important;
     border-radius: 12px;
     width: 100%;
     max-width: 300px;
     top: 45%;
+    z-index: 100000;
     transition: all .2s ease;
   }
 
@@ -49,7 +51,35 @@ const GlobalStyle = createGlobalStyle`
     top: 32px;
   }
 
+  .Dropdown-menu {
+    width: inherit;
+    background-color: #d9d9d9;
+    border: solid #9b8f8f 2px;
+    border-radius: 11px;
+    padding: 16px;
+    position: absolute;
+    z-index: 100000;
+    margin: 0 auto;
+    left: -2px;
+    top: -2px;
+    transform: rotate(0deg);
+
+    .Dropdown-option {
+      width: auto;
+      cursor: pointer;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+  }
+
+  .Dropdown-control {
+    cursor: pointer;
+    width: 100%;
+    min-width: 200px;
+  }
+
   .Dropdown-option {
+    width: 100%;
     padding: 8px 24px;
     border: solid 1px #bbb;
     border-radius: 12px;
