@@ -7,11 +7,22 @@ import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 
 import Flows from 'pages/Flows/Flows';
 import { baseURL } from 'services/api';
-import { flowsResponse, stagesResponse } from 'testConstants';
+import { usersResponse, flowsResponse, stagesResponse } from 'testConstants';
+import { Permissions } from 'util/permissionChecker';
 
 axios.defaults.adapter = require('axios/lib/adapters/http');
 
 const mockNavigate = jest.fn();
+
+function verifyPermission(user) {
+  if (
+    user.role == Permissions.DIRETOR ||
+    user.role == Permissions.SERVIDOR ||
+    user.role == Permissions.ADMINISTRADOR
+  ) {
+    return true;
+  } else return false;
+}
 
 jest.mock('react-router-dom', () => {
   return {
@@ -31,44 +42,86 @@ const scopeGet = nock(baseURL)
   .get('/stages')
   .reply(200, stagesResponse);
 
-test('Testando criar fluxo no componente Flows', async () => {
-  const scope = nock(baseURL)
-    .defaultReplyHeaders({
-      'access-control-allow-origin': '*',
-      'access-control-allow-credentials': 'true'
-    })
-    .persist()
-    .post('/newFlow')
-    .reply(200, {
-      _id: 'meuIdAleatório',
-      name: 'perito',
-      stages: ['etpa c', 'etpa c2'],
-      sequences: [],
-      createdAt: '2022-08-17T20:11:43.499+00:00',
-      updatedAt: '2022-08-17T20:11:43.499+00:00',
-      __v: 0
+usersResponse.user.forEach((user) => {
+  if (verifyPermission(user)) {
+    test(`Testando criar fluxo no componente Flows ${user.name}`, async () => {
+      localStorage.setItem('user', JSON.stringify(user));
+      const scope = nock(baseURL)
+        .defaultReplyHeaders({
+          'access-control-allow-origin': '*',
+          'access-control-allow-credentials': 'true'
+        })
+        .post('/newFlow')
+        .reply(200, {
+          _id: 'meuIdAleatório',
+          name: 'perito',
+          stages: ['etpa c', 'etpa c2'],
+          sequences: [],
+          createdAt: '2022-08-17T20:11:43.499+00:00',
+          updatedAt: '2022-08-17T20:11:43.499+00:00',
+          __v: 0
+        });
+
+      render(
+        <MemoryRouter initialEntries={['/']}>
+          <Routes>
+            <Route path="/" element={<Flows />} />
+          </Routes>
+        </MemoryRouter>
+      );
+
+      const buttonFlow = screen.getByText('+ Adicionar Fluxo');
+      fireEvent.click(buttonFlow);
+      const modalName = screen.getByText('Novo Fluxo');
+      const inputFlow = screen.getByPlaceholderText('Nome do fluxo');
+      const button = screen.getByText('Salvar');
+      const close = screen.getByText('Cancelar');
+      fireEvent.change(inputFlow, { target: { value: 'perito' } });
+      fireEvent.click(button);
+      fireEvent.click(close);
+
+      expect(modalName).toHaveTextContent('Novo Fluxo');
+
+      await waitFor(() => expect(scope.isDone()).toBe(true));
     });
+  }
+});
 
-  render(
-    <MemoryRouter initialEntries={['/']}>
-      <Routes>
-        <Route path="/" element={<Flows />} />
-      </Routes>
-    </MemoryRouter>
-  );
+usersResponse.user.forEach((user) => {
+  if (!verifyPermission(user)) {
+    test(`Testando falta de permissão ao criar fluxo no componente Flows como ${user.name}`, async () => {
+      localStorage.setItem('user', JSON.stringify(user));
+      const scope = nock(baseURL)
+        .defaultReplyHeaders({
+          'access-control-allow-origin': '*',
+          'access-control-allow-credentials': 'true'
+        })
+        .post('/newFlow')
+        .reply(200, {
+          _id: 'meuIdAleatório',
+          name: 'perito',
+          stages: ['etpa c', 'etpa c2'],
+          sequences: [],
+          createdAt: '2022-08-17T20:11:43.499+00:00',
+          updatedAt: '2022-08-17T20:11:43.499+00:00',
+          __v: 0
+        });
 
-  const buttonFlow = screen.getByText('+ Adicionar Fluxo');
-  fireEvent.click(buttonFlow);
+      render(
+        <MemoryRouter initialEntries={['/']}>
+          <Routes>
+            <Route path="/" element={<Flows />} />
+          </Routes>
+        </MemoryRouter>
+      );
 
-  const modalName = screen.getByText('Novo Fluxo');
-  const inputFlow = screen.getByPlaceholderText('Nome do fluxo');
-  const button = screen.getByText('Salvar');
-  const close = screen.getByTestId('close');
-  fireEvent.change(inputFlow, { target: { value: 'perito' } });
-  fireEvent.click(button);
-  fireEvent.click(close);
-  expect(modalName).toHaveTextContent('Novo Fluxo');
-  await waitFor(() => expect(scope.isDone()).toBe(true));
+      expect(
+        screen.getByText('+ Adicionar Fluxo').closest('button')
+      ).toHaveAttribute('disabled');
+
+      await waitFor(() => expect(scope.isDone()).toBe(false));
+    });
+  }
 });
 
 test('Testando editar fluxo no componente Flows', async () => {

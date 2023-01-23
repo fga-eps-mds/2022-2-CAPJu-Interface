@@ -1,4 +1,4 @@
-const Permissions = {
+export const Permissions = {
   DIRETOR: 1,
   JUIZ: 2,
   SERVIDOR: 3,
@@ -201,8 +201,6 @@ const permissionsArray = [
     ]
   }
 ];
-
-//const user = JSON.parse(localStorage.getItem('user'));
 
 export default function verifyRole(user, permissionName) {
   if (user == null) {
