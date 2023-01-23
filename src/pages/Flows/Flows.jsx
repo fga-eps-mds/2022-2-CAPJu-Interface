@@ -114,15 +114,16 @@ function Flows() {
           ? true
           : false;
       });
-
+      console.log('New Sequences = ', newSequences);
       setFlowSequences(newSequences);
+      console.log(flowUsers);
 
-      const response = await api.put('/editFlow', {
-        _id: flowId,
+      const response = await api.put('/flow', {
+        idFlow: flowId,
         name: flowName,
         stages: flowStages,
         sequences: flowSequences,
-        users: flowUsers
+        idUsersToNotify: flowUsers
       });
       responseHandler(
         response,
@@ -211,7 +212,7 @@ function Flows() {
       tooltip: 'Deletar fluxo',
       action: (flow) => {
         setDeleteModal(!deleteModal);
-        setSelectedFlow(flow._id);
+        setSelectedFlow(flow.idFlow);
       },
       type: 'delete'
     }

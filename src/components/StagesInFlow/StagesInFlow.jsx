@@ -22,7 +22,7 @@ function StagesInFlow(props) {
             <StageName>
               {
                 stageList.find((stage) => {
-                  return flowStage == stage._id;
+                  return flowStage == stage.idStage;
                 }).name
               }
               <XButton onClick={() => removeStage(flowStage)}> X </XButton>

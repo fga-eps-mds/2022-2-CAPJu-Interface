@@ -51,9 +51,9 @@ function FlowViewer(props) {
   if (procStages) {
     edges = procStages.map((sequence) => {
       return {
-        id: 'e' + sequence.stageIdFrom + '-' + sequence.stageIdTo,
-        source: sequence.stageIdFrom,
-        target: sequence.stageIdTo,
+        id: 'e' + sequence.from + '-' + sequence.to,
+        source: sequence.from,
+        target: sequence.to,
         label:
           sequence.commentary || (!disabled && '+ Adicionar nova notificação'),
         type: !disabled && 'edgebutton',

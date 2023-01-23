@@ -9,8 +9,10 @@ function AddSequenceInFlow({ options, stages, addSequence, removeSequence }) {
   const [originStage, setOriginStage] = useState('');
   const [destinationStage, setDestinationStage] = useState('');
 
+  console.log('options = ', options);
+
   const stagesInFlow = options.map((option) => {
-    const { name: label, _id: value } = stages.find(
+    const { name: label, idStage: value } = stages.find(
       (stage) => stage.idStage === option
     );
     return { label, value };
