@@ -11,7 +11,7 @@ function AddSequenceInFlow({ options, stages, addSequence, removeSequence }) {
 
   const stagesInFlow = options.map((option) => {
     const { name: label, _id: value } = stages.find(
-      (stage) => stage._id === option
+      (stage) => stage.idStage === option
     );
     return { label, value };
   });

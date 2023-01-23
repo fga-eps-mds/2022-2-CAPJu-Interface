@@ -15,7 +15,7 @@ function FlowViewer(props) {
   const { disabled, openModal } = props;
 
   function deadlineDate(stage) {
-    const stageDate = getStageDate(stage._id, props.proc, props.flow);
+    const stageDate = getStageDate(stage.idStage, props.proc, props.flow);
     if (stageDate instanceof Date && !isNaN(stageDate)) {
       stageDate.setDate(stageDate.getDate() + parseInt(stage.time));
       return stageDate.toLocaleDateString();
@@ -23,12 +23,12 @@ function FlowViewer(props) {
   }
   const nodes = props.stages
     .filter((stage) => {
-      return props.flow.stages.includes(stage._id);
+      return props.flow.stages.includes(stage.idStage);
     })
     .map((stage, idx) => {
       const deadline = props.proc && deadlineDate(stage);
       return {
-        id: stage._id,
+        id: stage.idStage,
         data: {
           label: (
             <>
@@ -37,12 +37,13 @@ function FlowViewer(props) {
           )
         },
         position: { x: (idx % 2) * 130, y: 140 * idx },
-        style: props.highlight === stage._id && {
+        /*style: props.highlight === stage.idStage && {
           backgroundColor: isLate(stage, props.proc, props.flow)
             ? 'rgb(222, 83, 83)'
             : '#1b9454',
           color: '#f1f1f1'
-        }
+        }*/
+        style: {}
       };
     });
 
@@ -54,7 +55,7 @@ function FlowViewer(props) {
         source: sequence.stageIdFrom,
         target: sequence.stageIdTo,
         label:
-          sequence.observation || (!disabled && '+ Adicionar nova notificação'),
+          sequence.commentary || (!disabled && '+ Adicionar nova notificação'),
         type: !disabled && 'edgebutton',
         animated: true,
         data: { onClick: openModal },
@@ -93,6 +94,9 @@ function FlowViewer(props) {
     } else return edgeS;
   });
 
+  console.log(nodes);
+  console.log(uniqueEdges);
+  console.log(edgeTypes);
   return (
     uniqueEdges && (
       <FlowContainer onClick={props.onClick}>

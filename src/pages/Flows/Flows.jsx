@@ -315,6 +315,8 @@ function Flows() {
                   placeholder="Selecione uma etapa"
                   options={stages}
                   selectedOptions={flowStages}
+                  selectedOptionsId={'idStage'}
+                  selectedOptionsName={'name'}
                   addSelectedOption={setFlowStages}
                   hintText="Etapas presentes em um fluxo"
                 />
@@ -323,6 +325,8 @@ function Flows() {
                   placeholder="Selecione o usuário"
                   options={users}
                   selectedOptions={flowUsers}
+                  selectedOptionsId={'cpf'}
+                  selectedOptionsName={'fullName'}
                   addSelectedOption={setFlowUsers}
                   hintText="Usuários notificados por email, quando processos deste fluxo estiverem atrasado."
                 />
@@ -381,6 +385,8 @@ function Flows() {
                 placeholder="Selecione uma etapa"
                 options={stages}
                 selectedOptions={flowStages}
+                selectedOptionsId={'idStage'}
+                selectedOptionsName={'name'}
                 addSelectedOption={setFlowStages}
                 hintText="Etapas presentes em um fluxo"
               />
@@ -389,6 +395,8 @@ function Flows() {
                 placeholder="Selecione o usuário"
                 options={users}
                 selectedOptions={flowUsers}
+                selectedOptionsId={'cpf'}
+                selectedOptionsName={'fullName'}
                 addSelectedOption={setFlowUsers}
                 hintText="Usuários notificados por email, quando processos deste fluxo estiverem atrasado."
               />
