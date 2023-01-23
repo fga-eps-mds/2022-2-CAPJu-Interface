@@ -45,7 +45,7 @@ function Flows() {
   }, []);
 
   async function updateFlows() {
-    const response = await api.get('/flows');
+    const response = await api.get('/flowsForFrontend');
     setFlowList(response.data.Flows);
   }
 
@@ -181,11 +181,11 @@ function Flows() {
   }, [flowSequences]);
 
   function getFlow(flowId) {
-    return flowList.find((flow) => flow._id == flowId);
+    return flowList.find((flow) => flow.idFlow == flowId);
   }
 
-  function buildFlow({ _id, name, stages, sequences, users }) {
-    setFlowId(_id || '');
+  function buildFlow({ idFlow, name, stages, sequences, users }) {
+    setFlowId(idFlow || '');
     setFlowName(name || '');
     setFlowStages(stages || []);
     setFlowSequences(sequences || []);
