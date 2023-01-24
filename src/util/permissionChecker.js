@@ -8,7 +8,14 @@ export const Permissions = {
 
 const permissionsArray = [
   {
-    name: 'criar-etapa editar-etapa apagar-etapa criar-fluxo editar-fluxo apagar-fluxo',
+    actions: [
+      'criar-etapa',
+      'editar-etapa',
+      'apagar-etapa',
+      'criar-fluxo',
+      'editar-fluxo',
+      'apagar-fluxo'
+    ],
     users: [
       Permissions.DIRETOR,
       Permissions.SERVIDOR,
@@ -16,7 +23,12 @@ const permissionsArray = [
     ]
   },
   {
-    name: 'criar-processo editar-processo apagar-processo',
+    actions: [
+      'criar-processo',
+      'editar-processo',
+      'apagar-processo',
+      'avançar-etapa'
+    ],
     users: [
       Permissions.ESTAGIARIO,
       Permissions.DIRETOR,
@@ -25,7 +37,13 @@ const permissionsArray = [
     ]
   },
   {
-    name: 'visualizar-etapa visualizar-fluxo visualizar-processo visualizar-unidade editar-conta',
+    actions: [
+      'visualizar-etapa',
+      'visualizar-fluxo',
+      'visualizar-processo',
+      'visualizar-unidade',
+      'editar-conta'
+    ],
     users: [
       Permissions.ESTAGIARIO,
       Permissions.DIRETOR,
@@ -35,28 +53,28 @@ const permissionsArray = [
     ]
   },
   {
-    name: 'editar-unidade apagar-unidade criar-unidade',
+    actions: ['editar-unidade', 'apagar-unidade', 'criar-unidade'],
     users: [Permissions.ADMINISTRADOR]
   },
   {
-    name: 'visualizar-usuario',
+    actions: 'visualizar-usuario',
     users: [Permissions.DIRETOR, Permissions.JUIZ, Permissions.ADMINISTRADOR]
   },
   {
-    name: 'criar-usuario aceitar-usuario retroceder-etapa apagar-usuario editar-usuario',
+    actions: [
+      'criar-usuario',
+      'aceitar-usuario',
+      'retroceder-etapa',
+      'apagar-usuario',
+      'editar-usuario'
+    ],
     users: [Permissions.DIRETOR, Permissions.ADMINISTRADOR]
   },
   {
-    name: 'avançar-etapa',
-    users: [
-      Permissions.ESTAGIARIO,
-      Permissions.DIRETOR,
-      Permissions.SERVIDOR,
-      Permissions.ADMINISTRADOR
-    ]
-  },
-  {
-    name: 'visualizar-processo-no-fluxo visualizar-estatistica-dos-processos-no-fluxo',
+    actions: [
+      'visualizar-processo-no-fluxo',
+      'visualizar-estatistica-dos-processos-no-fluxo'
+    ],
     users: [
       Permissions.ESTAGIARIO,
       Permissions.DIRETOR,
@@ -72,7 +90,7 @@ export default function verifyRole(user, permissionName) {
     return false;
   } else {
     const permission = permissionsArray.find((p) =>
-      p.name.includes(permissionName)
+      p.actions.includes(permissionName)
     );
     const hasPermission = permission.users.includes(user.role);
     return hasPermission;
