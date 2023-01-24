@@ -8,8 +8,7 @@ export const Permissions = {
 
 const permissionsArray = [
   {
-    id: 2,
-    name: 'criar-etapa',
+    name: 'criar-etapa editar-etapa apagar-etapa criar-fluxo editar-fluxo apagar-fluxo',
     users: [
       Permissions.DIRETOR,
       Permissions.SERVIDOR,
@@ -17,7 +16,16 @@ const permissionsArray = [
     ]
   },
   {
-    name: 'visualizar-etapa',
+    name: 'criar-processo editar-processo apagar-processo',
+    users: [
+      Permissions.ESTAGIARIO,
+      Permissions.DIRETOR,
+      Permissions.SERVIDOR,
+      Permissions.ADMINISTRADOR
+    ]
+  },
+  {
+    name: 'visualizar-etapa visualizar-fluxo visualizar-processo visualizar-unidade editar-conta',
     users: [
       Permissions.ESTAGIARIO,
       Permissions.DIRETOR,
@@ -27,139 +35,15 @@ const permissionsArray = [
     ]
   },
   {
-    name: 'editar-etapa',
-    users: [
-      Permissions.DIRETOR,
-      Permissions.SERVIDOR,
-      Permissions.ADMINISTRADOR
-    ]
-  },
-  {
-    name: 'apagar-etapa',
-    users: [
-      Permissions.DIRETOR,
-      Permissions.SERVIDOR,
-      Permissions.ADMINISTRADOR
-    ]
-  },
-  {
-    name: 'criar-fluxo',
-    users: [
-      Permissions.DIRETOR,
-      Permissions.SERVIDOR,
-      Permissions.ADMINISTRADOR
-    ]
-  },
-  {
-    name: 'visualizar-fluxo',
-    users: [
-      Permissions.ESTAGIARIO,
-      Permissions.DIRETOR,
-      Permissions.JUIZ,
-      Permissions.SERVIDOR,
-      Permissions.ADMINISTRADOR
-    ]
-  },
-  {
-    name: 'editar-fluxo',
-    users: [
-      Permissions.DIRETOR,
-      Permissions.SERVIDOR,
-      Permissions.ADMINISTRADOR
-    ]
-  },
-  {
-    name: 'apagar-fluxo',
-    users: [
-      Permissions.DIRETOR,
-      Permissions.SERVIDOR,
-      Permissions.ADMINISTRADOR
-    ]
-  },
-  {
-    name: 'criar-processo',
-    users: [
-      Permissions.ESTAGIARIO,
-      Permissions.DIRETOR,
-      Permissions.SERVIDOR,
-      Permissions.ADMINISTRADOR
-    ]
-  },
-  {
-    name: 'visualizar-processo',
-    users: [
-      Permissions.ESTAGIARIO,
-      Permissions.DIRETOR,
-      Permissions.JUIZ,
-      Permissions.SERVIDOR,
-      Permissions.ADMINISTRADOR
-    ]
-  },
-  {
-    name: 'editar-processo',
-    users: [
-      Permissions.ESTAGIARIO,
-      Permissions.DIRETOR,
-      Permissions.SERVIDOR,
-      Permissions.ADMINISTRADOR
-    ]
-  },
-  {
-    name: 'apagar-processo',
-    users: [
-      Permissions.ESTAGIARIO,
-      Permissions.DIRETOR,
-      Permissions.SERVIDOR,
-      Permissions.ADMINISTRADOR
-    ]
-  },
-  { name: 'criar-unidade', users: [Permissions.ADMINISTRADOR] },
-  {
-    name: 'visualizar-unidade',
-    users: [
-      Permissions.ESTAGIARIO,
-      Permissions.DIRETOR,
-      Permissions.JUIZ,
-      Permissions.SERVIDOR,
-      Permissions.ADMINISTRADOR
-    ]
-  },
-  {
-    name: 'editar-conta',
-    users: [
-      Permissions.ESTAGIARIO,
-      Permissions.DIRETOR,
-      Permissions.JUIZ,
-      Permissions.SERVIDOR,
-      Permissions.ADMINISTRADOR
-    ]
-  },
-  {
-    name: 'editar-unidade',
+    name: 'editar-unidade apagar-unidade criar-unidade',
     users: [Permissions.ADMINISTRADOR]
-  },
-  {
-    name: 'apagar-unidade',
-    users: [Permissions.ADMINISTRADOR]
-  },
-  {
-    name: 'criar-usuario',
-    users: [Permissions.DIRETOR, Permissions.ADMINISTRADOR]
   },
   {
     name: 'visualizar-usuario',
     users: [Permissions.DIRETOR, Permissions.JUIZ, Permissions.ADMINISTRADOR]
   },
   {
-    name: 'editar-usuario',
-    users: [Permissions.DIRETOR, Permissions.ADMINISTRADOR]
-  },
-  {
-    name: 'apagar-usuario',
-    users: [Permissions.DIRETOR, Permissions.ADMINISTRADOR]
-  },
-  {
-    name: 'aceitar-usuario',
+    name: 'criar-usuario aceitar-usuario retroceder-etapa apagar-usuario editar-usuario',
     users: [Permissions.DIRETOR, Permissions.ADMINISTRADOR]
   },
   {
@@ -172,26 +56,7 @@ const permissionsArray = [
     ]
   },
   {
-    name: 'retroceder-etapa',
-    users: [
-      Permissions.ESTAGIARIO,
-      Permissions.DIRETOR,
-      Permissions.SERVIDOR,
-      Permissions.ADMINISTRADOR
-    ]
-  },
-  {
-    name: 'visualizar-processo-no-fluxo',
-    users: [
-      Permissions.ESTAGIARIO,
-      Permissions.DIRETOR,
-      Permissions.JUIZ,
-      Permissions.SERVIDOR,
-      Permissions.ADMINISTRADOR
-    ]
-  },
-  {
-    name: 'visualizar-estatistica-dos-processos-no-fluxo',
+    name: 'visualizar-processo-no-fluxo visualizar-estatistica-dos-processos-no-fluxo',
     users: [
       Permissions.ESTAGIARIO,
       Permissions.DIRETOR,
@@ -206,7 +71,9 @@ export default function verifyRole(user, permissionName) {
   if (user == null) {
     return false;
   } else {
-    const permission = permissionsArray.find((p) => p.name === permissionName);
+    const permission = permissionsArray.find((p) =>
+      p.name.includes(permissionName)
+    );
     const hasPermission = permission.users.includes(user.role);
     return hasPermission;
   }
