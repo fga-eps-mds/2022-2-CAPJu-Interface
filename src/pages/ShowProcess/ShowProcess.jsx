@@ -301,14 +301,14 @@ function ShowProcess() {
         </Link>
         <div className="processInfo">
           <h1>
-            {proc.apelido.length > 0
-              ? proc.apelido
-              : `Processo ${proc.registro}`}
+            {proc.nickname.length > 0
+              ? proc.nickname
+              : `Processo ${proc.record}`}
           </h1>
           <div className="process">
-            {proc?.apelido.length > 0
-              ? `${proc?.registro} - ${proc?.apelido}`
-              : `${proc?.registro}`}
+            {proc?.nickname.length > 0
+              ? `${proc?.record} - ${proc?.record}`
+              : `${proc?.record}`}
           </div>
         </div>
         {flow ? (
