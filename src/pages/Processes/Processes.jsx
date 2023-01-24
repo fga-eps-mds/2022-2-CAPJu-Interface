@@ -136,14 +136,14 @@ function Processes() {
       const flow = flows.find((flow) => flow._id === flowId);
       if (registro && flow) {
         let sequences = flow.sequences;
-
-        await api.post('/newProcess', {
-          registro,
-          apelido,
+        const body = {
+          record: registro,
+          nickname: apelido,
           etapaAtual: sequences[0].from,
-          arquivado: false,
-          fluxoId: flowId
-        });
+          newProcess: false,
+          idFlow: flowId
+        };
+        await api.post('/newProcess', body);
       } else {
         toast.error('Registro vazio', { duration: 3000 });
         return;
