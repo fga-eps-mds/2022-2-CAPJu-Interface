@@ -17,7 +17,7 @@ function FlowViewer(props) {
   function deadlineDate(stage) {
     const stageDate = getStageDate(stage.idStage, props.proc, props.flow);
     if (stageDate instanceof Date && !isNaN(stageDate)) {
-      stageDate.setDate(stageDate.getDate() + parseInt(stage.time));
+      stageDate.setDate(stageDate.getDate() + stage.duration);
       return stageDate.toLocaleDateString();
     }
   }
@@ -26,7 +26,7 @@ function FlowViewer(props) {
       return props.flow.stages.includes(stage.idStage);
     })
     .map((stage, idx) => {
-      const deadline = props.proc && deadlineDate(stage);
+      const deadline = props.proc ? deadlineDate(stage) : null;
       return {
         id: stage.idStage,
         data: {
@@ -37,13 +37,12 @@ function FlowViewer(props) {
           )
         },
         position: { x: (idx % 2) * 130, y: 140 * idx },
-        /*style: props.highlight === stage.idStage && {
+        style: props.highlight === stage.idStage && {
           backgroundColor: isLate(stage, props.proc, props.flow)
             ? 'rgb(222, 83, 83)'
             : '#1b9454',
           color: '#f1f1f1'
-        }*/
-        style: {}
+        }
       };
     });
 
@@ -94,9 +93,7 @@ function FlowViewer(props) {
     } else return edgeS;
   });
 
-  console.log(nodes);
-  console.log(uniqueEdges);
-  console.log(edgeTypes);
+  console.log('nodes', nodes);
   return (
     uniqueEdges && (
       <FlowContainer onClick={props.onClick}>

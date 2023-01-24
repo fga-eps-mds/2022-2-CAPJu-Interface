@@ -217,7 +217,7 @@ function Processes() {
 
                 if (flow && stages) {
                   CurrentStage = stages.find(
-                    (stage) => stage.idStage === proc.etapaAtual
+                    (stage) => stage.idStage === proc.idStage
                   );
                   FinalStage = stages.find(
                     (stage) =>

@@ -80,13 +80,15 @@ function Flows() {
   }
 
   const addFlow = useCallback(async () => {
+    const { idUnit } = JSON.parse(localStorage.getItem('user'));
     setModalOpen(!isModalOpen);
     try {
       const response = await api.post('/newFlow', {
         name: flowName,
         stages: flowStages,
         sequences: flowSequences,
-        users: flowUsers
+        idUsersToNotify: flowUsers,
+        idUnit
       });
       responseHandler(
         response,
@@ -146,9 +148,7 @@ function Flows() {
   const deleteFlow = useCallback(
     async (id) => {
       try {
-        const response = await api.post('/deleteFlow', {
-          flowId: id
-        });
+        const response = await api.delete(`/flow/${id}`);
         responseHandler(
           response,
           'Fluxo Deletada com sucesso',
