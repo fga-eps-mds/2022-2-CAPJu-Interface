@@ -28,22 +28,22 @@ function App() {
     const currentDate = new Date();
     const localStorageUser = localStorage.getItem('user');
 
-    if (
-      !localStorageUser &&
-      location.pathname != '/Login' &&
-      !location.pathname.startsWith('/recovery/')
-    ) {
-      navigate('Login');
-      return;
-    }
+    if (!localStorageUser) {
+      if (
+        location.pathname != '/Login' &&
+        !location.pathname.startsWith('/recovery/')
+      ) {
+        navigate('Login');
+        return;
+      }
 
-    if (
-      !localStorageUser ||
-      !JSON.parse(localStorageUser)?.expiresIn ||
-      new Date(JSON.parse(localStorageUser)?.expiresIn) < currentDate
-    ) {
-      navigate('Login');
-      return;
+      if (
+        !JSON.parse(localStorageUser)?.expiresIn ||
+        new Date(JSON.parse(localStorageUser)?.expiresIn) < currentDate
+      ) {
+        navigate('Login');
+        return;
+      }
     }
 
     setUser(localStorageUser);

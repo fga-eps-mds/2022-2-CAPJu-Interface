@@ -8,7 +8,7 @@ import SkipNextIcon from '@mui/icons-material/SkipNext';
 
 import { Container, FlowWrapper } from './styles';
 import Button from 'components/Button/Button';
-import FlowViewer from 'components/FlowViewer/FlowViewer';
+import FlowViewer from 'components/Flow/FlowViewer';
 import ModalHeader from 'components/ModalHeader/ModalHeader';
 import ModalBody from 'components/ModalBody/ModalBody';
 import hasPermission from 'util/permissionChecker';
