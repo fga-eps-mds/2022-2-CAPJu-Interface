@@ -75,8 +75,7 @@ Table.propTypes = {
   itemList: PropTypes.array,
   actionList: PropTypes.array,
   columnList: PropTypes.array,
-  attributeList: PropTypes.func,
-  disabled: PropTypes.bool
+  attributeList: PropTypes.func
 };
 
 export default Table;
