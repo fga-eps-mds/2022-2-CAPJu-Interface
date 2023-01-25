@@ -8,8 +8,7 @@ import {
   Area,
   Modal,
   Content,
-  ContentHeader,
-  Disable
+  ContentHeader
 } from './styles';
 import api from 'services/api';
 import Table from 'components/Tables/Table';
@@ -24,6 +23,8 @@ function Stages() {
   const [currentStage, setCurrentStage] = useState({ name: '', _id: '' });
   const [isModalOpen, setModalOpen] = useState(false);
   const [isModalConfDelete, setModalConfDelete] = useState(false);
+
+  const user = JSON.parse(localStorage.getItem('user'));
 
   useEffect(() => {
     updateStages();
@@ -86,9 +87,6 @@ function Stages() {
     }
   }
 
-  const user = JSON.parse(localStorage.getItem('user'));
-  const disableDeleteStage = verifyRole(user, 'apagar-etapa');
-
   const actionList = [
     {
       tooltip: 'Deletar etapa',
@@ -97,7 +95,7 @@ function Stages() {
         setCurrentStage(stage);
       },
       type: 'delete',
-      className: !disableDeleteStage && 'action-button'
+      disabled: !verifyRole(user, 'apagar-etapa')
     }
   ];
 
@@ -114,21 +112,13 @@ function Stages() {
             attributeList={(stage) => [stage.name, stage.time]}
           />
         </Area>
-        {verifyRole(user, 'criar-etapa') ? (
-          <>
-            <AddStageButton onClick={() => setModalOpen(true)}>
-              + Adicionar Etapa
-            </AddStageButton>
-          </>
-        ) : (
-          <>
-            <Disable>
-              <AddStageButton onClick={() => setModalOpen(true)}>
-                + Adicionar Etapa
-              </AddStageButton>
-            </Disable>
-          </>
-        )}
+
+        <AddStageButton
+          onClick={() => setModalOpen(true)}
+          disabled={!verifyRole(user, 'criar-etapa')}
+        >
+          + Adicionar Etapa
+        </AddStageButton>
       </Container>
       {isModalOpen && (
         <Modal>

@@ -14,6 +14,8 @@ function SolicitacoesCadastro() {
   const [deleteModal, setDeleteModal] = useState(false);
   const [selectedUser, setSelectedUser] = useState(0);
 
+  const user = JSON.parse(localStorage.getItem('user'));
+
   const authHeader = authConfig()?.headers;
   useEffect(() => {
     updateSolicitacoes();
@@ -93,10 +95,6 @@ function SolicitacoesCadastro() {
     return users.find((user) => user._id == userId);
   }
 
-  const user = JSON.parse(localStorage.getItem('user'));
-  const disableAcceptUserSolicitation = verifyRole(user, 'aceitar-usuario');
-  const disableRefuseUserSolicitation = verifyRole(user, 'apagar-usuario');
-
   const actionList = [
     {
       tooltip: 'Aceitar solicitação',
@@ -105,11 +103,8 @@ function SolicitacoesCadastro() {
         setSelectedUser(user._id);
       },
       type: 'check',
-      //className: 'accept-button'
-      //className: !disableAcceptUserSolicitation && 'action-button'
-      className:
-        (!disableAcceptUserSolicitation && 'accept-button action-button') ||
-        'accept-button'
+      className: 'accept-button',
+      disabled: !verifyRole(user, 'aceitar-usuario')
     },
     {
       tooltip: 'Recusar solicitação',
@@ -118,11 +113,8 @@ function SolicitacoesCadastro() {
         setSelectedUser(user._id);
       },
       type: 'deny',
-      //className: 'deny-button'
-      //className: !disableRefuseUserSolicitation && 'action-button'
-      className:
-        (!disableRefuseUserSolicitation && 'deny-button action-button') ||
-        'deny-button'
+      className: 'deny-button',
+      disabled: !verifyRole(user, 'apagar-usuario')
     }
   ];
 

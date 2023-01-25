@@ -25,6 +25,8 @@ function SideBar() {
   const navigate = useNavigate();
   const authHeader = authConfig()?.headers;
 
+  const user = JSON.parse(localStorage.getItem('user'));
+
   useEffect(() => {
     updateNotification();
     // eslint-disable-next-line
@@ -37,15 +39,6 @@ function SideBar() {
     setUsers(response.data.user);
   }
 
-  const user = JSON.parse(localStorage.getItem('user'));
-  const disableUnity = verifyRole(user, 'visualizar-unidade');
-  const disableStage = verifyRole(user, 'visualizar-etapa');
-  const disableFlow = verifyRole(user, 'visualizar-fluxo');
-  const disableProcess = verifyRole(user, 'visualizar-processo');
-  const disableAcceptUser = verifyRole(user, 'aceitar-usuario');
-  const disableAccessProfile = verifyRole(user, 'visualizar-usuario');
-  const disableEditAccount = verifyRole(user, 'editar-conta');
-
   const userLogout = JSON.parse(localStorage.getItem('user'));
   return (
     <Container>
@@ -56,20 +49,23 @@ function SideBar() {
         <hr />
         <MenuItem
           href={'/unidades'}
-          className={!disableUnity && 'disable-item'}
+          disabled={!verifyRole(user, 'visualizar-unidade')}
         >
           <GroupWork size={35} />
           Unidades
         </MenuItem>
         <hr />
 
-        <MenuItem href={'/stages'} className={!disableStage && 'disable-item'}>
+        <MenuItem
+          href={'/stages'}
+          disabled={!verifyRole(user, 'visualizar-etapa')}
+        >
           <Flow size={35} />
           Etapas
         </MenuItem>
         <hr />
 
-        <MenuItem href={'/'} className={!disableFlow && 'disable-item'}>
+        <MenuItem href={'/'} disabled={!verifyRole(user, 'visualizar-fluxo')}>
           <FlowCascade size={35} />
           Fluxos
         </MenuItem>
@@ -77,7 +73,7 @@ function SideBar() {
 
         <MenuItem
           href="/processes"
-          className={!disableProcess && 'disable-item'}
+          disabled={!verifyRole(user, 'visualizar-processo')}
         >
           <ClipboardTaskListLtr size={35} />
           Processos
@@ -86,7 +82,7 @@ function SideBar() {
         <Menu>
           <MenuItem
             href={'/solicitacoes'}
-            className={!disableAcceptUser && 'disable-item'}
+            disabled={!verifyRole(user, 'aceitar-usuario')}
           >
             <UserPlus size={35} />
             Solicitações
@@ -96,7 +92,7 @@ function SideBar() {
 
           <MenuItem
             href={'/accessProfile'}
-            className={!disableAccessProfile && 'disable-item'}
+            disabled={!verifyRole(user, 'visualizar-usuario')}
           >
             <PersonFill size={35} /> Perfil de Acesso
           </MenuItem>
@@ -104,7 +100,7 @@ function SideBar() {
 
           <MenuItem
             href="/editAccount"
-            className={!disableEditAccount && 'disable-item'}
+            disabled={!verifyRole(user, 'editar-conta')}
           >
             <UserCircle size={35} />
             Editar Conta

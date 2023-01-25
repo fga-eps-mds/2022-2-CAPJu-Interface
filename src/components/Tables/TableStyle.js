@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 
-export const DefaultTable = styled.table.attrs(() => ({
-  disabled: 'boolean'
+export const DefaultTable = styled.table.attrs((props) => ({
+  disabled: props.disabled
 }))`
   margin-top: 20px;
   background-color: white;
@@ -21,14 +21,11 @@ export const DefaultTable = styled.table.attrs(() => ({
     color: #000001;
   }
 
-  svg.action-button {
-    ${(props) =>
-      props.disabled &&
-      `
-      pointer-events: none;
-      opacity: 0.5;
-    `}
+  svg[disabled] {
+    pointer-events: none;
+    opacity: 0.5;
   }
+
   th {
     border-radius: 5px;
     background-color: #7a7b4f;

@@ -53,6 +53,8 @@ function ShowProcess() {
   const [proc, setProc] = useState(location.state?.proc);
   const [flow, setFlow] = useState(null);
 
+  const user = JSON.parse(localStorage.getItem('user'));
+
   useEffect(() => {
     fetchFlow();
     fetchStages();
@@ -294,8 +296,6 @@ function ShowProcess() {
     );
   };
 
-  const user = JSON.parse(localStorage.getItem('user'));
-  const disableAdvanceStage = verifyRole(user, 'avançar-etapa');
   return (
     proc && (
       <Container>
@@ -332,7 +332,7 @@ function ShowProcess() {
         {renderEditObservationModal()}
         <Button
           onClick={() => checkExistAnnotation()}
-          disabled={!disableAdvanceStage}
+          disabled={!verifyRole(user, 'avançar-etapa')}
         >
           <SkipNextIcon />
           <span>Avançar etapa</span>

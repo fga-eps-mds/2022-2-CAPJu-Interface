@@ -30,6 +30,8 @@ function Unidades() {
   const [isAddAdminsModalOpen, setAddAdminsModalOpen] = useState(false);
   const [foundUsers, setFoundUsers] = useState([]);
 
+  const user = JSON.parse(localStorage.getItem('user'));
+
   useEffect(() => {
     updateUnitys();
   }, []);
@@ -125,11 +127,20 @@ function Unidades() {
     }
   ];
   const unitListActions = [
-    { tooltip: 'Visualizar Admins', action: updateUnityAdmins, type: 'eye' },
-    { tooltip: 'Adicionar Admins', action: searchUsers, type: 'addUser' }
+    {
+      tooltip: 'Visualizar Admins',
+      action: updateUnityAdmins,
+      type: 'eye',
+      disabled: !verifyRole(user, 'visualizar-admins')
+    },
+    {
+      tooltip: 'Adicionar Admins',
+      action: searchUsers,
+      type: 'addUser',
+      disabled: !verifyRole(user, 'adicionar-admin-na-unidade')
+    }
   ];
-  const user = JSON.parse(localStorage.getItem('user'));
-  const disableAddUnity = verifyRole(user, 'criar-unidade');
+
   return (
     <>
       <Container>
@@ -144,7 +155,7 @@ function Unidades() {
           onClick={() => {
             setModalOpen(true);
           }}
-          disabled={!disableAddUnity}
+          disabled={!verifyRole(user, 'criar-unidade')}
         >
           + Adicionar Unidade
         </AddUnityButton>

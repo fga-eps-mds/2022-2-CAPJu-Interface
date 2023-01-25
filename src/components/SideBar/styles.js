@@ -52,10 +52,13 @@ export const MenuItem = styled.a`
     color: black;
   }
 
-  &.disable-item {
+  ${(props) =>
+    // @ts-ignore
+    props.disabled &&
+    `
     pointer-events: none;
     opacity: 0.5;
-  }
+  `}
 `;
 
 export const Notification = styled.div`

@@ -43,6 +43,8 @@ function Flows() {
   const [deleteModal, setDeleteModal] = useState(false);
   const [selectedFlow, setSelectedFlow] = useState(0);
 
+  const user = JSON.parse(localStorage.getItem('user'));
+
   useEffect(() => {
     updateStages();
     updateFlows();
@@ -204,16 +206,13 @@ function Flows() {
     return flows.find((flow) => flow._id == flowId);
   }
 
-  const user = JSON.parse(localStorage.getItem('user'));
-  const disableEditFlow = verifyRole(user, 'editar-fluxo');
-  const disableDeleteFlow = verifyRole(user, 'apagar-fluxo');
-
   const actionList = [
     {
       tooltip: 'Visualizar processos',
       linkTo: '/processes',
       linkIcon: <DescriptionIcon htmlColor="black" />,
-      type: 'link'
+      type: 'link',
+      disabled: !verifyRole(user, 'visualizar-fluxo')
     },
     {
       tooltip: 'Editar fluxo',
@@ -222,7 +221,7 @@ function Flows() {
         setNewFlow(getFlow(flow._id));
       },
       type: 'edit',
-      className: !disableEditFlow && 'action-button'
+      disabled: !verifyRole(user, 'editar-fluxo')
     },
     {
       tooltip: 'Deletar fluxo',
@@ -231,7 +230,7 @@ function Flows() {
         setSelectedFlow(flow._id);
       },
       type: 'delete',
-      className: !disableDeleteFlow && 'action-button'
+      disabled: !verifyRole(user, 'apagar-fluxo')
     }
     /*,
     {
@@ -279,9 +278,6 @@ function Flows() {
     setModalOpen(!isModalOpen);
   }, [setNewFlow, setModalOpen, isModalOpen]);
 
-  const disableAddFlow = verifyRole(user, 'criar-fluxo');
-  const disableRegressStage = verifyRole(user, 'retroceder-etapa');
-
   return (
     <>
       <Container>
@@ -294,7 +290,10 @@ function Flows() {
             actionList={actionList}
           />
         </Area>
-        <AddFlowButton onClick={handleNewFlowModal} disabled={!disableAddFlow}>
+        <AddFlowButton
+          onClick={handleNewFlowModal}
+          disabled={!verifyRole(user, 'criar-fluxo')}
+        >
           <span>+ Adicionar Fluxo</span>
         </AddFlowButton>
         {/* {Modal para confirmar exclusão do fluxo} */}
@@ -378,7 +377,7 @@ function Flows() {
                     background="#de5353"
                     onClick={removeSequence}
                     text={'Retroceder'}
-                    disabled={!disableRegressStage}
+                    disabled={!verifyRole(user, 'retroceder-etapa')}
                   />
                 </>
               )}

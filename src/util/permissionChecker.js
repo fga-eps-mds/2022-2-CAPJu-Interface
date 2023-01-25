@@ -41,6 +41,7 @@ const permissionsArray = [
       'visualizar-etapa',
       'visualizar-fluxo',
       'visualizar-processo',
+      'visualizar-admins',
       'visualizar-unidade',
       'editar-conta'
     ],
@@ -66,7 +67,8 @@ const permissionsArray = [
       'aceitar-usuario',
       'retroceder-etapa',
       'apagar-usuario',
-      'editar-usuario'
+      'editar-usuario',
+      'adicionar-admin-na-unidade'
     ],
     users: [Permissions.DIRETOR, Permissions.ADMINISTRADOR]
   },

@@ -29,6 +29,12 @@ export const AddStageButton = styled.button`
   font-size: 24px;
   border: none;
   border-radius: 20px;
+  ${(props) =>
+    props.disabled &&
+    `
+    pointer-events: none;
+    opacity: 0.5;
+  `}
 `;
 
 export const Area = styled.div`
@@ -99,9 +105,4 @@ export const Content = styled.div`
   font-size: 20px;
   border-radius: 10px;
   overflow-x: hidden;
-`;
-
-export const Disable = styled.a`
-  pointer-events: none;
-  opacity: 0.5;
 `;
