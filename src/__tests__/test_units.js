@@ -74,7 +74,7 @@ describe('Testando Unidades', () => {
     if (verifyPermissionUnits(user)) {
       it('Testando criar Unidades', async () => {
         localStorage.setItem('user', JSON.stringify(user));
-        permissionChecker(user, 'criar-unidade');
+        permissionChecker(user, 'create-unity');
       });
     }
   });

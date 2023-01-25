@@ -212,7 +212,7 @@ function Flows() {
       linkTo: '/processes',
       linkIcon: <DescriptionIcon htmlColor="black" />,
       type: 'link',
-      disabled: !hasPermission(user, 'visualizar-fluxo')
+      disabled: !hasPermission(user, 'view-flow')
     },
     {
       tooltip: 'Editar fluxo',
@@ -221,7 +221,7 @@ function Flows() {
         setNewFlow(getFlow(flow._id));
       },
       type: 'edit',
-      disabled: !hasPermission(user, 'editar-fluxo')
+      disabled: !hasPermission(user, 'edit-flow')
     },
     {
       tooltip: 'Deletar fluxo',
@@ -230,7 +230,7 @@ function Flows() {
         setSelectedFlow(flow._id);
       },
       type: 'delete',
-      disabled: !hasPermission(user, 'apagar-fluxo')
+      disabled: !hasPermission(user, 'delete-flow')
     }
     /*,
     {
@@ -292,7 +292,7 @@ function Flows() {
         </Area>
         <AddFlowButton
           onClick={handleNewFlowModal}
-          disabled={!hasPermission(user, 'criar-fluxo')}
+          disabled={!hasPermission(user, 'create-flow')}
         >
           <span>+ Adicionar Fluxo</span>
         </AddFlowButton>
@@ -377,7 +377,7 @@ function Flows() {
                     background="#de5353"
                     onClick={removeSequence}
                     text={'Retroceder'}
-                    disabled={!hasPermission(user, 'retroceder-etapa')}
+                    disabled={!hasPermission(user, 'regress-stage')}
                   />
                 </>
               )}

@@ -104,7 +104,7 @@ function SolicitacoesCadastro() {
       },
       type: 'check',
       className: 'accept-button',
-      disabled: !hasPermission(user, 'aceitar-usuario')
+      disabled: !hasPermission(user, 'accept-user')
     },
     {
       tooltip: 'Recusar solicitação',
@@ -114,7 +114,7 @@ function SolicitacoesCadastro() {
       },
       type: 'deny',
       className: 'deny-button',
-      disabled: !hasPermission(user, 'apagar-usuario')
+      disabled: !hasPermission(user, 'delete-user')
     }
   ];
 

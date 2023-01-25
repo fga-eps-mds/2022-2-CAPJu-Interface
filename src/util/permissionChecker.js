@@ -9,12 +9,12 @@ export const Permissions = {
 const permissionsArray = [
   {
     actions: [
-      'criar-etapa',
-      'editar-etapa',
-      'apagar-etapa',
-      'criar-fluxo',
-      'editar-fluxo',
-      'apagar-fluxo'
+      'create-stage',
+      'edit-stage',
+      'delete-stage',
+      'create-flow',
+      'edit-flow',
+      'delete-flow'
     ],
     users: [
       Permissions.DIRETOR,
@@ -24,10 +24,10 @@ const permissionsArray = [
   },
   {
     actions: [
-      'criar-processo',
-      'editar-processo',
-      'apagar-processo',
-      'avançar-etapa'
+      'create-process',
+      'edit-process',
+      'delete-process',
+      'advance-stage'
     ],
     users: [
       Permissions.ESTAGIARIO,
@@ -38,12 +38,12 @@ const permissionsArray = [
   },
   {
     actions: [
-      'visualizar-etapa',
-      'visualizar-fluxo',
-      'visualizar-processo',
-      'visualizar-admins',
-      'visualizar-unidade',
-      'editar-conta'
+      'view-stage',
+      'view-flow',
+      'view-process',
+      'view-admins',
+      'view-unity',
+      'edit-account'
     ],
     users: [
       Permissions.ESTAGIARIO,
@@ -54,29 +54,26 @@ const permissionsArray = [
     ]
   },
   {
-    actions: ['editar-unidade', 'apagar-unidade', 'criar-unidade'],
+    actions: ['edit-unity', 'delete-unity', 'create-unity'],
     users: [Permissions.ADMINISTRADOR]
   },
   {
-    actions: 'visualizar-usuario',
+    actions: 'view-user',
     users: [Permissions.DIRETOR, Permissions.JUIZ, Permissions.ADMINISTRADOR]
   },
   {
     actions: [
-      'criar-usuario',
-      'aceitar-usuario',
-      'retroceder-etapa',
-      'apagar-usuario',
-      'editar-usuario',
-      'adicionar-admin-na-unidade'
+      'create-user',
+      'accept-user',
+      'regress-stage',
+      'delete-user',
+      'edit-user',
+      'add-admin-in-unity'
     ],
     users: [Permissions.DIRETOR, Permissions.ADMINISTRADOR]
   },
   {
-    actions: [
-      'visualizar-processo-no-fluxo',
-      'visualizar-estatistica-dos-processos-no-fluxo'
-    ],
+    actions: ['view-process-in-flow', 'view-statistic-of-process-in-flow'],
     users: [
       Permissions.ESTAGIARIO,
       Permissions.DIRETOR,

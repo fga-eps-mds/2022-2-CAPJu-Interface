@@ -260,7 +260,7 @@ function Processes() {
                       </Tooltip>
                       <Tooltip
                         title="Editar processo"
-                        disabled={!hasPermission(user, 'editar-processo')}
+                        disabled={!hasPermission(user, 'edit-process')}
                       >
                         <EditIcon
                           className="edit-process"
@@ -269,7 +269,7 @@ function Processes() {
                       </Tooltip>
                       <Tooltip
                         title="Deletar processo"
-                        disabled={!hasPermission(user, 'apagar-processo')}
+                        disabled={!hasPermission(user, 'delete-process')}
                       >
                         <DeleteForeverIcon
                           className="delete-process"
@@ -375,7 +375,7 @@ function Processes() {
         onClick={() => {
           openEditModal(false);
         }}
-        disabled={!hasPermission(user, 'criar-processo')}
+        disabled={!hasPermission(user, 'create-process')}
       >
         + Adicionar Processo
       </AddProcess>

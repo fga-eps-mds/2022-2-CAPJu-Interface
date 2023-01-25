@@ -332,7 +332,7 @@ function ShowProcess() {
         {renderEditObservationModal()}
         <Button
           onClick={() => checkExistAnnotation()}
-          disabled={!hasPermission(user, 'avançar-etapa')}
+          disabled={!hasPermission(user, 'advance-stage')}
         >
           <SkipNextIcon />
           <span>Avançar etapa</span>

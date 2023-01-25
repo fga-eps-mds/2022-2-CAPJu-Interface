@@ -131,13 +131,13 @@ function Unidades() {
       tooltip: 'Visualizar Admins',
       action: updateUnityAdmins,
       type: 'eye',
-      disabled: !hasPermission(user, 'visualizar-admins')
+      disabled: !hasPermission(user, 'view-admins')
     },
     {
       tooltip: 'Adicionar Admins',
       action: searchUsers,
       type: 'addUser',
-      disabled: !hasPermission(user, 'adicionar-admin-na-unidade')
+      disabled: !hasPermission(user, 'add-admin-in-unity')
     }
   ];
 
@@ -155,7 +155,7 @@ function Unidades() {
           onClick={() => {
             setModalOpen(true);
           }}
-          disabled={!hasPermission(user, 'criar-unidade')}
+          disabled={!hasPermission(user, 'create-unity')}
         >
           + Adicionar Unidade
         </AddUnityButton>

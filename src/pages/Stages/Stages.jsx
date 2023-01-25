@@ -95,7 +95,7 @@ function Stages() {
         setCurrentStage(stage);
       },
       type: 'delete',
-      disabled: !hasPermission(user, 'apagar-etapa')
+      disabled: !hasPermission(user, 'delete-stage')
     }
   ];
 
@@ -115,7 +115,7 @@ function Stages() {
 
         <AddStageButton
           onClick={() => setModalOpen(true)}
-          disabled={!hasPermission(user, 'criar-etapa')}
+          disabled={!hasPermission(user, 'create-stage')}
         >
           + Adicionar Etapa
         </AddStageButton>

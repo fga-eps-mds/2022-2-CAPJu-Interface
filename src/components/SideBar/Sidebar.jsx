@@ -49,7 +49,7 @@ function SideBar() {
         <hr />
         <MenuItem
           href={'/unidades'}
-          disabled={!hasPermission(user, 'visualizar-unidade')}
+          disabled={!hasPermission(user, 'view-unity')}
         >
           <GroupWork size={35} />
           Unidades
@@ -58,17 +58,14 @@ function SideBar() {
 
         <MenuItem
           href={'/stages'}
-          disabled={!hasPermission(user, 'visualizar-etapa')}
+          disabled={!hasPermission(user, 'view-stage')}
         >
           <Flow size={35} />
           Etapas
         </MenuItem>
         <hr />
 
-        <MenuItem
-          href={'/'}
-          disabled={!hasPermission(user, 'visualizar-fluxo')}
-        >
+        <MenuItem href={'/'} disabled={!hasPermission(user, 'view-flow')}>
           <FlowCascade size={35} />
           Fluxos
         </MenuItem>
@@ -76,7 +73,7 @@ function SideBar() {
 
         <MenuItem
           href="/processes"
-          disabled={!hasPermission(user, 'visualizar-processo')}
+          disabled={!hasPermission(user, 'view-process')}
         >
           <ClipboardTaskListLtr size={35} />
           Processos
@@ -85,7 +82,7 @@ function SideBar() {
         <Menu>
           <MenuItem
             href={'/solicitacoes'}
-            disabled={!hasPermission(user, 'aceitar-usuario')}
+            disabled={!hasPermission(user, 'accept-user')}
           >
             <UserPlus size={35} />
             Solicitações
@@ -95,7 +92,7 @@ function SideBar() {
 
           <MenuItem
             href={'/accessProfile'}
-            disabled={!hasPermission(user, 'visualizar-usuario')}
+            disabled={!hasPermission(user, 'view-user')}
           >
             <PersonFill size={35} /> Perfil de Acesso
           </MenuItem>
@@ -103,7 +100,7 @@ function SideBar() {
 
           <MenuItem
             href="/editAccount"
-            disabled={!hasPermission(user, 'editar-conta')}
+            disabled={!hasPermission(user, 'edit-account')}
           >
             <UserCircle size={35} />
             Editar Conta

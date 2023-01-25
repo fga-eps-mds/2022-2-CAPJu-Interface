@@ -160,7 +160,7 @@ function AccessProfile() {
         setSelectedUser(user._id);
       },
       type: 'edit',
-      disabled: !hasPermission(user, 'editar-usuario')
+      disabled: !hasPermission(user, 'edit-user')
     },
     {
       tooltip: 'Deletar Perfil',
@@ -169,7 +169,7 @@ function AccessProfile() {
         setSelectedUser(user._id);
       },
       type: 'delete',
-      disabled: !hasPermission(user, 'apagar-usuario')
+      disabled: !hasPermission(user, 'delete-user')
     }
   ];
 
