@@ -70,11 +70,24 @@ describe('Testando Unidades', () => {
     await waitFor(() => expect(getUnits.isDone()).toBe(true));
   });
 
+  usersResponse.user.forEach((user) => {
+    if (!verifyPermissionUnits(user)) {
+      it('Testando criar Unidades com permissão', async () => {
+        localStorage.setItem('user', JSON.stringify(user));
+        await waitFor(() =>
+          expect(permissionChecker(user, 'create-unity')).toBe(false)
+        );
+      });
+    }
+  });
+
   adminsList.admins.forEach((user) => {
     if (verifyPermissionUnits(user)) {
-      it('Testando criar Unidades', async () => {
+      it('Testando criar Unidades com permissão', async () => {
         localStorage.setItem('user', JSON.stringify(user));
-        permissionChecker(user, 'create-unity');
+        await waitFor(() =>
+          expect(permissionChecker(user, 'create-unity')).toBe(true)
+        );
       });
     }
   });
