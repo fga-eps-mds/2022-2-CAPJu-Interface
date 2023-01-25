@@ -14,7 +14,9 @@ import {
   Table,
   Content,
   ContentHeader,
-  Modal
+  Modal,
+  PrioritySelection,
+  ContentBody
 } from './styles';
 import BackButton from 'components/BackButton/BackButton';
 import api from 'services/api';
@@ -36,7 +38,17 @@ function Processes() {
   const [flows, setFlows] = useState([]);
   const [flowId, setFlowId] = useState(flow && flow.idFlow);
   const [stages, setStages] = useState([]);
-  const [priority, setPriority] = useState(0);
+  const [priority, setPriority] = useState('');
+  const [showPriorityPlaceholder, setShowPriorityPlaceholder] = useState(false);
+  const priorities = [
+    'Art. 1048, II, do CPC (ECA)',
+    'Art. 1048, IV, do CPC (Licitação)',
+    'Art, 7o, parágrafo 4o, da Lei n. 12.016/2009',
+    'Idoso(a) maior de 80 anos',
+    'Pessoa com deficiência',
+    'Pessoa em situação de rua',
+    'Réu Preso'
+  ];
 
   useEffect(() => {
     updateProcesses();
@@ -55,6 +67,15 @@ function Processes() {
     setSearchTerm(event.target.value);
   };
 
+  const handleYesClick = () => {
+    setShowPriorityPlaceholder(true);
+  };
+
+  const handleNoClick = () => {
+    setShowPriorityPlaceholder(false);
+    setPriority('');
+  };
+
   //Filter processes by record and nickname
   const filterProcesses = (processList) => {
     return processList.filter((process) => {
@@ -66,6 +87,10 @@ function Processes() {
       }
     });
   };
+
+  function filterByPriority() {
+    console.log('Filter by priority clicked');
+  }
 
   async function deleteProcess(registro) {
     try {
@@ -103,7 +128,7 @@ function Processes() {
 
   async function getFlows() {
     const response = await api.get(`/flows/`);
-    setFlows(response.data.Flows);
+    setFlows(response.data);
   }
 
   async function editProcess() {
@@ -286,33 +311,70 @@ function Processes() {
                     : 'Criar Processo'}{' '}
                 </span>
               </ContentHeader>
-              <Dropdown
-                options={flows.map((flow) => {
-                  return { label: flow.name, value: flow.idFlow };
-                })}
-                onChange={(e) => setFlowId(e.value)}
-                value={flowId}
-                placeholder="Selecione o fluxo"
-                className="dropdown"
-                controlClassName="dropdown-control"
-                placeholderClassName="dropdown-placeholder"
-                menuClassName="dropdown-menu"
-                arrowClassName="dropdown-arrow"
-              />
-              <div>
-                <TextInput
-                  label="Registro"
-                  value={registro}
-                  set={setRegistro}
-                  placeholder="registro"
+              <PrioritySelection>
+                <label>Prioridade legal?</label>
+                <div>
+                  <input
+                    type="radio"
+                    name="selection"
+                    onClick={() => handleYesClick()}
+                  />
+                  sim
+                  <input
+                    type="radio"
+                    name="selection"
+                    onClick={() => handleNoClick()}
+                    defaultChecked={!showPriorityPlaceholder}
+                  />
+                  nao
+                </div>
+                {showPriorityPlaceholder && (
+                  <Dropdown
+                    options={priorities.map((priority) => {
+                      return { label: priority, value: priority };
+                    })}
+                    onChange={(e) => {
+                      setPriority(e.value);
+                    }}
+                    value={priority}
+                    placeholder="Selecione a prioridade"
+                    className="dropdown"
+                    controlClassName="dropdown-control"
+                    placeholderClassName="dropdown-placeholder"
+                    menuClassName="dropdown-menu"
+                    arrowClassName="dropdown-arrow"
+                  />
+                )}
+              </PrioritySelection>
+              <ContentBody>
+                <Dropdown
+                  options={flows.map((flow) => {
+                    return { label: flow.name, value: flow.idFlow };
+                  })}
+                  onChange={(e) => setFlowId(e.value)}
+                  value={flowId}
+                  placeholder="Selecione o fluxo"
+                  className="dropdown"
+                  controlClassName="dropdown-control"
+                  placeholderClassName="dropdown-placeholder"
+                  menuClassName="dropdown-menu"
+                  arrowClassName="dropdown-arrow"
                 />
-                <TextInput
-                  label="Apelido"
-                  value={apelido}
-                  set={setApelido}
-                  placeholder="apelido"
-                />
-              </div>
+                <div>
+                  <TextInput
+                    label="Registro"
+                    value={registro}
+                    set={setRegistro}
+                    placeholder="registro"
+                  />
+                  <TextInput
+                    label="Apelido"
+                    value={apelido}
+                    set={setApelido}
+                    placeholder="apelido"
+                  />
+                </div>
+              </ContentBody>
               <div>
                 <Button
                   onClick={async () => {

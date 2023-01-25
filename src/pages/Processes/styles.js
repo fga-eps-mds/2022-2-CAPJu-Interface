@@ -109,7 +109,6 @@ export const Content = styled.div`
   max-height: 90vh;
   min-height: 60vh;
   justify-content: space-between;
-  align-items: center;
   flex-direction: column;
   gap: 10px;
   font-size: 20px;
@@ -191,4 +190,16 @@ export const InputSearch = styled.input`
     outline: none;
     background-color: rgba(0, 0, 0, 0);
   }
+`;
+export const PrioritySelection = styled.div`
+  display: flex;
+  justify-content: space-evenly;
+  flex-direction: row;
+`;
+
+export const ContentBody = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-direction: column;
 `;
