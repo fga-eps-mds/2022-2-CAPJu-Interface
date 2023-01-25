@@ -49,17 +49,23 @@ const GlobalStyle = createGlobalStyle`
     top: 32px;
   }
 
+  
   .Dropdown-option {
     padding: 8px 24px;
     border: solid 1px #bbb;
     border-radius: 12px;
-
-
+    
+    
     :hover {
       background: rgba(255, 255, 255, .3);
       border-radius: 12px;
     }
   }
-`;
+  
+  &[disabled] {
+    pointer-events: none;
+    opacity: 0.5;
+  }
+  `;
 
 export default GlobalStyle;

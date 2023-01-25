@@ -1,8 +1,6 @@
 import styled from 'styled-components';
 
-export const DefaultTable = styled.table.attrs((props) => ({
-  disabled: props.disabled
-}))`
+export const DefaultTable = styled.table`
   margin-top: 20px;
   background-color: white;
   min-width: 35vw;
@@ -19,11 +17,6 @@ export const DefaultTable = styled.table.attrs((props) => ({
     height: 30px;
     cursor: pointer;
     color: #000001;
-  }
-
-  svg[disabled] {
-    pointer-events: none;
-    opacity: 0.5;
   }
 
   th {

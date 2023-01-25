@@ -51,14 +51,6 @@ export const MenuItem = styled.a`
     text-decoration: none;
     color: black;
   }
-
-  ${(props) =>
-    // @ts-ignore
-    props.disabled &&
-    `
-    pointer-events: none;
-    opacity: 0.5;
-  `}
 `;
 
 export const Notification = styled.div`

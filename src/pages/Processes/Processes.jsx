@@ -14,8 +14,7 @@ import {
   Table,
   Content,
   ContentHeader,
-  Modal,
-  Disable
+  Modal
 } from './styles';
 import BackButton from 'components/BackButton/BackButton';
 import api from 'services/api';
@@ -259,48 +258,24 @@ function Processes() {
                           <Visibility className="see-process"></Visibility>
                         </Link>
                       </Tooltip>
-                      {verifyRole(user, 'editar-processo') ? (
-                        <>
-                          <Tooltip title="Editar processo">
-                            <EditIcon
-                              className="edit-process"
-                              onClick={() => openEditModal(proc)}
-                            />
-                          </Tooltip>
-                        </>
-                      ) : (
-                        <>
-                          <Disable>
-                            <Tooltip title="Editar processo">
-                              <EditIcon
-                                className="edit-process"
-                                onClick={() => openEditModal(proc)}
-                              />
-                            </Tooltip>
-                          </Disable>
-                        </>
-                      )}
-                      {verifyRole(user, 'apagar-processo') ? (
-                        <>
-                          <Tooltip title="Deletar processo">
-                            <DeleteForeverIcon
-                              className="delete-process"
-                              onClick={() => setDeleteProcessModal(idx)}
-                            />
-                          </Tooltip>
-                        </>
-                      ) : (
-                        <>
-                          <Disable>
-                            <Tooltip title="Deletar processo">
-                              <DeleteForeverIcon
-                                className="delete-process"
-                                onClick={() => setDeleteProcessModal(idx)}
-                              />
-                            </Tooltip>
-                          </Disable>
-                        </>
-                      )}
+                      <Tooltip
+                        title="Editar processo"
+                        disabled={!verifyRole(user, 'editar-processo')}
+                      >
+                        <EditIcon
+                          className="edit-process"
+                          onClick={() => openEditModal(proc)}
+                        />
+                      </Tooltip>
+                      <Tooltip
+                        title="Deletar processo"
+                        disabled={!verifyRole(user, 'apagar-processo')}
+                      >
+                        <DeleteForeverIcon
+                          className="delete-process"
+                          onClick={() => setDeleteProcessModal(idx)}
+                        />
+                      </Tooltip>
                     </td>
                   </tr>
                 );
@@ -396,29 +371,14 @@ function Processes() {
           </Modal>
         )}
       </div>
-      {verifyRole(user, 'criar-processo') ? (
-        <>
-          <AddProcess
-            onClick={() => {
-              openEditModal(false);
-            }}
-          >
-            + Adicionar Processo
-          </AddProcess>
-        </>
-      ) : (
-        <>
-          <Disable>
-            <AddProcess
-              onClick={() => {
-                openEditModal(false);
-              }}
-            >
-              + Adicionar Processo
-            </AddProcess>
-          </Disable>
-        </>
-      )}
+      <AddProcess
+        onClick={() => {
+          openEditModal(false);
+        }}
+        disabled={!verifyRole(user, 'criar-processo')}
+      >
+        + Adicionar Processo
+      </AddProcess>
     </Container>
   );
 }
