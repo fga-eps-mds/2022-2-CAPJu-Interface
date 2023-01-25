@@ -14,7 +14,7 @@ import api from 'services/api';
 import userApi from 'services/user';
 import Button from 'components/Button/Button';
 import TextInput from 'components/TextInput/TextInput';
-import verifyRole from 'util/permissionChecker';
+import hasPermission from 'util/permissionChecker';
 
 function Unidades() {
   const [unitList, setUnitList] = useState([{ name: '', time: '', _id: '' }]);
@@ -131,13 +131,13 @@ function Unidades() {
       tooltip: 'Visualizar Admins',
       action: updateUnityAdmins,
       type: 'eye',
-      disabled: !verifyRole(user, 'visualizar-admins')
+      disabled: !hasPermission(user, 'visualizar-admins')
     },
     {
       tooltip: 'Adicionar Admins',
       action: searchUsers,
       type: 'addUser',
-      disabled: !verifyRole(user, 'adicionar-admin-na-unidade')
+      disabled: !hasPermission(user, 'adicionar-admin-na-unidade')
     }
   ];
 
@@ -155,7 +155,7 @@ function Unidades() {
           onClick={() => {
             setModalOpen(true);
           }}
-          disabled={!verifyRole(user, 'criar-unidade')}
+          disabled={!hasPermission(user, 'criar-unidade')}
         >
           + Adicionar Unidade
         </AddUnityButton>

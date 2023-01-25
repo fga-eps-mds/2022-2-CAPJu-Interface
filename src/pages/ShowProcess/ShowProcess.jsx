@@ -11,7 +11,7 @@ import Button from 'components/Button/Button';
 import FlowViewer from 'components/FlowViewer/FlowViewer';
 import ModalHeader from 'components/ModalHeader/ModalHeader';
 import ModalBody from 'components/ModalBody/ModalBody';
-import verifyRole from 'util/permissionChecker';
+import hasPermission from 'util/permissionChecker';
 
 Modal.setAppElement('body');
 
@@ -332,7 +332,7 @@ function ShowProcess() {
         {renderEditObservationModal()}
         <Button
           onClick={() => checkExistAnnotation()}
-          disabled={!verifyRole(user, 'avançar-etapa')}
+          disabled={!hasPermission(user, 'avançar-etapa')}
         >
           <SkipNextIcon />
           <span>Avançar etapa</span>

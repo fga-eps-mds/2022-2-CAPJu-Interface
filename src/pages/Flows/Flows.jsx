@@ -24,7 +24,7 @@ import {
 } from './styles';
 import FlowViewer from 'components/FlowViewer/FlowViewer';
 import Table from 'components/Tables/Table';
-import verifyRole from 'util/permissionChecker';
+import hasPermission from 'util/permissionChecker';
 
 function Flows() {
   const [flows, setFlows] = useState([]);
@@ -212,7 +212,7 @@ function Flows() {
       linkTo: '/processes',
       linkIcon: <DescriptionIcon htmlColor="black" />,
       type: 'link',
-      disabled: !verifyRole(user, 'visualizar-fluxo')
+      disabled: !hasPermission(user, 'visualizar-fluxo')
     },
     {
       tooltip: 'Editar fluxo',
@@ -221,7 +221,7 @@ function Flows() {
         setNewFlow(getFlow(flow._id));
       },
       type: 'edit',
-      disabled: !verifyRole(user, 'editar-fluxo')
+      disabled: !hasPermission(user, 'editar-fluxo')
     },
     {
       tooltip: 'Deletar fluxo',
@@ -230,7 +230,7 @@ function Flows() {
         setSelectedFlow(flow._id);
       },
       type: 'delete',
-      disabled: !verifyRole(user, 'apagar-fluxo')
+      disabled: !hasPermission(user, 'apagar-fluxo')
     }
     /*,
     {
@@ -292,7 +292,7 @@ function Flows() {
         </Area>
         <AddFlowButton
           onClick={handleNewFlowModal}
-          disabled={!verifyRole(user, 'criar-fluxo')}
+          disabled={!hasPermission(user, 'criar-fluxo')}
         >
           <span>+ Adicionar Fluxo</span>
         </AddFlowButton>
@@ -377,7 +377,7 @@ function Flows() {
                     background="#de5353"
                     onClick={removeSequence}
                     text={'Retroceder'}
-                    disabled={!verifyRole(user, 'retroceder-etapa')}
+                    disabled={!hasPermission(user, 'retroceder-etapa')}
                   />
                 </>
               )}

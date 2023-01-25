@@ -11,7 +11,7 @@ import { ClipboardTaskListLtr } from '@styled-icons/fluentui-system-regular/Clip
 import api from 'services/user';
 import Button from 'components/Button/Button';
 import authConfig from 'services/config';
-import verifyRole from 'util/permissionChecker';
+import hasPermission from 'util/permissionChecker';
 import {
   Container,
   MenuItem,
@@ -49,7 +49,7 @@ function SideBar() {
         <hr />
         <MenuItem
           href={'/unidades'}
-          disabled={!verifyRole(user, 'visualizar-unidade')}
+          disabled={!hasPermission(user, 'visualizar-unidade')}
         >
           <GroupWork size={35} />
           Unidades
@@ -58,14 +58,17 @@ function SideBar() {
 
         <MenuItem
           href={'/stages'}
-          disabled={!verifyRole(user, 'visualizar-etapa')}
+          disabled={!hasPermission(user, 'visualizar-etapa')}
         >
           <Flow size={35} />
           Etapas
         </MenuItem>
         <hr />
 
-        <MenuItem href={'/'} disabled={!verifyRole(user, 'visualizar-fluxo')}>
+        <MenuItem
+          href={'/'}
+          disabled={!hasPermission(user, 'visualizar-fluxo')}
+        >
           <FlowCascade size={35} />
           Fluxos
         </MenuItem>
@@ -73,7 +76,7 @@ function SideBar() {
 
         <MenuItem
           href="/processes"
-          disabled={!verifyRole(user, 'visualizar-processo')}
+          disabled={!hasPermission(user, 'visualizar-processo')}
         >
           <ClipboardTaskListLtr size={35} />
           Processos
@@ -82,7 +85,7 @@ function SideBar() {
         <Menu>
           <MenuItem
             href={'/solicitacoes'}
-            disabled={!verifyRole(user, 'aceitar-usuario')}
+            disabled={!hasPermission(user, 'aceitar-usuario')}
           >
             <UserPlus size={35} />
             Solicitações
@@ -92,7 +95,7 @@ function SideBar() {
 
           <MenuItem
             href={'/accessProfile'}
-            disabled={!verifyRole(user, 'visualizar-usuario')}
+            disabled={!hasPermission(user, 'visualizar-usuario')}
           >
             <PersonFill size={35} /> Perfil de Acesso
           </MenuItem>
@@ -100,7 +103,7 @@ function SideBar() {
 
           <MenuItem
             href="/editAccount"
-            disabled={!verifyRole(user, 'editar-conta')}
+            disabled={!hasPermission(user, 'editar-conta')}
           >
             <UserCircle size={35} />
             Editar Conta

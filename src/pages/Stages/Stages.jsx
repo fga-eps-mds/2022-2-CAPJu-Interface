@@ -14,7 +14,7 @@ import api from 'services/api';
 import Table from 'components/Tables/Table';
 import Button from 'components/Button/Button';
 import TextInput from 'components/TextInput/TextInput';
-import verifyRole from 'util/permissionChecker';
+import hasPermission from 'util/permissionChecker';
 
 function Stages() {
   const [stages, setStages] = useState([{ name: '', time: '', _id: '' }]);
@@ -95,7 +95,7 @@ function Stages() {
         setCurrentStage(stage);
       },
       type: 'delete',
-      disabled: !verifyRole(user, 'apagar-etapa')
+      disabled: !hasPermission(user, 'apagar-etapa')
     }
   ];
 
@@ -115,7 +115,7 @@ function Stages() {
 
         <AddStageButton
           onClick={() => setModalOpen(true)}
-          disabled={!verifyRole(user, 'criar-etapa')}
+          disabled={!hasPermission(user, 'criar-etapa')}
         >
           + Adicionar Etapa
         </AddStageButton>

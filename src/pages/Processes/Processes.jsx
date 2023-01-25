@@ -21,7 +21,7 @@ import api from 'services/api';
 import Button from 'components/Button/Button';
 import TextInput from 'components/TextInput/TextInput';
 import { isLate } from 'components/IsLate/index.js';
-import verifyRole from 'util/permissionChecker';
+import hasPermission from 'util/permissionChecker';
 
 function Processes() {
   const [processes, setProcesses] = useState([]);
@@ -260,7 +260,7 @@ function Processes() {
                       </Tooltip>
                       <Tooltip
                         title="Editar processo"
-                        disabled={!verifyRole(user, 'editar-processo')}
+                        disabled={!hasPermission(user, 'editar-processo')}
                       >
                         <EditIcon
                           className="edit-process"
@@ -269,7 +269,7 @@ function Processes() {
                       </Tooltip>
                       <Tooltip
                         title="Deletar processo"
-                        disabled={!verifyRole(user, 'apagar-processo')}
+                        disabled={!hasPermission(user, 'apagar-processo')}
                       >
                         <DeleteForeverIcon
                           className="delete-process"
@@ -375,7 +375,7 @@ function Processes() {
         onClick={() => {
           openEditModal(false);
         }}
-        disabled={!verifyRole(user, 'criar-processo')}
+        disabled={!hasPermission(user, 'criar-processo')}
       >
         + Adicionar Processo
       </AddProcess>

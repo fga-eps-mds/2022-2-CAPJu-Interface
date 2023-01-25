@@ -6,7 +6,7 @@ import Table from 'components/Tables/Table';
 import api from 'services/user';
 import authConfig from 'services/config.js';
 import Button from 'components/Button/Button';
-import verifyRole from 'util/permissionChecker';
+import hasPermission from 'util/permissionChecker';
 
 function SolicitacoesCadastro() {
   const [users, setUsers] = useState([]);
@@ -104,7 +104,7 @@ function SolicitacoesCadastro() {
       },
       type: 'check',
       className: 'accept-button',
-      disabled: !verifyRole(user, 'aceitar-usuario')
+      disabled: !hasPermission(user, 'aceitar-usuario')
     },
     {
       tooltip: 'Recusar solicitação',
@@ -114,7 +114,7 @@ function SolicitacoesCadastro() {
       },
       type: 'deny',
       className: 'deny-button',
-      disabled: !verifyRole(user, 'apagar-usuario')
+      disabled: !hasPermission(user, 'apagar-usuario')
     }
   ];
 

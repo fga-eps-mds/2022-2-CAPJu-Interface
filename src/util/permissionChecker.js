@@ -87,7 +87,7 @@ const permissionsArray = [
   }
 ];
 
-export default function verifyRole(user, permissionName) {
+export default function hasPermission(user, permissionName) {
   if (user == null) {
     return false;
   } else {
