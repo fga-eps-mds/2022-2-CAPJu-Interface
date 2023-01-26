@@ -96,7 +96,12 @@ function Processes() {
       setRegistro(proc.record);
       setApelido(proc.nickname);
       setFlowId(proc.idFlow);
-    } else setEditOrCreate('create');
+    } else {
+      setEditOrCreate('create');
+      setRegistro('');
+      setApelido('');
+      setFlowId('');
+    }
     setEditModalIsOpen(true);
   }
 
@@ -285,7 +290,6 @@ function Processes() {
                     : 'Criar Processo'}{' '}
                 </span>
               </ContentHeader>
-              {console.log(flowId)}
               <Dropdown
                 options={flows.map((flow) => {
                   return { label: flow.name, value: flow.idFlow };
@@ -305,6 +309,7 @@ function Processes() {
                   value={registro}
                   set={setRegistro}
                   placeholder="registro"
+                  disabled={editOrCreate == 'edit'}
                 />
                 <TextInput
                   label="Apelido"
