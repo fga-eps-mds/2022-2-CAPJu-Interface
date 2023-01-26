@@ -2,6 +2,7 @@ import toast from 'react-hot-toast';
 import React, { useCallback, useEffect, useState } from 'react';
 
 import api from 'services/api';
+import userApi from 'services/user';
 import Button from 'components/Button/Button';
 import TextInput from 'components/TextInput/TextInput';
 import DescriptionIcon from '@mui/icons-material/Description';
@@ -52,7 +53,7 @@ function Flows() {
   }
 
   async function updateUsers() {
-    const response = await user.get('/allUser');
+    const response = await userApi.get('/allUser');
     setUsers(response.data.user);
   }
 

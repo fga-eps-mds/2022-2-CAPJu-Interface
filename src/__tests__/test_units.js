@@ -119,7 +119,7 @@ describe('Testando Unidades', () => {
     act(() => userEvent.click(listAdminsButton));
 
     await waitFor(() => expect(getAdmins.isDone()).toBe(true));
-    await screen.getByText('Administradores -');
+    await screen.findByText('Administradores -');
 
     expect(screen.getByText('Lude Teste')).toBeInTheDocument();
     expect(screen.getByText('Fernando')).toBeInTheDocument();
@@ -153,7 +153,7 @@ describe('Testando Unidades', () => {
     act(() => userEvent.click(addAdminButton));
 
     await waitFor(() => expect(getUsers.isDone()).toBe(true));
-    await screen.getByText('Administradores -');
+    await screen.findByText('Administradores -');
 
     const makeAdminButton = screen.getAllByLabelText('Adicionar como Admin')[0];
     expect(makeAdminButton).toBeInTheDocument();

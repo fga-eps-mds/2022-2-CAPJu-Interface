@@ -4,7 +4,7 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import api from 'services/api';
-import user from 'services/user';
+import userApi from 'services/user';
 import {
   Container,
   Menu,
@@ -68,7 +68,7 @@ function Login() {
     }
 
     try {
-      const response = await user.post('/newUser', {
+      const response = await userApi.post('/newUser', {
         name: newName,
         email: newEmail,
         password: newPassword,
@@ -93,7 +93,7 @@ function Login() {
 
   async function login() {
     try {
-      const response = await user.post('/login', {
+      const response = await userApi.post('/login', {
         cpf: loginCpf,
         password: password
       });
@@ -132,7 +132,7 @@ function Login() {
   }
 
   async function requestNewPassword() {
-    const response = await user.post('/requestRecovery', {
+    const response = await userApi.post('/requestRecovery', {
       email: email
     });
     if (response.status == 200) {
