@@ -370,9 +370,7 @@ function Processes() {
         )}
       </div>
       <AddProcess
-        onClick={() => {
-          openEditModal(false);
-        }}
+        onClick={() => openEditModal(false)}
         disabled={!hasPermission(user, 'create-process')}
       >
         + Adicionar Processo
