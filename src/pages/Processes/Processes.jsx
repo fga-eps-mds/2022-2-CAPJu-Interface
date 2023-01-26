@@ -29,7 +29,6 @@ function Processes() {
   const [editModalIsOpen, setEditModalIsOpen] = useState(false);
   const [registro, setRegistro] = useState('');
   const [apelido, setApelido] = useState('');
-  const [processId, setProcessesId] = useState('');
   const [editOrCreate, setEditOrCreate] = useState('');
   const location = useLocation();
   const flow = location.state;
@@ -112,7 +111,7 @@ function Processes() {
         await api.put(`/updateProcess`, {
           record: registro,
           nickname: apelido,
-          idFlow: flowId,
+          idFlow: flowId.value,
           priority: priority
         });
       else toast.error('Registro vazio', { duration: 3000 });
@@ -134,13 +133,13 @@ function Processes() {
 
   async function createProcess() {
     try {
-      const flow = flows.find((flow) => flow.idFlow === flowId);
+      const flow = flows.find((flow) => flow.idFlow === flowId.value);
       if (registro && flow) {
         const body = {
           record: registro,
           nickname: apelido,
           effectiveDate: new Date(),
-          idFlow: flowId,
+          idFlow: flowId.value,
           priority: priority
         };
         await api.post('/newProcess', body);
@@ -286,11 +285,12 @@ function Processes() {
                     : 'Criar Processo'}{' '}
                 </span>
               </ContentHeader>
+              {console.log(flowId)}
               <Dropdown
                 options={flows.map((flow) => {
                   return { label: flow.name, value: flow.idFlow };
                 })}
-                onChange={(e) => setFlowId(e.value)}
+                onChange={(e) => setFlowId(e)}
                 value={flowId}
                 placeholder="Selecione o fluxo"
                 className="dropdown"
