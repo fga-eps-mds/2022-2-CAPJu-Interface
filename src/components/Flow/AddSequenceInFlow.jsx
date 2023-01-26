@@ -24,7 +24,7 @@ function AddSequenceInFlow({ options, stages, addSequence, removeSequence }) {
         <Dropdown
           className="dropdown"
           options={stagesInFlow}
-          onChange={(e) => setOriginStage(e.value)}
+          onChange={(e) => setOriginStage(e)}
           value={originStage}
           placeholder="Selecione a etapa"
         />
@@ -34,7 +34,7 @@ function AddSequenceInFlow({ options, stages, addSequence, removeSequence }) {
         <Dropdown
           className="dropdown"
           options={stagesInFlow}
-          onChange={(e) => setDestinationStage(e.value)}
+          onChange={(e) => setDestinationStage(e)}
           value={destinationStage}
           placeholder="Selecione a etapa"
         />

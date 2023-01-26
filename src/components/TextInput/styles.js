@@ -16,4 +16,9 @@ export const Input = styled.input`
     outline: none;
     background-color: rgba(0, 0, 0, 0);
   }
+
+  :disabled {
+    cursor: not-allowed;
+    color: EBEBE4;
+  }
 `;

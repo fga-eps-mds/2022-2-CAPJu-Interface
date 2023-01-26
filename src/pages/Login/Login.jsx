@@ -72,8 +72,8 @@ function Login() {
         fullName: newName,
         email: newEmail,
         password: newPassword,
-        idRole: newRole,
-        idUnit: newUnity,
+        idRole: newRole.value,
+        idUnit: newUnity.value,
         cpf: newCpf
       });
       response.status = 200;
@@ -282,9 +282,7 @@ function Login() {
           <EditDrop>
             <Dropdown
               options={OptionsRoles}
-              onChange={(e) => {
-                setNewRole(e.value);
-              }}
+              onChange={(e) => setNewRole(e)}
               value={roles[newRole]}
               placeholder="Selecione o perfil"
               className="dropdown"
@@ -297,7 +295,7 @@ function Login() {
           <EditDrop>
             <Dropdown
               options={allOptions}
-              onChange={(e) => setNewUnity(e.value)}
+              onChange={(e) => setNewUnity(e)}
               value={newUnity}
               placeholder="Selecione a unidade"
               className="dropdown"

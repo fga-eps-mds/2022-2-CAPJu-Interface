@@ -116,9 +116,7 @@ function Flows() {
           ? true
           : false;
       });
-      console.log('New Sequences = ', newSequences);
       setFlowSequences(newSequences);
-      console.log(flowUsers);
 
       const response = await api.put('/flow', {
         idFlow: flowId,
@@ -162,7 +160,7 @@ function Flows() {
   );
 
   const addSequence = useCallback(
-    (from, to) => {
+    ({ value: from }, { value: to }) => {
       if (
         flowSequences.find(
           (sequence) => sequence.from == from && sequence.to == to

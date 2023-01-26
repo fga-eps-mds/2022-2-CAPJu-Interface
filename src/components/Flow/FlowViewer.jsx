@@ -28,13 +28,9 @@ function FlowViewer(props) {
     .map((stage, idx) => {
       const deadline = props.proc ? deadlineDate(stage) : null;
       return {
-        id: stage.idStage,
+        id: `${stage.idStage}`,
         data: {
-          label: (
-            <>
-              {stage.name} <br /> {deadline && `Vencimento: ${deadline}`}
-            </>
-          )
+          label: `${stage.name}\n${deadline && `Vencimento: ${deadline}`}`
         },
         position: { x: (idx % 2) * 130, y: 140 * idx },
         style: props.highlight === stage.idStage && {
@@ -73,8 +69,8 @@ function FlowViewer(props) {
       const id = 'e' + sequence.from + '-' + sequence.to;
       return {
         id: id,
-        source: sequence.from,
-        target: sequence.to,
+        source: `${sequence.from}`,
+        target: `${sequence.to}`,
         label: !disabled && '+ Adicionar nova notificação',
         type: !disabled && 'edgebutton',
         animated: true,
