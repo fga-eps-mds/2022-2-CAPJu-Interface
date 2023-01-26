@@ -203,3 +203,16 @@ export const ContentBody = styled.div`
   align-items: center;
   flex-direction: column;
 `;
+
+export const PriorityFilter = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  font-size: 17px;
+  padding: 15px;
+  #priority-checkbox {
+    width: 20px;
+    height: 20px;
+  }
+`;

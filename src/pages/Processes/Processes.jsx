@@ -16,7 +16,8 @@ import {
   ContentHeader,
   Modal,
   PrioritySelection,
-  ContentBody
+  ContentBody,
+  PriorityFilter
 } from './styles';
 import BackButton from 'components/BackButton/BackButton';
 import api from 'services/api';
@@ -88,7 +89,7 @@ function Processes() {
   };
 
   function filterByPriority() {
-    console.log('Filter by priority clicked');
+    console.log('Filter by priority clicado');
   }
 
   async function deleteProcess(registro) {
@@ -218,6 +219,14 @@ function Processes() {
             placeholder={'Buscar Processo'}
             onChange={handleChange}
           />
+          <PriorityFilter>
+            <label> Mostrar processos com Prioridade Legal</label>
+            <input
+              type="checkbox"
+              id="priority-checkbox"
+              onClick={() => filterByPriority()}
+            ></input>
+          </PriorityFilter>
         </div>
         {processes.length == 0 && (
           <>
