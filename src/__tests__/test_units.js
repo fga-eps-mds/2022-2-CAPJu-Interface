@@ -72,7 +72,7 @@ describe('Testando Unidades', () => {
 
   usersResponse.user.forEach((user) => {
     if (!verifyPermissionUnits(user)) {
-      it('Testando criar Unidades com permissão', async () => {
+      it('Testando criar Unidades com sem permissão', async () => {
         localStorage.setItem('user', JSON.stringify(user));
         await waitFor(() =>
           expect(permissionChecker(user, 'create-unity')).toBe(false)
@@ -215,6 +215,36 @@ describe('Testando Unidades', () => {
         expect(buttonSave).toBeInTheDocument();
         act(() => buttonSave.click());
 
+        await waitFor(() => expect(postUnit.isDone()).toBe(false));
+      });
+    }
+  });
+
+  usersResponse.user.forEach((user) => {
+    if (verifyPermissionUnits(user)) {
+      it('Adicionar Unidade', async () => {
+        localStorage.setItem('user', JSON.stringify(user));
+        const postUnit = nock(baseURL)
+          .defaultReplyHeaders({
+            'access-control-allow-origin': '*',
+            'access-control-allow-credentials': 'true'
+          })
+          .persist()
+          .post('/newUnity')
+          .reply(200, { message: 'Unidade criada' });
+
+        const buttonUnit = screen.getByText('+ Adicionar Unidade');
+        expect(buttonUnit).toBeInTheDocument();
+        act(() => buttonUnit.click());
+
+        await screen.getByText('Salvar');
+        let input = screen.getByRole('textbox');
+        expect(input).toBeInTheDocument();
+        fireEvent.change(input, { target: { value: 'unidade 3' } });
+
+        const buttonSave = screen.getByText('Salvar');
+        expect(buttonSave).toBeInTheDocument();
+        act(() => buttonSave.click());
         await waitFor(() => expect(postUnit.isDone()).toBe(false));
       });
     }
