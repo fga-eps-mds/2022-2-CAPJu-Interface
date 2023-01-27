@@ -2,7 +2,13 @@ import React from 'react';
 import nock from 'nock';
 import '@testing-library/jest-dom';
 import { MemoryRouter, Route, Routes } from 'react-router-dom';
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import {
+  render,
+  screen,
+  fireEvent,
+  waitFor,
+  act
+} from '@testing-library/react';
 
 import { userURL } from 'services/user.js';
 import SolicitacoesCadastro from 'pages/SolicitacoesCadastro/SolicitacoesCadastro';
@@ -72,7 +78,7 @@ test('Testando aceitar solicitação', async () => {
     }
   );
 
-  screen.getByText('Solicitações de Cadastro');
+  screen.findByText('Solicitações de Cadastro');
 
   //Aceitando Solicitação
   const scopeAccept = nock(userURL)
@@ -83,8 +89,8 @@ test('Testando aceitar solicitação', async () => {
     .post(`/acceptRequest/${user.user[0]._id}`)
     .reply(200, null);
 
-  const acceptButton = screen.getByLabelText('Aceitar solicitação');
-  fireEvent.click(acceptButton);
+  const acceptButton = await screen.findByLabelText('Aceitar solicitação');
+  act(() => fireEvent.click(acceptButton));
   const acceptConfirmButton = screen.getByText('Confirmar');
   fireEvent.click(acceptConfirmButton);
   await waitFor(() => expect(scopeAccept.isDone()).toBe(true));
@@ -109,13 +115,13 @@ test('Testando aceitar solicitação', async () => {
 
   //Cancelando Confirmação de Aceitação
   fireEvent.click(acceptButton);
-  const cancelAcceptButton = screen.getByText('Cancelar');
-  fireEvent.click(cancelAcceptButton);
+  const cancelAcceptButton = await screen.findByText('Cancelar');
+  act(() => cancelAcceptButton.click());
 
   //Cancelando Confiramação de Deleção
   fireEvent.click(deleteButton);
-  const cancelDeleteButton = screen.getByText('Cancelar');
-  fireEvent.click(cancelDeleteButton);
+  const cancelDeleteButton = await screen.findByText('Cancelar');
+  act(() => cancelDeleteButton.click());
   screen.getByText('Solicitações de Cadastro');
 });
 afterAll(() => nock.restore());

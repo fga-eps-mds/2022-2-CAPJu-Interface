@@ -6,12 +6,15 @@ import Table from 'components/Tables/Table';
 import api from 'services/user';
 import authConfig from 'services/config.js';
 import Button from 'components/Button/Button';
+import hasPermission from 'util/permissionChecker';
 
 function SolicitacoesCadastro() {
   const [users, setUsers] = useState([]);
   const [acceptModal, setAcceptModal] = useState(false);
   const [deleteModal, setDeleteModal] = useState(false);
   const [selectedUser, setSelectedUser] = useState(0);
+
+  const user = JSON.parse(localStorage.getItem('user'));
 
   const authHeader = authConfig()?.headers;
   useEffect(() => {
@@ -100,7 +103,8 @@ function SolicitacoesCadastro() {
         setSelectedUser(user._id);
       },
       type: 'check',
-      className: 'accept-button'
+      className: 'accept-button',
+      disabled: !hasPermission(user, 'accept-user')
     },
     {
       tooltip: 'Recusar solicitação',
@@ -109,7 +113,8 @@ function SolicitacoesCadastro() {
         setSelectedUser(user._id);
       },
       type: 'deny',
-      className: 'deny-button'
+      className: 'deny-button',
+      disabled: !hasPermission(user, 'delete-user')
     }
   ];
 

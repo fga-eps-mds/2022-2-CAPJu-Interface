@@ -6,7 +6,7 @@ import { render, waitFor, screen } from '@testing-library/react';
 
 import { userURL } from 'services/user';
 import { loggedUser, usersResponse } from 'testConstants';
-import SideBar from 'components/SideBar/ModalHeader';
+import SideBar from 'components/SideBar/Sidebar';
 
 describe('Testando SideBar', () => {
   it('Testando se o componente carrega todo o conteúdo', async () => {

@@ -21,6 +21,7 @@ import api from 'services/api';
 import Button from 'components/Button/Button';
 import TextInput from 'components/TextInput/TextInput';
 import { isLate } from 'components/IsLate/index.js';
+import hasPermission from 'util/permissionChecker';
 
 function Processes() {
   const [processes, setProcesses] = useState([]);
@@ -177,6 +178,8 @@ function Processes() {
     }
   }
 
+  const user = JSON.parse(localStorage.getItem('user'));
+
   return (
     <Container>
       <div className="processes">
@@ -255,13 +258,19 @@ function Processes() {
                           <Visibility className="see-process"></Visibility>
                         </Link>
                       </Tooltip>
-                      <Tooltip title="Editar processo">
+                      <Tooltip
+                        title="Editar processo"
+                        disabled={!hasPermission(user, 'edit-process')}
+                      >
                         <EditIcon
                           className="edit-process"
                           onClick={() => openEditModal(proc)}
                         />
                       </Tooltip>
-                      <Tooltip title="Deletar processo">
+                      <Tooltip
+                        title="Deletar processo"
+                        disabled={!hasPermission(user, 'delete-process')}
+                      >
                         <DeleteForeverIcon
                           className="delete-process"
                           onClick={() => setDeleteProcessModal(idx)}
@@ -361,9 +370,8 @@ function Processes() {
         )}
       </div>
       <AddProcess
-        onClick={() => {
-          openEditModal(false);
-        }}
+        onClick={() => openEditModal(false)}
+        disabled={!hasPermission(user, 'create-process')}
       >
         + Adicionar Processo
       </AddProcess>

@@ -14,6 +14,7 @@ import api from 'services/api';
 import userApi from 'services/user';
 import Button from 'components/Button/Button';
 import TextInput from 'components/TextInput/TextInput';
+import hasPermission from 'util/permissionChecker';
 
 function Unidades() {
   const [unitList, setUnitList] = useState([{ name: '', time: '', _id: '' }]);
@@ -28,6 +29,8 @@ function Unidades() {
   const [isSeeAdminsModalOpen, setSeeAdminsModalOpen] = useState(false);
   const [isAddAdminsModalOpen, setAddAdminsModalOpen] = useState(false);
   const [foundUsers, setFoundUsers] = useState([]);
+
+  const user = JSON.parse(localStorage.getItem('user'));
 
   useEffect(() => {
     updateUnitys();
@@ -124,9 +127,20 @@ function Unidades() {
     }
   ];
   const unitListActions = [
-    { tooltip: 'Visualizar Admins', action: updateUnityAdmins, type: 'eye' },
-    { tooltip: 'Adicionar Admins', action: searchUsers, type: 'addUser' }
+    {
+      tooltip: 'Visualizar Admins',
+      action: updateUnityAdmins,
+      type: 'eye',
+      disabled: !hasPermission(user, 'view-admins')
+    },
+    {
+      tooltip: 'Adicionar Admins',
+      action: searchUsers,
+      type: 'addUser',
+      disabled: !hasPermission(user, 'add-admin-in-unity')
+    }
   ];
+
   return (
     <>
       <Container>
@@ -141,6 +155,7 @@ function Unidades() {
           onClick={() => {
             setModalOpen(true);
           }}
+          disabled={!hasPermission(user, 'create-unity')}
         >
           + Adicionar Unidade
         </AddUnityButton>

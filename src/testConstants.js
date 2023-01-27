@@ -1,3 +1,54 @@
+export const adminsList = {
+  admins: [
+    {
+      _id: '6366be8b22943db6cb47aij7',
+      name: 'Samuel Gomes',
+      email: 'samuel@email.com',
+      accepted: true,
+      role: 5,
+      createdAt: '2023-01-25T20:08:32.382+00:00',
+      updatedAt: '2023-01-18T21:07:32.382+00:00',
+      __v: 0
+    },
+    {
+      _id: '6366b61c1103cade86f4b145',
+      name: 'João Vitor Alves',
+      email: 'vitor.alves07750@outlook.com',
+      accepted: true,
+      role: 1,
+      unity: '6366b55accb406a52123e319',
+      createdAt: '2022-11-05T19:14:36.201Z',
+      updatedAt: '2022-12-03T16:33:35.634Z',
+      __v: 0,
+      unityAdmin: '6366b55accb406a52123e319'
+    },
+    {
+      _id: '6366be8a32943db6cb47ffd0',
+      name: 'Fernando',
+      email: 'teste@gmail.com',
+      accepted: true,
+      role: 1,
+      unity: '6366b55accb406a52123e319',
+      createdAt: '2022-11-05T19:50:34.320Z',
+      updatedAt: '2022-11-26T14:56:41.146Z',
+      __v: 0,
+      unityAdmin: '6366b55accb406a52123e319'
+    },
+    {
+      _id: '6369a99b857faed1f519ecb3',
+      name: 'Lude Teste',
+      email: 'ludeyuri07@gmail.com',
+      accepted: true,
+      role: 2,
+      unity: '6366b55accb406a52123e319',
+      createdAt: '2022-11-08T00:58:03.623Z',
+      updatedAt: '2022-12-03T16:39:55.619Z',
+      __v: 0,
+      unityAdmin: '6366b55accb406a52123e319'
+    }
+  ]
+};
+
 export const flowsResponse = {
   Flows: [
     {
@@ -112,6 +163,16 @@ export const stagesResponse = {
 export const usersResponse = {
   user: [
     {
+      _id: '62fd4b7f776730249d33b112',
+      name: 'Adm Cardoso',
+      email: 'Adm@gmail.com',
+      accepted: true,
+      role: 5,
+      createdAt: '2022-08-17T20:08:32.382+00:00',
+      updatedAt: '2022-08-17T20:08:32.382+00:00',
+      __v: 0
+    },
+    {
       _id: '62fd4b7f776730249d33b1ab',
       name: 'João Cardoso',
       email: 'joão12@gmail.com',
@@ -160,48 +221,7 @@ export const units = {
       _id: '62fd4b7f776730249d33b1ab',
       name: 'Unidade 1',
       deleted: 'false',
-      admins: [
-        {
-          _id: '62fd4b7f776730249d33b1ab',
-          name: 'João Cardoso',
-          email: 'joão12@gmail.com',
-          accepted: true,
-          role: 4,
-          createdAt: '2022-08-17T20:08:32.382+00:00',
-          updatedAt: '2022-08-17T20:08:32.382+00:00',
-          __v: 0
-        },
-        {
-          _id: '89Fd4b7f016730249d63bboo',
-          name: 'Maria Joana',
-          email: 'mjoana12@gmail.com',
-          accepted: false,
-          role: 3,
-          createdAt: '2022-08-17T20:08:32.382+00:00',
-          updatedAt: '2022-08-17T20:08:32.382+00:00',
-          __v: 0
-        },
-        {
-          _id: '84Fd4b7f016740049d63bolo',
-          name: 'Marcio de carvalho',
-          email: 'marcioc12@gmail.com',
-          accepted: false,
-          role: 2,
-          createdAt: '2022-08-17T20:08:32.382+00:00',
-          updatedAt: '2022-08-17T20:08:32.382+00:00',
-          __v: 0
-        },
-        {
-          _id: '50fd4a7f000778949d63bart',
-          name: 'Rebecca Calda',
-          email: 'dirrebecca12@gmail.com',
-          accepted: true,
-          role: 1,
-          createdAt: '2022-08-17T20:08:32.382+00:00',
-          updatedAt: '2022-08-17T20:08:32.382+00:00',
-          __v: 0
-        }
-      ]
+      admins: adminsList
     },
     {
       _id: '89Fd4b7f016730249d63bboo',
@@ -209,11 +229,21 @@ export const units = {
       deleted: 'false',
       admins: [
         {
+          _id: '62fd4b7f226730567d33b200',
+          name: 'Chaydson Ferreira',
+          email: 'chaydson@email.com',
+          accepted: true,
+          role: 5,
+          createdAt: '2023-01-17T20:03:32.382+00:00',
+          updatedAt: '2023-01-17T20:03:32.382+00:00',
+          __v: 0
+        },
+        {
           _id: '62fd4b7f776730249d33b1ab',
           name: 'João Cardoso',
           email: 'joão12@gmail.com',
           accepted: true,
-          role: 4,
+          role: 5,
           createdAt: '2022-08-17T20:08:32.382+00:00',
           updatedAt: '2022-08-17T20:08:32.382+00:00',
           __v: 0
@@ -224,48 +254,18 @@ export const units = {
       _id: '84Fd4b7f016740049d63bolo',
       name: 'Unidade 3',
       deleted: 'false',
-      admins: []
-    }
-  ]
-};
-
-export const adminsList = {
-  admins: [
-    {
-      _id: '6366b61c1103cade86f4b145',
-      name: 'João Vitor Alves',
-      email: 'vitor.alves07750@outlook.com',
-      accepted: true,
-      role: 1,
-      unity: '6366b55accb406a52123e319',
-      createdAt: '2022-11-05T19:14:36.201Z',
-      updatedAt: '2022-12-03T16:33:35.634Z',
-      __v: 0,
-      unityAdmin: '6366b55accb406a52123e319'
-    },
-    {
-      _id: '6366be8a32943db6cb47ffd0',
-      name: 'Fernando',
-      email: 'teste@gmail.com',
-      accepted: true,
-      role: 1,
-      unity: '6366b55accb406a52123e319',
-      createdAt: '2022-11-05T19:50:34.320Z',
-      updatedAt: '2022-11-26T14:56:41.146Z',
-      __v: 0,
-      unityAdmin: '6366b55accb406a52123e319'
-    },
-    {
-      _id: '6369a99b857faed1f519ecb3',
-      name: 'Lude Teste',
-      email: 'ludeyuri07@gmail.com',
-      accepted: true,
-      role: 2,
-      unity: '6366b55accb406a52123e319',
-      createdAt: '2022-11-08T00:58:03.623Z',
-      updatedAt: '2022-12-03T16:39:55.619Z',
-      __v: 0,
-      unityAdmin: '6366b55accb406a52123e319'
+      admins: [
+        {
+          _id: '62ff4b1f776730249f83b142',
+          name: 'Adm Silva',
+          email: 'AdmSilva@gmail.com',
+          accepted: true,
+          role: 5,
+          createdAt: '2023-02-17T20:08:32.382+00:00',
+          updatedAt: '2023-02-17T20:08:32.382+00:00',
+          __v: 0
+        }
+      ]
     }
   ]
 };

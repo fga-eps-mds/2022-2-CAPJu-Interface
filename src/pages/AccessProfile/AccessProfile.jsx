@@ -13,6 +13,7 @@ import {
 } from './sytles.js';
 import Table from 'components/Tables/Table';
 import authConfig from 'services/config';
+import hasPermission from 'util/permissionChecker.js';
 
 function AccessProfile() {
   const [users, setUsers] = useState([]);
@@ -23,6 +24,7 @@ function AccessProfile() {
   const [selectedUser, setSelectedUser] = useState(0);
 
   const authHeader = authConfig()?.headers;
+  const user = JSON.parse(localStorage.getItem('user'));
 
   const roles = useMemo(
     () => [
@@ -157,7 +159,8 @@ function AccessProfile() {
         setRoleModal(true);
         setSelectedUser(user._id);
       },
-      type: 'edit'
+      type: 'edit',
+      disabled: !hasPermission(user, 'edit-user')
     },
     {
       tooltip: 'Deletar Perfil',
@@ -165,7 +168,8 @@ function AccessProfile() {
         setDeleteModal(true);
         setSelectedUser(user._id);
       },
-      type: 'delete'
+      type: 'delete',
+      disabled: !hasPermission(user, 'delete-user')
     }
   ];
 
