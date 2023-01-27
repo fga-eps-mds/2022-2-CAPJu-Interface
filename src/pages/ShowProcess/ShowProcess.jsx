@@ -70,15 +70,18 @@ function ShowProcess() {
   }
 
   function checkExistAnnotation() {
-    console.log('proc', proc);
-    console.log('flow', flow);
-    // sequences?
-    const foundStage = proc.etapas.find(
-      (etapa) =>
-        etapa.stageIdFrom === proc.idStage && etapa.observation.length > 0
-    );
-    if (foundStage) handleObservation(foundStage.observation);
-    else handleObservation('');
+    const foundSequence = flow.sequences.find((sequence) => {
+      return (
+        sequence.from === proc.idStage &&
+        sequence.commentary != null &&
+        sequence.commentary.length > 0
+      );
+    });
+    if (foundSequence) {
+      handleObservation(foundSequence.commentary);
+    } else {
+      handleObservation('');
+    }
 
     setOpenNextStageModal(true);
   }
@@ -100,12 +103,9 @@ function ShowProcess() {
       setFlow(location.state.flow);
     } else {
       const processFlows = await api.get(`/flows/process/${proc.record}`);
-      // idFlow?
-      // let response = await api.get(`/flow/${proc?.fluxoId}`);
       const response = await api.get(
         `/flowForFrontend/${processFlows.data.flowProcesses[0].idFlow}`
       );
-      // setFlow(response.data);
       setFlow(response.data.Flow);
     }
   }
@@ -114,9 +114,9 @@ function ShowProcess() {
     try {
       let stageTo = '';
       // sequence?
-      for (let proc_iterator of flow.sequences) {
-        if (proc_iterator.from == proc?.etapaAtual) {
-          stageTo = proc_iterator.to;
+      for (const sequence of flow.sequences) {
+        if (sequence.from == proc?.idStage) {
+          stageTo = sequence.to;
           break;
         }
       }
