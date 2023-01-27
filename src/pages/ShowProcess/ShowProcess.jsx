@@ -141,13 +141,13 @@ function ShowProcess() {
   async function newObservation(newObservation) {
     try {
       await api.put('/processNewObservation/', {
-        processId: proc?._id,
+        record: proc.record,
         originStage,
         destinationStage,
-        observation: newObservation
+        commentary: newObservation
       });
 
-      const response = await api.get(`getOneProcess/${proc?._id}`);
+      const response = await api.get(`getOneProcess/${proc.record}`);
       setProc(response.data);
       closeModal();
 
