@@ -38,28 +38,27 @@ function Processes() {
   const [flows, setFlows] = useState([]);
   const [flowId, setFlowId] = useState(flow && flow.idFlow);
   const [stages, setStages] = useState([]);
-  const [priority, setPriority] = useState('');
+  const [priorities, setPriorities] = useState([]);
+  const [priority, setPriority] = useState(0);
   const [showPriorityPlaceholder, setShowPriorityPlaceholder] = useState(false);
-  const priorities = [
-    'Art. 1048, II, do CPC (ECA)',
-    'Art. 1048, IV, do CPC (Licitação)',
-    'Art, 7o, parágrafo 4o, da Lei n. 12.016/2009',
-    'Idoso(a) maior de 80 anos',
-    'Pessoa com deficiência',
-    'Pessoa em situação de rua',
-    'Réu Preso'
-  ];
 
   useEffect(() => {
     updateProcesses();
     getFlows();
     getStages();
+    getPriorities();
     // eslint-disable-next-line
   }, []);
 
   async function updateProcesses() {
     const response = await api.get(`/processes/${flow ? flow.idFlow : ''}`);
     setProcesses(response.data.processes);
+  }
+
+  async function getPriorities() {
+    const response = await api.get(`/priorities`);
+    console.log('response = ', response);
+    setPriorities(response.data.priorities);
   }
 
   //Catch the event when the input changes
@@ -73,7 +72,7 @@ function Processes() {
 
   const handleNoClick = () => {
     setShowPriorityPlaceholder(false);
-    setPriority('');
+    setPriority(0);
   };
 
   //Filter processes by record and nickname
@@ -133,7 +132,8 @@ function Processes() {
 
   async function getFlows() {
     const response = await api.get(`/flows/`);
-    setFlows(response.data);
+    console.log('flows=', flows);
+    setFlows(response.data.Flows);
   }
 
   async function editProcess() {
@@ -344,7 +344,10 @@ function Processes() {
                 {showPriorityPlaceholder && (
                   <Dropdown
                     options={priorities.map((priority) => {
-                      return { label: priority, value: priority };
+                      return {
+                        label: priority.description,
+                        value: priority.idPriority
+                      };
                     })}
                     onChange={(e) => {
                       setPriority(e.value);
