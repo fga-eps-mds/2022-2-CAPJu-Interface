@@ -11,7 +11,7 @@ import Recovery from 'pages/Recovery/Login';
 import { Container, Content } from './styles';
 import Unidades from 'pages/Unidades/Unidades';
 import Processes from 'pages/Processes/Processes';
-import SideBar from 'components/SideBar/ModalHeader';
+import SideBar from 'components/SideBar/Sidebar';
 import ShowProcess from 'pages/ShowProcess/ShowProcess';
 import EditAccount from 'pages/EditAccount/EditAccount';
 import AccessProfile from 'pages/AccessProfile/AccessProfile';

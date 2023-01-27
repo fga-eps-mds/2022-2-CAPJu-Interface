@@ -11,6 +11,7 @@ import Button from 'components/Button/Button';
 import FlowViewer from 'components/Flow/FlowViewer';
 import ModalHeader from 'components/ModalHeader/ModalHeader';
 import ModalBody from 'components/ModalBody/ModalBody';
+import hasPermission from 'util/permissionChecker';
 
 Modal.setAppElement('body');
 
@@ -51,6 +52,8 @@ function ShowProcess() {
   const [stages, setStages] = useState([]);
   const [proc, setProc] = useState(location.state?.proc);
   const [flow, setFlow] = useState(location.state?.flow);
+
+  const user = JSON.parse(localStorage.getItem('user'));
 
   useEffect(() => {
     fetchFlow();
@@ -338,7 +341,10 @@ function ShowProcess() {
         {renderNextStageModal()}
         {renderNewObservationModal()}
         {renderEditObservationModal()}
-        <Button onClick={() => checkExistAnnotation()}>
+        <Button
+          onClick={() => checkExistAnnotation()}
+          disabled={!hasPermission(user, 'advance-stage')}
+        >
           <SkipNextIcon />
           <span>Avançar etapa</span>
         </Button>

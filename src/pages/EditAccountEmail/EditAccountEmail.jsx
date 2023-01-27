@@ -8,7 +8,7 @@ import {
   ContainerTitle,
   Criterios
 } from './styles';
-import user from 'services/user';
+import userApi from 'services/user';
 import Button from 'components/Button/Button';
 import TextInput from 'components/TextInput/TextInput';
 
@@ -26,7 +26,7 @@ function EditAccountEmail() {
           toast.error('E-mail Inválido');
           return;
         }
-        await user.put(`/updateUser/${userEmail._id}`, {
+        await userApi.put(`/updateUser/${userEmail._id}`, {
           email: newEmail
         });
         toast.success('Email atualizado com  sucesso');

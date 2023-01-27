@@ -2,7 +2,7 @@ import toast from 'react-hot-toast';
 import React, { useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 
-import user from 'services/user';
+import userApi from 'services/user';
 import { Container, Modal } from './styles';
 import Button from 'components/Button/Button';
 import { Content } from 'pages/Stages/styles';
@@ -24,7 +24,7 @@ function Login() {
       return;
     }
 
-    const response = await user.post('/updatePassword', {
+    const response = await userApi.post('/updatePassword', {
       hash,
       newPassword: newPassword
     });

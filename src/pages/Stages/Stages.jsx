@@ -14,6 +14,7 @@ import api from 'services/api';
 import Table from 'components/Tables/Table';
 import Button from 'components/Button/Button';
 import TextInput from 'components/TextInput/TextInput';
+import hasPermission from 'util/permissionChecker';
 
 function Stages() {
   const [stages, setStages] = useState([
@@ -24,6 +25,8 @@ function Stages() {
   const [currentStage, setCurrentStage] = useState({ name: '', idStage: '' });
   const [isModalOpen, setModalOpen] = useState(false);
   const [isModalConfDelete, setModalConfDelete] = useState(false);
+
+  const user = JSON.parse(localStorage.getItem('user'));
 
   useEffect(() => {
     updateStages();
@@ -96,7 +99,8 @@ function Stages() {
         setModalConfDelete(true);
         setCurrentStage(stage);
       },
-      type: 'delete'
+      type: 'delete',
+      disabled: !hasPermission(user, 'delete-stage')
     }
   ];
 
@@ -113,7 +117,11 @@ function Stages() {
             attributeList={(stage) => [stage.name, stage.duration]}
           />
         </Area>
-        <AddStageButton onClick={() => setModalOpen(true)}>
+
+        <AddStageButton
+          onClick={() => setModalOpen(true)}
+          disabled={!hasPermission(user, 'create-stage')}
+        >
           + Adicionar Etapa
         </AddStageButton>
       </Container>

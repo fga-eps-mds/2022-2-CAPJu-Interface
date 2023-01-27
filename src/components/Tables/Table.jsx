@@ -44,7 +44,11 @@ function Table({ itemList, actionList, columnList, attributeList }) {
                   const ActionIcon = iconList[action.type];
                   return ActionIcon == Link ? (
                     <Tooltip title={action.tooltip} key={index}>
-                      <Link to={action.linkTo} state={item}>
+                      <Link
+                        to={action.linkTo}
+                        state={item}
+                        disabled={action.disabled}
+                      >
                         {action.linkIcon}
                       </Link>
                     </Tooltip>
@@ -53,6 +57,7 @@ function Table({ itemList, actionList, columnList, attributeList }) {
                       <ActionIcon
                         onClick={() => action.action(item)}
                         className={action.className}
+                        disabled={action.disabled}
                       />
                     </Tooltip>
                   );
