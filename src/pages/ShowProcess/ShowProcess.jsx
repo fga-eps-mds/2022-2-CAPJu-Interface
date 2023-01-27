@@ -122,10 +122,10 @@ function ShowProcess() {
       }
 
       await api.put('/processNextStage/', {
-        processId: proc?.record,
-        stageIdTo: stageTo,
-        stageIdFrom: proc?.idStage,
-        observation: observation
+        record: proc?.record,
+        to: stageTo,
+        from: proc?.idStage,
+        commentary: observation
       });
 
       const response = await api.get(`getOneProcess/${proc?.record}`);
