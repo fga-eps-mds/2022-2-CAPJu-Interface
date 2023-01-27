@@ -91,7 +91,7 @@ export default function hasPermission(user, permissionName) {
     const permission = permissionsArray.find((p) =>
       p.actions.includes(permissionName)
     );
-    const hasPermission = permission.users.includes(user.role);
+    const hasPermission = permission.users.includes(user.idRole);
     return hasPermission;
   }
 }
