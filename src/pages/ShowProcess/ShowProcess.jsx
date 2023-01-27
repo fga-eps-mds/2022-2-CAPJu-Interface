@@ -50,7 +50,7 @@ function ShowProcess() {
   const location = useLocation();
   const [stages, setStages] = useState([]);
   const [proc, setProc] = useState(location.state?.proc);
-  const [flow, setFlow] = useState(null);
+  const [flow, setFlow] = useState(location.state?.flow);
 
   useEffect(() => {
     fetchFlow();
@@ -71,6 +71,7 @@ function ShowProcess() {
 
   function checkExistAnnotation() {
     console.log('proc', proc);
+    console.log('flow', flow);
     // sequences?
     const foundStage = proc.etapas.find(
       (etapa) =>
@@ -95,11 +96,17 @@ function ShowProcess() {
   }
 
   async function fetchFlow() {
-    if (location.state.flow) setFlow(location.state.flow);
-    else {
+    if (location.state.flow) {
+      setFlow(location.state.flow);
+    } else {
+      const processFlows = await api.get(`/flows/process/${proc.record}`);
       // idFlow?
-      let response = await api.get(`/flow/${proc?.fluxoId}`);
-      setFlow(response.data);
+      // let response = await api.get(`/flow/${proc?.fluxoId}`);
+      const response = await api.get(
+        `/flowForFrontend/${processFlows.data.flowProcesses[0].idFlow}`
+      );
+      // setFlow(response.data);
+      setFlow(response.data.Flow);
     }
   }
 
