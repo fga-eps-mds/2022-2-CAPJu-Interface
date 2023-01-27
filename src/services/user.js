@@ -2,7 +2,7 @@ import axios from 'axios';
 
 import authConfig from './config';
 
-export const userURL = 'https://capju-service.herokuapp.com/';
+export const userURL = 'https://capju-user.herokuapp.com/';
 
 const api = axios.create({
   baseURL: userURL,
