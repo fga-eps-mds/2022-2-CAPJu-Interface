@@ -45,7 +45,7 @@ function Flows() {
     updateStages();
     updateFlows();
     updateUsers();
-  });
+  }, []);
 
   async function updateFlows() {
     const response = await api.get('/flowsForFrontend');
