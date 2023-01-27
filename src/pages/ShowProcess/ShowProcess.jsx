@@ -70,9 +70,11 @@ function ShowProcess() {
   }
 
   function checkExistAnnotation() {
+    console.log('proc', proc);
+    // sequences?
     const foundStage = proc.etapas.find(
       (etapa) =>
-        etapa.stageIdFrom === proc.etapaAtual && etapa.observation.length > 0
+        etapa.stageIdFrom === proc.idStage && etapa.observation.length > 0
     );
     if (foundStage) handleObservation(foundStage.observation);
     else handleObservation('');
@@ -95,7 +97,8 @@ function ShowProcess() {
   async function fetchFlow() {
     if (location.state.flow) setFlow(location.state.flow);
     else {
-      let response = await api.get(`/flows/${proc?.fluxoId}`);
+      // idFlow?
+      let response = await api.get(`/flow/${proc?.fluxoId}`);
       setFlow(response.data);
     }
   }
@@ -103,6 +106,7 @@ function ShowProcess() {
   async function nextStage() {
     try {
       let stageTo = '';
+      // sequence?
       for (let proc_iterator of flow.sequences) {
         if (proc_iterator.from == proc?.etapaAtual) {
           stageTo = proc_iterator.to;
@@ -111,16 +115,16 @@ function ShowProcess() {
       }
 
       await api.put('/processNextStage/', {
-        processId: proc?._id,
+        processId: proc?.record,
         stageIdTo: stageTo,
-        stageIdFrom: proc?.etapaAtual,
+        stageIdFrom: proc?.idStage,
         observation: observation
       });
 
       const response = await api.get(`getOneProcess/${proc?.record}`);
 
       setProc(response.data);
-      proc.etapaAtual = stageTo;
+      proc.idStage = stageTo;
       closeModal();
 
       toast.success('Etapa avançada!', { duration: 4000 });
@@ -317,7 +321,7 @@ function ShowProcess() {
               openModal={observationModal}
               stages={stages}
               flow={flow}
-              highlight={proc?.etapaAtual}
+              highlight={proc?.idStage}
               proc={proc}
             />
           </FlowWrapper>
