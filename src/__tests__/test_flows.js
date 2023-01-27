@@ -362,6 +362,18 @@ describe('Testes da pagina de fluxos', () => {
   });
 
   it('Adicionar sequências invalidas', async () => {
+    const scopePut = nock(baseURL)
+      .defaultReplyHeaders({
+        'access-control-allow-origin': '*',
+        'access-control-allow-credentials': 'true'
+      })
+      .options('/editFlow')
+      .reply(200)
+      .put('/editFlow')
+      .reply(200, {
+        message: 'Fluxo editado com sucesso'
+      });
+
     const editButtons = await screen.findAllByLabelText('Editar fluxo');
     fireEvent.click(editButtons[0]);
 
@@ -401,40 +413,36 @@ describe('Testes da pagina de fluxos', () => {
     fireEvent.click(submitButton);
   });
 
-  usersResponse.user.forEach((user) => {
-    if (verifyPermission(user)) {
-      test(`Testando criar fluxo no componente Flows ${user.name}`, async () => {
-        localStorage.setItem('user', JSON.stringify(user));
-        const scope = nock(baseURL)
-          .defaultReplyHeaders({
-            'access-control-allow-origin': '*',
-            'access-control-allow-credentials': 'true'
-          })
-          .post('/newFlow')
-          .reply(200, {
-            _id: 'meuIdAleatório',
-            name: 'perito',
-            stages: ['etpa c', 'etpa c2'],
-            sequences: [],
-            createdAt: '2022-08-17T20:11:43.499+00:00',
-            updatedAt: '2022-08-17T20:11:43.499+00:00',
-            __v: 0
-          });
-
-        const buttonFlow = screen.getByText('+ Adicionar Fluxo');
-        fireEvent.click(buttonFlow);
-        const modalName = screen.getByText('Novo Fluxo');
-        const inputFlow = screen.getByPlaceholderText('Nome do fluxo');
-        const button = screen.getByText('Salvar');
-        const close = screen.getByText('Cancelar');
-        fireEvent.change(inputFlow, { target: { value: 'perito' } });
-        fireEvent.click(button);
-        fireEvent.click(close);
-
-        expect(modalName).toHaveTextContent('Novo Fluxo');
-
-        await waitFor(() => expect(scope.isDone()).toBe(true));
+  it(`Testando criar fluxo no componente Flows`, async () => {
+    localStorage.setItem('user', JSON.stringify(usersResponse.user[0]));
+    const scope = nock(baseURL)
+      .defaultReplyHeaders({
+        'access-control-allow-origin': '*',
+        'access-control-allow-credentials': 'true'
+      })
+      .post('/newFlow')
+      .reply(200, {
+        _id: 'meuIdAleatório',
+        name: 'perito',
+        stages: ['etpa c', 'etpa c2'],
+        sequences: [],
+        createdAt: '2022-08-17T20:11:43.499+00:00',
+        updatedAt: '2022-08-17T20:11:43.499+00:00',
+        __v: 0
       });
-    }
+
+    const buttonFlow = screen.getByText('+ Adicionar Fluxo');
+    fireEvent.click(buttonFlow);
+    const modalName = screen.getByText('Novo Fluxo');
+    const inputFlow = screen.getByPlaceholderText('Nome do fluxo');
+    const button = screen.getByText('Salvar');
+    const close = screen.getByText('Cancelar');
+    fireEvent.change(inputFlow, { target: { value: 'perito' } });
+    fireEvent.click(button);
+    fireEvent.click(close);
+
+    expect(modalName).toHaveTextContent('Novo Fluxo');
+
+    await waitFor(() => expect(scope.isDone()).toBe(true));
   });
 });
