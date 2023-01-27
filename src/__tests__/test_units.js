@@ -129,7 +129,21 @@ describe('Testando Unidades', () => {
     act(() => userEvent.click(returnButton));
   });
 
+  it('Teste buscar unidades', async () => {
+    localStorage.setItem('user', JSON.stringify(usersResponse.user[0]));
+
+    await waitFor(() => expect(getUnits.isDone()).toBe(true));
+
+    const addAdminButton = screen.getByLabelText('Adicionar Admins');
+    act(() => userEvent.click(addAdminButton));
+
+    const searchButton = screen.getByText('Buscar');
+    expect(searchButton).toBeInTheDocument();
+    act(() => userEvent.click(searchButton));
+  });
+
   it('Teste adicionar admins', async () => {
+    localStorage.setItem('user', JSON.stringify(usersResponse.user[0]));
     const getUsers = nock(userURL)
       .defaultReplyHeaders({
         'access-control-allow-origin': '*',
@@ -148,11 +162,8 @@ describe('Testando Unidades', () => {
       .post(/setUnityAdmin/)
       .reply(200, 'ok');
 
-    const addAdminButton = screen.getByLabelText('Adicionar Admins');
-    expect(addAdminButton).toBeInTheDocument();
-    act(() => userEvent.click(addAdminButton));
-
-    await waitFor(() => expect(getUsers.isDone()).toBe(true));
+    const button = await screen.getByLabelText('Adicionar Admins');
+    fireEvent.click(button);
     await screen.findByText('Administradores -');
 
     const makeAdminButton = screen.getAllByLabelText('Adicionar como Admin')[0];
