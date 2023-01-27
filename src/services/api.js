@@ -2,7 +2,9 @@ import axios from 'axios';
 
 import authConfig from './config.js';
 
-export const baseURL = 'https://caju-service.herokuapp.com/';
+export const baseURL = process.env.REACT_APP_DEV
+  ? 'https://localhost:3333'
+  : 'https://caju-service.herokuapp.com/';
 
 const api = axios.create({
   baseURL: baseURL,
