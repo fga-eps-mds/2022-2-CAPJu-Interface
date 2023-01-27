@@ -82,7 +82,7 @@ function ShowProcess() {
 
   async function updateProc() {
     const response = await api.get(
-      `/getOneProcess/${location.state?.proc._id}`
+      `/getOneProcess/${location.state?.proc.record}`
     );
     setProc(response.data);
   }
@@ -117,7 +117,7 @@ function ShowProcess() {
         observation: observation
       });
 
-      const response = await api.get(`getOneProcess/${proc?._id}`);
+      const response = await api.get(`getOneProcess/${proc?.record}`);
 
       setProc(response.data);
       proc.etapaAtual = stageTo;
