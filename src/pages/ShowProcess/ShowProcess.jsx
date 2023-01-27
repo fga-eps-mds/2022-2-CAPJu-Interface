@@ -113,7 +113,6 @@ function ShowProcess() {
   async function nextStage() {
     try {
       let stageTo = '';
-      // sequence?
       for (const sequence of flow.sequences) {
         if (sequence.from == proc?.idStage) {
           stageTo = sequence.to;
@@ -125,7 +124,8 @@ function ShowProcess() {
         record: proc?.record,
         to: stageTo,
         from: proc?.idStage,
-        commentary: observation
+        commentary: observation,
+        idFlow: flow?.idFlow
       });
 
       const response = await api.get(`getOneProcess/${proc?.record}`);
