@@ -12,34 +12,10 @@ import {
 
 import { userURL } from 'services/user.js';
 import SolicitacoesCadastro from 'pages/SolicitacoesCadastro/SolicitacoesCadastro';
-
-const user = {
-  user: [
-    {
-      _id: '3049304932093',
-      name: 'Cleber',
-      email: 'cleber@gmail.com',
-      password: 'ijj2pei9ue39ej3d9dj30',
-      accepted: false,
-      createdAt: '2022-08-24T14:17:42.934Z',
-      unity: '6325329e78f4b09d6082232f',
-      role: 1,
-      unityAdmin: '6325329e78f4b09d6082232f',
-      updatedAt: '2022-09-14T15:27:59.428Z',
-      __v: 0,
-      recoveryDate: '2022-09-01T16:42:00.913Z',
-      recoveryHash:
-        '0f85ff4b6ad7c46055f49c010fb90389b31977a1833e0f43cfeb09b45684ec7f'
-    }
-  ]
-};
-
-const setLocalStorage = (user, data) => {
-  window.localStorage.setItem(user, JSON.stringify(data));
-};
+import { loggedUser } from 'testConstants';
 
 beforeAll(() => {
-  setLocalStorage('user', user.user[0]);
+  localStorage.setItem('user', JSON.stringify(loggedUser[0]));
 });
 
 const scopeRequest = nock(userURL)
@@ -49,7 +25,7 @@ const scopeRequest = nock(userURL)
   })
   .persist()
   .get('/allUser?accepted=false')
-  .reply(200, user);
+  .reply(200, loggedUser);
 
 const scopeAllUsers = nock(userURL)
   .defaultReplyHeaders({
@@ -58,7 +34,7 @@ const scopeAllUsers = nock(userURL)
   })
   .persist()
   .get('/allUser?accepted=true')
-  .reply(200, user);
+  .reply(200, loggedUser);
 
 test('Testando aceitar solicitação', async () => {
   render(
@@ -86,7 +62,7 @@ test('Testando aceitar solicitação', async () => {
       'access-control-allow-origin': '*',
       'access-control-allow-credentials': 'true'
     })
-    .post(`/acceptRequest/${user.user[0]._id}`)
+    .post(`/acceptRequest/${loggedUser[0].cpf}`)
     .reply(200, null);
 
   const acceptButton = await screen.findByLabelText('Aceitar solicitação');
@@ -101,9 +77,9 @@ test('Testando aceitar solicitação', async () => {
       'access-control-allow-origin': '*',
       'access-control-allow-credentials': 'true'
     })
-    .options(`/deleteRequest/${user.user[0]._id}`)
+    .options(`/deleteRequest/${loggedUser[0].cpf}`)
     .reply(200, null)
-    .delete(`/deleteRequest/${user.user[0]._id}`)
+    .delete(`/deleteRequest/${loggedUser[0].cpf}`)
     .reply(200, null);
 
   const deleteButton = screen.getByLabelText('Recusar solicitação');
