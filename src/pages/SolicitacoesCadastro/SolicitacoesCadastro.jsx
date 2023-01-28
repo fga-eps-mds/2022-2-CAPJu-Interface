@@ -27,7 +27,7 @@ function SolicitacoesCadastro() {
       headers: authHeader
     });
     const idUser = JSON.parse(localStorage.getItem('user'));
-    for (let user of allUser.data.user) {
+    for (let user of allUser.data) {
       if (user.cpf == idUser.cpf)
         localStorage.setItem('unitys', JSON.stringify(user.idUnit));
     }
@@ -38,7 +38,7 @@ function SolicitacoesCadastro() {
     });
 
     const targetUsers = [];
-    const pendingUsers = response.data.user;
+    const pendingUsers = response.data;
     for (let users of pendingUsers) {
       if (users.idUnit == trataUnidade) {
         targetUsers.push(users);

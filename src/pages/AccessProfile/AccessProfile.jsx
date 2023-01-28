@@ -52,7 +52,7 @@ function AccessProfile() {
     const response = await api.get('/allUser', {
       headers: authHeader
     });
-    setUsers(response.data.user);
+    setUsers(response.data);
   }, [authHeader]);
 
   const editRole = useCallback(async () => {

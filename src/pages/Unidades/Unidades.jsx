@@ -40,8 +40,8 @@ function Unidades() {
 
   async function searchUsers(unit) {
     setCurrentUnity({ ...unit, admins: [] });
-    const response = await userApi.get('users');
-    setFoundUsers(response.data.users);
+    const response = await userApi.get('/allUser?accepted=true');
+    setFoundUsers(response.data);
     setAddAdminsModalOpen(true);
   }
 

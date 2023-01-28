@@ -54,7 +54,7 @@ function Flows() {
 
   async function updateUsers() {
     const response = await userApi.get('/allUser');
-    setUsers(response.data.user);
+    setUsers(response.data);
   }
 
   async function updateStages() {
