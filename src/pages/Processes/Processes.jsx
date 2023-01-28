@@ -47,7 +47,7 @@ function Processes() {
 
   async function updateProcesses() {
     const response = await api.get(`/processes/${flow ? flow.idFlow : ''}`);
-    setProcesses(response.data.processes);
+    setProcesses(response.data);
   }
 
   //Catch the event when the input changes
