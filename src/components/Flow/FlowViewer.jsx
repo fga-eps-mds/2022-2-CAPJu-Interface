@@ -89,7 +89,6 @@ function FlowViewer(props) {
     } else return edgeS;
   });
 
-  console.log('nodes', nodes);
   return (
     uniqueEdges && (
       <FlowContainer onClick={props.onClick}>

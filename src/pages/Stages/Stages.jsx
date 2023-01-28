@@ -45,7 +45,6 @@ function Stages() {
   async function addStage() {
     try {
       const cpf = JSON.parse(localStorage.getItem('user')).cpf;
-      const userBody = { cpf: cpf };
       const user = await api.get(`/user/${cpf}`);
       const body = {
         name: stageName,
