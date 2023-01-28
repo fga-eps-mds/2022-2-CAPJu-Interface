@@ -61,7 +61,7 @@ function Unidades() {
     setCurrentUnity({ ...unit, admins: [] });
     const response = await api.get('unitAdmins/' + unit.idUnit);
     let existingUnity = { ...unit };
-    existingUnity.admins = response.data.admins || [];
+    existingUnity.admins = response.data || [];
     setCurrentUnity(existingUnity);
     setSeeAdminsModalOpen(true);
   }
