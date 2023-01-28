@@ -41,6 +41,7 @@ function Processes() {
   const [priorities, setPriorities] = useState([]);
   const [priority, setPriority] = useState(0);
   const [showPriorityPlaceholder, setShowPriorityPlaceholder] = useState(false);
+  const [filterPriorityProcess, setFilterPriorityProcess] = useState(false);
 
   useEffect(() => {
     updateProcesses();
@@ -75,6 +76,11 @@ function Processes() {
     setPriority(0);
   };
 
+  const handlePriorityFilterClick = () => {
+    setFilterPriorityProcess(true);
+    console.log(filterPriorityProcess);
+  };
+
   //Filter processes by record and nickname
   const filterProcesses = (processList) => {
     return processList.filter((process) => {
@@ -84,12 +90,11 @@ function Processes() {
       ) {
         return process;
       }
+      if (process.priority !== 0 && filterPriorityProcess) {
+        return process;
+      }
     });
   };
-
-  function filterByPriority() {
-    console.log('Filter by priority clicado');
-  }
 
   async function deleteProcess(registro) {
     try {
@@ -224,7 +229,7 @@ function Processes() {
             <input
               type="checkbox"
               id="priority-checkbox"
-              onClick={() => filterByPriority()}
+              onClick={() => handlePriorityFilterClick()}
             ></input>
           </PriorityFilter>
         </div>
@@ -330,12 +335,14 @@ function Processes() {
                   <input
                     type="radio"
                     name="selection"
+                    value="yes"
                     onClick={() => handleYesClick()}
                   />
                   sim
                   <input
                     type="radio"
                     name="selection"
+                    value="no"
                     onClick={() => handleNoClick()}
                     defaultChecked={!showPriorityPlaceholder}
                   />
