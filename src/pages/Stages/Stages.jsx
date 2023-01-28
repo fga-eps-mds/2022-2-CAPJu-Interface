@@ -44,12 +44,11 @@ function Stages() {
 
   async function addStage() {
     try {
-      const cpf = JSON.parse(localStorage.getItem('user')).cpf;
-      const user = await api.get(`/user/${cpf}`);
+      const user = JSON.parse(localStorage.getItem('user'));
       const body = {
         name: stageName,
         duration: stageTime,
-        idUnit: user.data.idUnit
+        idUnit: user.idUnit
       };
       const response = await api.post('/newStage', body);
 
