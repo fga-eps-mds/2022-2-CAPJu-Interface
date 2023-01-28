@@ -98,7 +98,7 @@ function ShowProcess() {
 
   async function fetchStages() {
     let response = await api.get('/stages');
-    setStages(response.data.Stages);
+    setStages(response.data);
   }
 
   async function fetchFlow() {

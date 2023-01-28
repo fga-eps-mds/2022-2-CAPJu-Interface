@@ -59,7 +59,7 @@ function Flows() {
 
   async function updateStages() {
     const response = await api.get('/stages');
-    setStages(response.data.Stages);
+    setStages(response.data);
   }
 
   const responseHandler = useCallback((response, successMsg, errorMsg) => {

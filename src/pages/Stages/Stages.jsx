@@ -38,8 +38,8 @@ function Stages() {
       if (a.duration > b.duration) return a.name > b.name ? 1 : 0;
       return -1;
     }
-    response.data.Stages.sort(compara);
-    setStages(response.data.Stages);
+    response.data.sort(compara);
+    setStages(response.data);
   }
 
   async function addStage() {
