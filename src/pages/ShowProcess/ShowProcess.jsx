@@ -319,7 +319,7 @@ function ShowProcess() {
           </h1>
           <div className="process">
             {proc?.nickname.length > 0
-              ? `${proc?.record} - ${proc?.record}`
+              ? `${proc?.record} - ${proc?.nickname}`
               : `${proc?.record}`}
           </div>
         </div>
