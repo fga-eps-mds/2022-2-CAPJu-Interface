@@ -48,8 +48,8 @@ function Flows() {
   }, []);
 
   async function updateFlows() {
-    const response = await api.get('/flowsForFrontend');
-    setFlowList(response.data.Flows);
+    const response = await api.get('/flows');
+    setFlowList(response.data);
   }
 
   async function updateUsers() {

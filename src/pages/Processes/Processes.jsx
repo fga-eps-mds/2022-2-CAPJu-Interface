@@ -108,7 +108,7 @@ function Processes() {
 
   async function getFlows() {
     const response = await api.get(`/flows/`);
-    setFlows(response.data.Flows);
+    setFlows(response.data);
   }
 
   async function editProcess() {

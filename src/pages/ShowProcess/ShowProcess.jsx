@@ -107,9 +107,9 @@ function ShowProcess() {
     } else {
       const processFlows = await api.get(`/flows/process/${proc.record}`);
       const response = await api.get(
-        `/flowForFrontend/${processFlows.data.flowProcesses[0].idFlow}`
+        `/flow/${processFlows.data.flowProcesses[0].idFlow}`
       );
-      setFlow(response.data.Flow);
+      setFlow(response.data);
     }
   }
 
