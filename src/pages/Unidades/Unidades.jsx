@@ -80,7 +80,7 @@ function Unidades() {
 
   async function updateUnitys() {
     const response = await api.get('/units');
-    setUnitList(response.data.units);
+    setUnitList(response.data);
   }
 
   function filterUsers() {

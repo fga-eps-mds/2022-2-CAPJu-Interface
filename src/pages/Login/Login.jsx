@@ -143,7 +143,7 @@ function Login() {
   }
   async function updateUnitys() {
     const response = await api.get('/units');
-    setUnits(response.data.units);
+    setUnits(response.data);
   }
   const allOptions = units.map((units) => {
     return { label: units.name, value: units.idUnit };
