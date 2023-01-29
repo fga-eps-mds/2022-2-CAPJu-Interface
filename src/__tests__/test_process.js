@@ -145,6 +145,76 @@ describe('Testes de Processos', () => {
     const submitButton = screen.getByText('Confirmar');
     fireEvent.click(submitButton);
   });
+
+  it('Teste edição de processo', async () => {
+    const scopePutProcess = nock(baseURL)
+      .defaultReplyHeaders({
+        'access-control-allow-origin': '*',
+        'access-control-allow-credentials': 'true'
+      })
+      .options('/updateProcess')
+      .reply(200, null)
+      .put('/updateProcess')
+      .reply(200, {
+        message: 'Processo editado com sucesso'
+      });
+    screen.getByText('Processos');
+    await screen.findByText('1111');
+    const editProcessButton = screen.getAllByTestId('EditIcon')[0];
+    fireEvent.click(editProcessButton);
+    await screen.getByText('Editar Processo');
+    const priorityRadio = screen.getByLabelText('não');
+    const submitButton = screen.getByText('Confirmar');
+    const flowNameInput = screen.getByTestId('react-select-mock');
+    userEvent.selectOptions(flowNameInput, flowsResponse[0].name);
+    fireEvent.click(priorityRadio);
+    fireEvent.click(submitButton);
+    await waitFor(() => expect(scopePutProcess.isDone()).toBe(true));
+  });
+  it('Teste de exclusão de processo', async () => {
+    const processDelete = nock(baseURL)
+      .defaultReplyHeaders({
+        'access-control-allow-origin': '*',
+        'access-control-allow-credentials': 'true'
+      })
+      .options(`/deleteProcess/${processResponse[0].record}`)
+      .reply(200)
+      .delete(`/deleteProcess/${processResponse[0].record}`)
+      .reply(200);
+    screen.getByText('Processos');
+    await screen.findByText('1111');
+    const deleteProcessButton = screen.getAllByTestId('DeleteForeverIcon')[0];
+    fireEvent.click(deleteProcessButton);
+    await screen.getByText('Excluir Processo');
+    const submitButton = screen.getByText('Confirmar');
+    fireEvent.click(submitButton);
+    await waitFor(() => expect(processDelete.isDone()).toBe(true));
+  });
+  it('Teste busca de processos prioritarios', async () => {
+    screen.getByText('Processos');
+    const filterByPriorityCheckbox = screen.getByLabelText(
+      'Mostrar processos com Prioridade Legal'
+    );
+    fireEvent.click(filterByPriorityCheckbox);
+    await expect(screen.getAllByRole('row')).toHaveLength(2);
+  });
+  it('Teste erro ao deletar um processo', async () => {
+    const processDelete = nock(baseURL)
+      .defaultReplyHeaders({
+        'access-control-allow-origin': '*',
+        'access-control-allow-credentials': 'true'
+      })
+      .options(`/deleteProcess/${processResponse[1].record}`)
+      .reply(200)
+      .delete(`/deleteProcess/${processResponse[1].record}`)
+      .reply(401);
+    const deleteProcessButton = screen.getAllByTestId('DeleteForeverIcon')[1];
+    fireEvent.click(deleteProcessButton);
+    await screen.getByText('Excluir Processo');
+    const submitButton = screen.getByText('Confirmar');
+    fireEvent.click(submitButton);
+    await waitFor(() => expect(processDelete.isDone()).toBe(true));
+  });
 });
 
 afterAll(() => nock.restore());
