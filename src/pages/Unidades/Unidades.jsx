@@ -86,7 +86,7 @@ function Unidades() {
   function filterUsers() {
     return foundUsers.filter((user) => {
       return (
-        user.fullName.includes(adminSearchName) &&
+        user.fullName.toLowerCase().includes(adminSearchName.toLowerCase()) &&
         user.idUnit === currentUnity.idUnit &&
         user.idRole != 5
       );
@@ -143,7 +143,7 @@ function Unidades() {
       tooltip: 'Adicionar Admins',
       action: searchUsers,
       type: 'addUser',
-      disabled: !hasPermission(user, 'add-admin-in-unity')
+      disabled: !hasPermission(user, 'add-admin-in-unit')
     }
   ];
 
@@ -161,7 +161,7 @@ function Unidades() {
           onClick={() => {
             setModalOpen(true);
           }}
-          disabled={!hasPermission(user, 'create-unity')}
+          disabled={!hasPermission(user, 'create-unit')}
         >
           + Adicionar Unidade
         </AddUnityButton>

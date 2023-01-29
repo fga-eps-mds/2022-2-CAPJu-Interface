@@ -49,7 +49,7 @@ function SideBar() {
         <hr />
         <MenuItem
           href={'/unidades'}
-          disabled={!hasPermission(user, 'view-unity')}
+          disabled={!hasPermission(user, 'view-unit')}
         >
           <GroupWork size={35} />
           Unidades

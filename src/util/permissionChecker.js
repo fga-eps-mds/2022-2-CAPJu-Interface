@@ -42,7 +42,7 @@ const permissionsArray = [
       'view-flow',
       'view-process',
       'view-admins',
-      'view-unity',
+      'view-unit',
       'edit-account'
     ],
     users: [
@@ -54,7 +54,7 @@ const permissionsArray = [
     ]
   },
   {
-    actions: ['edit-unity', 'delete-unity', 'create-unity'],
+    actions: ['edit-unit', 'delete-unit', 'create-unit'],
     users: [Permissions.ADMINISTRADOR]
   },
   {
@@ -68,7 +68,7 @@ const permissionsArray = [
       'regress-stage',
       'delete-user',
       'edit-user',
-      'add-admin-in-unity'
+      'add-admin-in-unit'
     ],
     users: [Permissions.DIRETOR, Permissions.ADMINISTRADOR]
   },
