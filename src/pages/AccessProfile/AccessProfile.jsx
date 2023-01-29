@@ -137,17 +137,14 @@ function AccessProfile() {
     setDeleteModal(false);
   }, [deleteUser, updateUser, setDeleteModal, getSelectedUser]);
 
-  const filterUser = (arr) => {
-    const user = JSON.parse(localStorage.getItem('user'));
-    return arr.filter((users) => {
+  const filterUser = (userList) => {
+    const loggedUser = JSON.parse(localStorage.getItem('user'));
+    return userList.filter((user) => {
       if (
-        (users.fullName
-          .toLowerCase()
-          .includes(searchUser.toLocaleLowerCase()) ||
-          users.fulName.includes(searchUser)) &&
-        users.email !== user.email
+        user.fullName.toLowerCase().includes(searchUser.toLowerCase()) &&
+        user.email !== loggedUser.email
       )
-        return users;
+        return user;
     });
   };
 
