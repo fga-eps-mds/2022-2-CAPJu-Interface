@@ -27,6 +27,7 @@ import { isLate } from 'components/IsLate/index.js';
 
 function Processes() {
   const [processes, setProcesses] = useState([]);
+  const [prioritiesProcesses, setPrioritiesProcesses] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [deleteProcessModal, setDeleteProcessModal] = useState(-1);
   const [editModalIsOpen, setEditModalIsOpen] = useState(false);
@@ -48,6 +49,7 @@ function Processes() {
     getFlows();
     getStages();
     getPriorities();
+    getPrioritiesProcesses();
     // eslint-disable-next-line
   }, []);
 
@@ -60,6 +62,11 @@ function Processes() {
     const response = await api.get(`/priorities`);
     console.log('response = ', response);
     setPriorities(response.data.priorities);
+  }
+
+  async function getPrioritiesProcesses() {
+    const response = await api.get(`/prioritiesProcesses`);
+    setPrioritiesProcesses(response.data.prioritiesProcesses);
   }
 
   //Catch the event when the input changes
@@ -282,9 +289,17 @@ function Processes() {
 
                 return (
                   <tr key={idx} className={className}>
-                    <td>{proc.record}</td>
-                    <td>{proc.nickname}</td>
-
+                    {`${proc.idPriority}` !== '0' ? (
+                      <>
+                        <td> ⬆ {proc.record}</td>
+                        <td> ⬆ {proc.nickname}</td>
+                      </>
+                    ) : (
+                      <>
+                        <td>{proc.record}</td>
+                        <td>{proc.nickname}</td>
+                      </>
+                    )}
                     {flow && stages && (
                       <>
                         <td>
@@ -357,7 +372,7 @@ function Processes() {
                       };
                     })}
                     onChange={(e) => {
-                      setPriority(e.value);
+                      setPriority(e);
                     }}
                     value={priority}
                     placeholder="Selecione a prioridade"
