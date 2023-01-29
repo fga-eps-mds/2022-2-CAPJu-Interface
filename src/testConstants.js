@@ -119,7 +119,7 @@ export const flowsResponse = [
 
 export const processResponse = [
   {
-    effectiveDate: '2022-08-17T20:09:58.530Z',
+    createdAt: '2022-08-17T20:09:58.530Z',
     idPriority: 0,
     idStage: '7',
     idUnit: 4,

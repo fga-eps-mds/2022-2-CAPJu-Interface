@@ -3,6 +3,7 @@ import axios from 'axios';
 import nock from 'nock';
 import '@testing-library/jest-dom';
 import { MemoryRouter, Route, Routes } from 'react-router-dom';
+import userEvent from '@testing-library/user-event';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 
 import Flows from 'pages/Flows/Flows';
@@ -99,10 +100,10 @@ describe('Testes da pagina de fluxos', () => {
     selectBoxes = await screen.findAllByTestId('react-select-mock');
     addToListButtons = screen.getAllByText('Adicionar');
 
-    fireEvent.change(selectBoxes[2], {
+    fireEvent.change(selectBoxes[1], {
       target: { value: stagesResponse[2].idStage }
     });
-    fireEvent.change(selectBoxes[3], {
+    fireEvent.change(selectBoxes[2], {
       target: { value: stagesResponse[1].idStage }
     });
 
@@ -179,14 +180,14 @@ describe('Testes da pagina de fluxos', () => {
     });
     fireEvent.click(addToListButtons[1]);
 
-    selectBoxes = await screen.findAllByTestId('react-select-mock');
-    addToListButtons = screen.getAllByText('Adicionar');
+    selectBoxes = await screen.getAllByRole('combobox');
+    addToListButtons = await screen.getAllByText('Adicionar');
 
-    fireEvent.change(selectBoxes[2], {
-      target: { value: stagesResponse[3].idStage }
-    });
     fireEvent.change(selectBoxes[3], {
-      target: { value: stagesResponse[2].idStage }
+      target: { value: stagesResponse[1].idStage }
+    });
+    fireEvent.change(selectBoxes[2], {
+      target: { value: stagesResponse[0].idStage }
     });
 
     fireEvent.click(addToListButtons[2]);
@@ -371,27 +372,25 @@ describe('Testes da pagina de fluxos', () => {
 
     const selectBoxes = await screen.findAllByTestId('react-select-mock');
     const addToListButtons = screen.getAllByText('Adicionar');
+    const addSequenceButton = addToListButtons[2];
 
-    fireEvent.change(selectBoxes[2], {
-      target: { value: stagesResponse[3].idStage }
-    });
-    fireEvent.change(selectBoxes[3], {
-      target: { value: stagesResponse[3].idStage }
-    });
-    fireEvent.click(addToListButtons[2]);
+    userEvent.selectOptions(selectBoxes[2], stagesResponse[0].idStage);
+    userEvent.selectOptions(selectBoxes[3], stagesResponse[0].idStage);
+    fireEvent.click(addSequenceButton);
 
     await waitFor(() => {
       const toastr = screen.findByTestId('toastr');
       expect(toastr).not.toBe(null);
     });
 
-    fireEvent.change(selectBoxes[2], {
-      target: { value: stagesResponse[0].idStage }
-    });
-    fireEvent.change(selectBoxes[3], {
-      target: { value: stagesResponse[1].idStage }
-    });
-    fireEvent.click(addToListButtons[2]);
+    screen.debug();
+    userEvent.selectOptions(selectBoxes[2], stagesResponse[0].idStage);
+    userEvent.selectOptions(selectBoxes[3], stagesResponse[1].idStage);
+    fireEvent.click(addSequenceButton);
+
+    userEvent.selectOptions(selectBoxes[2], stagesResponse[0].idStage);
+    userEvent.selectOptions(selectBoxes[3], stagesResponse[1].idStage);
+    fireEvent.click(addSequenceButton);
 
     await waitFor(() => {
       const toastr = screen.findByTestId('toastr');
