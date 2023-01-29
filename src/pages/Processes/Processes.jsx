@@ -41,7 +41,7 @@ function Processes() {
   const [flowId, setFlowId] = useState(flow && flow.idFlow);
   const [stages, setStages] = useState([]);
   const [priorities, setPriorities] = useState([]);
-  const [priority, setPriority] = useState(0);
+  const [priority, setPriority] = useState(null);
   const [showPriorityPlaceholder, setShowPriorityPlaceholder] = useState(false);
   const [filterPriorityProcess, setFilterPriorityProcess] = useState(false);
 
@@ -50,7 +50,6 @@ function Processes() {
     getFlows();
     getStages();
     getPriorities();
-    getPrioritiesProcesses();
     // eslint-disable-next-line
   }, []);
 
@@ -63,11 +62,6 @@ function Processes() {
     const response = await api.get(`/priorities`);
     console.log('response = ', response);
     setPriorities(response.data.priorities);
-  }
-
-  async function getPrioritiesProcesses() {
-    const response = await api.get(`/prioritiesProcesses`);
-    setPrioritiesProcesses(response.data.prioritiesProcesses);
   }
 
   //Catch the event when the input changes
@@ -84,25 +78,26 @@ function Processes() {
     setPriority(0);
   };
 
-  const handlePriorityFilterClick = () => {
-    setFilterPriorityProcess(true);
-    console.log(filterPriorityProcess);
-  };
-
   //Filter processes by record and nickname
-  const filterProcesses = (processList) => {
-    return processList.filter((process) => {
+  function filterProcesses() {
+    return processes.filter((process) => {
       if (
-        process.record.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        process.nickname.toLowerCase().includes(searchTerm.toLowerCase())
+        filterPriorityProcess &&
+        process.idPriority !== 0 &&
+        (process.record.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          process.nickname.toLowerCase().includes(searchTerm.toLowerCase()))
       ) {
         return process;
       }
-      if (process.priority !== 0 && filterPriorityProcess) {
+      if (
+        !filterPriorityProcess &&
+        (process.record.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          process.nickname.toLowerCase().includes(searchTerm.toLowerCase()))
+      ) {
         return process;
       }
     });
-  };
+  }
 
   async function deleteProcess(registro) {
     try {
@@ -134,11 +129,17 @@ function Processes() {
       setRegistro(proc.record);
       setApelido(proc.nickname);
       setFlowId(proc.idFlow);
+      setPriority({
+        value: proc.idPriority,
+        label: priorities[proc.idPriority].description
+      });
+      setShowPriorityPlaceholder(proc.idPriority != 0);
     } else {
       setEditOrCreate('create');
       setRegistro('');
       setApelido('');
       setFlowId('');
+      setPriority(null);
     }
     setEditModalIsOpen(true);
   }
@@ -183,7 +184,7 @@ function Processes() {
           nickname: apelido,
           effectiveDate: new Date(),
           idFlow: flowId.value,
-          priority: priority
+          priority: priority.value
         };
         await api.post('/newProcess', body);
       } else {
@@ -238,7 +239,7 @@ function Processes() {
             <input
               type="checkbox"
               id="priority-checkbox"
-              onClick={() => handlePriorityFilterClick()}
+              onClick={() => setFilterPriorityProcess(!filterPriorityProcess)}
             ></input>
           </PriorityFilter>
         </div>
@@ -262,7 +263,7 @@ function Processes() {
             </tr>
           </thead>
           <tbody>
-            {filterProcesses(processes)
+            {filterProcesses()
               /*.sort((a, b) => b.etapas.length - a.etapas.length)*/
               .map((proc, idx) => {
                 let CurrentStage, FinalStage, CurrentStagePos, FinalStagePos;
@@ -360,6 +361,7 @@ function Processes() {
                     name="selection"
                     value="yes"
                     onClick={() => handleYesClick()}
+                    defaultChecked={showPriorityPlaceholder}
                   />
                   sim
                   <input
@@ -379,9 +381,7 @@ function Processes() {
                         value: priority.idPriority
                       };
                     })}
-                    onChange={(e) => {
-                      setPriority(e);
-                    }}
+                    onChange={(e) => setPriority(e)}
                     value={priority}
                     placeholder="Selecione a prioridade"
                     className="dropdown"
