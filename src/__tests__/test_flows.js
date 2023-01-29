@@ -383,7 +383,6 @@ describe('Testes da pagina de fluxos', () => {
       expect(toastr).not.toBe(null);
     });
 
-    screen.debug();
     userEvent.selectOptions(selectBoxes[2], stagesResponse[0].idStage);
     userEvent.selectOptions(selectBoxes[3], stagesResponse[1].idStage);
     fireEvent.click(addSequenceButton);

@@ -28,7 +28,6 @@ import hasPermission from 'util/permissionChecker';
 
 function Processes() {
   const [processes, setProcesses] = useState([]);
-  const [prioritiesProcesses, setPrioritiesProcesses] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [deleteProcessModal, setDeleteProcessModal] = useState(-1);
   const [editModalIsOpen, setEditModalIsOpen] = useState(false);
@@ -60,8 +59,7 @@ function Processes() {
 
   async function getPriorities() {
     const response = await api.get(`/priorities`);
-    console.log('response = ', response);
-    setPriorities(response.data.priorities);
+    setPriorities(response.data);
   }
 
   //Catch the event when the input changes
@@ -75,7 +73,7 @@ function Processes() {
 
   const handleNoClick = () => {
     setShowPriorityPlaceholder(false);
-    setPriority(0);
+    setPriority(null);
   };
 
   //Filter processes by record and nickname
@@ -151,14 +149,12 @@ function Processes() {
 
   async function editProcess() {
     try {
-      if (registro)
-        await api.put(`/updateProcess`, {
-          record: registro,
-          nickname: apelido,
-          idFlow: flowId.value,
-          priority: priority
-        });
-      else toast.error('Registro vazio', { duration: 3000 });
+      await api.put(`/updateProcess`, {
+        record: registro,
+        nickname: apelido,
+        idFlow: flowId.value,
+        priority: priority
+      });
       toast.success('Processo Alterado com Sucesso', { duration: 4000 });
     } catch (error) {
       if (error.response.status == 401) {
@@ -184,17 +180,15 @@ function Processes() {
           nickname: apelido,
           effectiveDate: new Date(),
           idFlow: flowId.value,
-          priority: priority.value
+          priority: priority ? priority.value : 0
         };
         await api.post('/newProcess', body);
       } else {
         toast.error('Registro vazio', { duration: 3000 });
         return;
       }
-
       toast.success('Processo Registrado com Sucesso', { duration: 4000 });
     } catch (error) {
-      console.log(error);
       if (error.response?.status == 401) {
         toast(error.response.data.message, {
           icon: '⚠️',
@@ -211,9 +205,9 @@ function Processes() {
 
   async function getStages() {
     try {
-      const Stage = await api.get(`/stages`);
+      const stage = await api.get(`/stages`);
 
-      setStages(Stage.data.Stages);
+      setStages(stage.data);
     } catch (error) {
       toast.error('Erro ao pegar etapa\n ' + error.response.data.message, {
         duration: 3000
@@ -235,7 +229,9 @@ function Processes() {
             onChange={handleChange}
           />
           <PriorityFilter>
-            <label> Mostrar processos com Prioridade Legal</label>
+            <label htmlFor="priority-checkbox">
+              Mostrar processos com Prioridade Legal
+            </label>
             <input
               type="checkbox"
               id="priority-checkbox"
@@ -360,18 +356,20 @@ function Processes() {
                     type="radio"
                     name="selection"
                     value="yes"
+                    id="radio-button-yes"
                     onClick={() => handleYesClick()}
                     defaultChecked={showPriorityPlaceholder}
                   />
-                  sim
+                  <label htmlFor="radio-button-yes">sim</label>
                   <input
                     type="radio"
                     name="selection"
                     value="no"
+                    id="radio-button-no"
                     onClick={() => handleNoClick()}
                     defaultChecked={!showPriorityPlaceholder}
                   />
-                  nao
+                  <label htmlFor="radio-button-no">não</label>
                 </div>
                 {showPriorityPlaceholder && (
                   <Dropdown
