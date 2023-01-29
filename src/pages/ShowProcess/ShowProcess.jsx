@@ -11,6 +11,7 @@ import Button from 'components/Button/Button';
 import FlowViewer from 'components/Flow/FlowViewer';
 import ModalHeader from 'components/ModalHeader/ModalHeader';
 import ModalBody from 'components/ModalBody/ModalBody';
+import hasPermission from 'util/permissionChecker';
 
 Modal.setAppElement('body');
 
@@ -50,7 +51,9 @@ function ShowProcess() {
   const location = useLocation();
   const [stages, setStages] = useState([]);
   const [proc, setProc] = useState(location.state?.proc);
-  const [flow, setFlow] = useState(null);
+  const [flow, setFlow] = useState(location.state?.flow);
+
+  const user = JSON.parse(localStorage.getItem('user'));
 
   useEffect(() => {
     fetchFlow();
@@ -70,32 +73,40 @@ function ShowProcess() {
   }
 
   function checkExistAnnotation() {
-    const foundStage = proc.etapas.find(
-      (etapa) =>
-        etapa.stageIdFrom === proc.etapaAtual && etapa.observation.length > 0
-    );
-    if (foundStage) handleObservation(foundStage.observation);
-    else handleObservation('');
+    const foundSequence = flow.sequences.find((sequence) => {
+      return (
+        sequence.from === proc.idStage &&
+        sequence.commentary != null &&
+        sequence.commentary.length > 0
+      );
+    });
+    if (foundSequence) {
+      handleObservation(foundSequence.commentary);
+    } else {
+      handleObservation('');
+    }
 
     setOpenNextStageModal(true);
   }
 
   async function updateProc() {
     const response = await api.get(
-      `/getOneProcess/${location.state?.proc._id}`
+      `/getOneProcess/${location.state?.proc.record}`
     );
     setProc(response.data);
   }
 
   async function fetchStages() {
     let response = await api.get('/stages');
-    setStages(response.data.Stages);
+    setStages(response.data);
   }
 
   async function fetchFlow() {
-    if (location.state.flow) setFlow(location.state.flow);
-    else {
-      let response = await api.get(`/flows/${proc?.fluxoId}`);
+    if (location.state.flow) {
+      setFlow(location.state.flow);
+    } else {
+      const processFlows = await api.get(`/flows/process/${proc.record}`);
+      const response = await api.get(`/flow/${processFlows.data[0].idFlow}`);
       setFlow(response.data);
     }
   }
@@ -103,24 +114,25 @@ function ShowProcess() {
   async function nextStage() {
     try {
       let stageTo = '';
-      for (let proc_iterator of flow.sequences) {
-        if (proc_iterator.from == proc?.etapaAtual) {
-          stageTo = proc_iterator.to;
+      for (const sequence of flow.sequences) {
+        if (sequence.from == proc?.idStage) {
+          stageTo = sequence.to;
           break;
         }
       }
 
       await api.put('/processNextStage/', {
-        processId: proc?._id,
-        stageIdTo: stageTo,
-        stageIdFrom: proc?.etapaAtual,
-        observation: observation
+        record: proc?.record,
+        to: stageTo,
+        from: proc?.idStage,
+        commentary: observation,
+        idFlow: flow?.idFlow
       });
 
-      const response = await api.get(`getOneProcess/${proc?._id}`);
+      const response = await api.get(`getOneProcess/${proc?.record}`);
 
       setProc(response.data);
-      proc.etapaAtual = stageTo;
+      proc.idStage = stageTo;
       closeModal();
 
       toast.success('Etapa avançada!', { duration: 4000 });
@@ -307,7 +319,7 @@ function ShowProcess() {
           </h1>
           <div className="process">
             {proc?.nickname.length > 0
-              ? `${proc?.record} - ${proc?.record}`
+              ? `${proc?.record} - ${proc?.nickname}`
               : `${proc?.record}`}
           </div>
         </div>
@@ -317,7 +329,7 @@ function ShowProcess() {
               openModal={observationModal}
               stages={stages}
               flow={flow}
-              highlight={proc?.etapaAtual}
+              highlight={proc?.idStage}
               proc={proc}
             />
           </FlowWrapper>
@@ -327,7 +339,10 @@ function ShowProcess() {
         {renderNextStageModal()}
         {renderNewObservationModal()}
         {renderEditObservationModal()}
-        <Button onClick={() => checkExistAnnotation()}>
+        <Button
+          onClick={() => checkExistAnnotation()}
+          disabled={!hasPermission(user, 'advance-stage')}
+        >
           <SkipNextIcon />
           <span>Avançar etapa</span>
         </Button>

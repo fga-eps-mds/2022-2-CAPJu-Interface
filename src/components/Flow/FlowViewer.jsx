@@ -89,7 +89,6 @@ function FlowViewer(props) {
     } else return edgeS;
   });
 
-  console.log('nodes', nodes);
   return (
     uniqueEdges && (
       <FlowContainer onClick={props.onClick}>
@@ -109,7 +108,7 @@ FlowViewer.propTypes = {
   onClick: PropTypes.func,
   flow: PropTypes.any,
   stages: PropTypes.array,
-  highlight: PropTypes.string,
+  highlight: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   proc: PropTypes.object,
   openModal: PropTypes.func
 };

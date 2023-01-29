@@ -20,7 +20,7 @@ jest.mock('react-router-dom', () => {
   };
 });
 
-localStorage.setItem('user', JSON.stringify(usersResponse.user[0]));
+localStorage.setItem('user', JSON.stringify(usersResponse[0]));
 
 const scopeGet = nock(userURL)
   .defaultReplyHeaders({
@@ -45,7 +45,7 @@ describe('Teste Perfil de Acesso', () => {
   });
 
   it('Teste deletar um usuário', async () => {
-    const deleteURL = /deleteRequest/;
+    const deleteURL = `/deleteUser/${usersResponse[2].cpf}`;
     const scopeDelete = nock(userURL)
       .defaultReplyHeaders({
         'access-control-allow-origin': '*',
@@ -54,11 +54,9 @@ describe('Teste Perfil de Acesso', () => {
       .options(deleteURL)
       .reply(200, null)
       .delete(deleteURL)
-      .reply(200, {
-        result: 'Usuário deletado com sucesso'
-      });
+      .reply(200);
 
-    const deleteIcon = await screen.getAllByLabelText('Deletar Perfil');
+    const deleteIcon = await screen.getAllByLabelText('Deletar Usuário');
     fireEvent.click(deleteIcon[1]);
 
     const modalName = screen.getByText('Excluir Usuário');
@@ -74,9 +72,9 @@ describe('Teste Perfil de Acesso', () => {
         'access-control-allow-origin': '*',
         'access-control-allow-credentials': 'true'
       })
-      .options('/updateRole')
+      .options('/updateUserRole')
       .reply(200, null)
-      .put('/updateRole')
+      .put('/updateUserRole')
       .reply(200, {
         result: 'Deletado com sucesso'
       });
@@ -98,7 +96,7 @@ describe('Teste Perfil de Acesso', () => {
   });
 
   it('Teste cancelar exclusão', async () => {
-    const deleteIcon = await screen.findAllByLabelText('Deletar Perfil');
+    const deleteIcon = await screen.findAllByLabelText('Deletar Usuário');
     fireEvent.click(deleteIcon[1]);
 
     const buttonClose = screen.getByText('Cancelar');
@@ -123,7 +121,7 @@ describe('Teste Perfil de Acesso', () => {
     });
     expect(searchInput).toHaveValue('Marcio');
 
-    const filteredUsers = await screen.findAllByText(/Marcio/);
+    const filteredUsers = await screen.findAllByText(/ca/);
     expect(filteredUsers).toHaveLength(1);
   });
 
@@ -133,9 +131,9 @@ describe('Teste Perfil de Acesso', () => {
         'access-control-allow-origin': '*',
         'access-control-allow-credentials': 'true'
       })
-      .options('/updateRole')
+      .options('/updateUserRole')
       .reply(200, null)
-      .put('/updateRole')
+      .put('/updateUserRole')
       .reply(401, {
         message: 'Erro ao editar perfil'
       });
@@ -154,9 +152,9 @@ describe('Teste Perfil de Acesso', () => {
         'access-control-allow-origin': '*',
         'access-control-allow-credentials': 'true'
       })
-      .options('/updateRole')
+      .options('/updateUserRole')
       .reply(200, null)
-      .put('/updateRole')
+      .put('/updateUserRole')
       .reply(205, null);
 
     const editIcon = await screen.findAllByTestId('EditIcon');
@@ -173,9 +171,9 @@ describe('Teste Perfil de Acesso', () => {
         'access-control-allow-origin': '*',
         'access-control-allow-credentials': 'true'
       })
-      .options('/updateRole')
+      .options('/updateUserRole')
       .reply(200, null)
-      .put('/updateRole')
+      .put('/updateUserRole')
       .reply(400, null);
 
     const editIcon = await screen.findAllByTestId('EditIcon');
@@ -187,19 +185,20 @@ describe('Teste Perfil de Acesso', () => {
   });
 
   it('Teste falha em deletar usuário', async () => {
+    const deleteURL = `/deleteUser/${usersResponse[3].cpf}`;
     const scopeFailedDelete = nock(userURL)
       .defaultReplyHeaders({
         'access-control-allow-origin': '*',
         'access-control-allow-credentials': 'true'
       })
-      .options(/deleteRequest/)
-      .reply(200, null)
-      .delete(/deleteRequest/)
-      .reply(205, {
-        message: 'Erro ao deletar perfil'
+      .options(deleteURL)
+      .reply(200)
+      .delete(deleteURL)
+      .reply(500, {
+        message: 'Erro ao deletar Usuário'
       });
 
-    const deleteIcon = await screen.findAllByLabelText('Deletar Perfil');
+    const deleteIcon = await screen.findAllByLabelText('Deletar Usuário');
     fireEvent.click(deleteIcon[2]);
 
     const buttonEdit = screen.getByText('Confirmar');
@@ -207,20 +206,21 @@ describe('Teste Perfil de Acesso', () => {
     await waitFor(() => expect(scopeFailedDelete.isDone()).toBe(true));
   });
 
-  it('Teste erro ao deletar perfil', async () => {
+  it('Teste erro ao deletar Usuário', async () => {
+    const deleteURL = `/deleteUser/${usersResponse[3].cpf}`;
     const scopeFailedDelete = nock(userURL)
       .defaultReplyHeaders({
         'access-control-allow-origin': '*',
         'access-control-allow-credentials': 'true'
       })
-      .options(/deleteRequest/)
-      .reply(200, null)
-      .delete(/deleteRequest/)
+      .options(deleteURL)
+      .reply(200)
+      .delete(deleteURL)
       .reply(400, {
-        message: 'Erro ao deletar perfil'
+        message: 'Erro ao deletar Usuário'
       });
 
-    const deleteIcon = await screen.findAllByLabelText('Deletar Perfil');
+    const deleteIcon = await screen.findAllByLabelText('Deletar Usuário');
     fireEvent.click(deleteIcon[2]);
 
     const buttonEdit = screen.getByText('Confirmar');
@@ -228,20 +228,21 @@ describe('Teste Perfil de Acesso', () => {
     await waitFor(() => expect(scopeFailedDelete.isDone()).toBe(true));
   });
 
-  it('Teste falta de permissão para deletar perfil', async () => {
+  it('Teste falta de permissão para deletar Usuário', async () => {
+    const deleteURL = `/deleteUser/${usersResponse[3].cpf}`;
     const scopeFailedDelete = nock(userURL)
       .defaultReplyHeaders({
         'access-control-allow-origin': '*',
         'access-control-allow-credentials': 'true'
       })
-      .options(/deleteRequest/)
-      .reply(200, null)
-      .delete(/deleteRequest/)
+      .options(deleteURL)
+      .reply(200)
+      .delete(deleteURL)
       .reply(401, {
-        message: 'Você não possui permissão para apagar este perfil'
+        message: 'Erro ao deletar Usuário'
       });
 
-    const deleteIcon = await screen.findAllByLabelText('Deletar Perfil');
+    const deleteIcon = await screen.findAllByLabelText('Deletar Usuário');
     fireEvent.click(deleteIcon[2]);
 
     const buttonEdit = screen.getByText('Confirmar');

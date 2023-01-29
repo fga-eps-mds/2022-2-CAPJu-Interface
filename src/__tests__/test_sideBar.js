@@ -6,7 +6,7 @@ import { render, waitFor, screen } from '@testing-library/react';
 
 import { userURL } from 'services/user';
 import { loggedUser, usersResponse } from 'testConstants';
-import SideBar from 'components/SideBar/ModalHeader';
+import SideBar from 'components/SideBar/Sidebar';
 
 describe('Testando SideBar', () => {
   it('Testando se o componente carrega todo o conteúdo', async () => {
@@ -19,7 +19,7 @@ describe('Testando SideBar', () => {
       .get(/allUser/)
       .reply(200, usersResponse);
 
-    localStorage.setItem('user', JSON.stringify(loggedUser.user));
+    localStorage.setItem('user', JSON.stringify(loggedUser[0]));
 
     render(
       <MemoryRouter initialEntries={['/']}>

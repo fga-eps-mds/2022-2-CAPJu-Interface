@@ -19,7 +19,7 @@ function EditAccount() {
         <UserIcon />
         <h1>Editar Conta</h1>
       </ContainerTitle>
-      <NameTitle>{user.name}</NameTitle>
+      <NameTitle>{user.fullName}</NameTitle>
       <ContainerMenu>
         <Link to="email">
           <Button text={'Email'} />

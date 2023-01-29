@@ -14,6 +14,7 @@ import api from 'services/api';
 import userApi from 'services/user';
 import Button from 'components/Button/Button';
 import TextInput from 'components/TextInput/TextInput';
+import hasPermission from 'util/permissionChecker';
 
 function Unidades() {
   const [unitList, setUnitList] = useState([
@@ -31,14 +32,16 @@ function Unidades() {
   const [isAddAdminsModalOpen, setAddAdminsModalOpen] = useState(false);
   const [foundUsers, setFoundUsers] = useState([]);
 
+  const user = JSON.parse(localStorage.getItem('user'));
+
   useEffect(() => {
     updateUnitys();
   }, []);
 
   async function searchUsers(unit) {
     setCurrentUnity({ ...unit, admins: [] });
-    const response = await userApi.get('users');
-    setFoundUsers(response.data.users);
+    const response = await userApi.get('/allUser?accepted=true');
+    setFoundUsers(response.data);
     setAddAdminsModalOpen(true);
   }
 
@@ -58,7 +61,7 @@ function Unidades() {
     setCurrentUnity({ ...unit, admins: [] });
     const response = await api.get('unitAdmins/' + unit.idUnit);
     let existingUnity = { ...unit };
-    existingUnity.admins = response.data.admins || [];
+    existingUnity.admins = response.data || [];
     setCurrentUnity(existingUnity);
     setSeeAdminsModalOpen(true);
   }
@@ -77,13 +80,13 @@ function Unidades() {
 
   async function updateUnitys() {
     const response = await api.get('/units');
-    setUnitList(response.data.units);
+    setUnitList(response.data);
   }
 
   function filterUsers() {
     return foundUsers.filter((user) => {
       return (
-        user.fullName.includes(adminSearchName) &&
+        user.fullName.toLowerCase().includes(adminSearchName.toLowerCase()) &&
         user.idUnit === currentUnity.idUnit &&
         user.idRole != 5
       );
@@ -130,9 +133,20 @@ function Unidades() {
     }
   ];
   const unitListActions = [
-    { tooltip: 'Visualizar Admins', action: updateUnityAdmins, type: 'eye' },
-    { tooltip: 'Adicionar Admins', action: searchUsers, type: 'addUser' }
+    {
+      tooltip: 'Visualizar Admins',
+      action: updateUnityAdmins,
+      type: 'eye',
+      disabled: !hasPermission(user, 'view-admins')
+    },
+    {
+      tooltip: 'Adicionar Admins',
+      action: searchUsers,
+      type: 'addUser',
+      disabled: !hasPermission(user, 'add-admin-in-unit')
+    }
   ];
+
   return (
     <>
       <Container>
@@ -147,6 +161,7 @@ function Unidades() {
           onClick={() => {
             setModalOpen(true);
           }}
+          disabled={!hasPermission(user, 'create-unit')}
         >
           + Adicionar Unidade
         </AddUnityButton>

@@ -14,6 +14,7 @@ import api from 'services/api';
 import Table from 'components/Tables/Table';
 import Button from 'components/Button/Button';
 import TextInput from 'components/TextInput/TextInput';
+import hasPermission from 'util/permissionChecker';
 
 function Stages() {
   const [stages, setStages] = useState([
@@ -25,6 +26,8 @@ function Stages() {
   const [isModalOpen, setModalOpen] = useState(false);
   const [isModalConfDelete, setModalConfDelete] = useState(false);
 
+  const user = JSON.parse(localStorage.getItem('user'));
+
   useEffect(() => {
     updateStages();
   }, []);
@@ -35,19 +38,17 @@ function Stages() {
       if (a.duration > b.duration) return a.name > b.name ? 1 : 0;
       return -1;
     }
-    response.data.Stages.sort(compara);
-    setStages(response.data.Stages);
+    response.data.sort(compara);
+    setStages(response.data);
   }
 
   async function addStage() {
     try {
-      const cpf = JSON.parse(localStorage.getItem('user')).cpf;
-      const userBody = { cpf: cpf };
-      const user = await api.get(`/user/${cpf}`);
+      const user = JSON.parse(localStorage.getItem('user'));
       const body = {
         name: stageName,
         duration: stageTime,
-        idUnit: user.data.idUnit
+        idUnit: user.idUnit
       };
       const response = await api.post('/newStage', body);
 
@@ -96,7 +97,8 @@ function Stages() {
         setModalConfDelete(true);
         setCurrentStage(stage);
       },
-      type: 'delete'
+      type: 'delete',
+      disabled: !hasPermission(user, 'delete-stage')
     }
   ];
 
@@ -113,7 +115,11 @@ function Stages() {
             attributeList={(stage) => [stage.name, stage.duration]}
           />
         </Area>
-        <AddStageButton onClick={() => setModalOpen(true)}>
+
+        <AddStageButton
+          onClick={() => setModalOpen(true)}
+          disabled={!hasPermission(user, 'create-stage')}
+        >
           + Adicionar Etapa
         </AddStageButton>
       </Container>

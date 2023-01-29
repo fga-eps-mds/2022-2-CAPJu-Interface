@@ -59,11 +59,7 @@ function SelectionList({
           >
             <QuestionCircleFill size={20} />
           </div>
-          {showTextBox && (
-            <>
-              <QuestionBox>{hintText}</QuestionBox>
-            </>
-          )}
+          {showTextBox && <QuestionBox>{hintText}</QuestionBox>}
         </DivFlex>
         {selectedOptions.length > 0 ? (
           selectedOptions.map((option, index) => {

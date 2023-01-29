@@ -13,6 +13,7 @@ import {
 } from './sytles.js';
 import Table from 'components/Tables/Table';
 import authConfig from 'services/config';
+import hasPermission from 'util/permissionChecker.js';
 
 function AccessProfile() {
   const [users, setUsers] = useState([]);
@@ -23,6 +24,7 @@ function AccessProfile() {
   const [selectedUser, setSelectedUser] = useState(0);
 
   const authHeader = authConfig()?.headers;
+  const user = JSON.parse(localStorage.getItem('user'));
 
   const roles = useMemo(
     () => [
@@ -50,7 +52,7 @@ function AccessProfile() {
     const response = await api.get('/allUser', {
       headers: authHeader
     });
-    setUsers(response.data.user);
+    setUsers(response.data);
   }, [authHeader]);
 
   const editRole = useCallback(async () => {
@@ -135,17 +137,14 @@ function AccessProfile() {
     setDeleteModal(false);
   }, [deleteUser, updateUser, setDeleteModal, getSelectedUser]);
 
-  const filterUser = (arr) => {
-    const user = JSON.parse(localStorage.getItem('user'));
-    return arr.filter((users) => {
+  const filterUser = (userList) => {
+    const loggedUser = JSON.parse(localStorage.getItem('user'));
+    return userList.filter((user) => {
       if (
-        (users.fullName
-          .toLowerCase()
-          .includes(searchUser.toLocaleLowerCase()) ||
-          users.fulName.includes(searchUser)) &&
-        users.email !== user.email
+        user.fullName.toLowerCase().includes(searchUser.toLowerCase()) &&
+        user.email !== loggedUser.email
       )
-        return users;
+        return user;
     });
   };
 
@@ -156,7 +155,8 @@ function AccessProfile() {
         setRoleModal(true);
         setSelectedUser(user.cpf);
       },
-      type: 'edit'
+      type: 'edit',
+      disabled: !hasPermission(user, 'edit-user')
     },
     {
       tooltip: 'Deletar Usuário',
@@ -164,7 +164,8 @@ function AccessProfile() {
         setDeleteModal(true);
         setSelectedUser(user.cpf);
       },
-      type: 'delete'
+      type: 'delete',
+      disabled: !hasPermission(user, 'delete-user')
     }
   ];
 

@@ -24,6 +24,7 @@ import api from 'services/api';
 import Button from 'components/Button/Button';
 import TextInput from 'components/TextInput/TextInput';
 import { isLate } from 'components/IsLate/index.js';
+import hasPermission from 'util/permissionChecker';
 
 function Processes() {
   const [processes, setProcesses] = useState([]);
@@ -55,7 +56,7 @@ function Processes() {
 
   async function updateProcesses() {
     const response = await api.get(`/processes/${flow ? flow.idFlow : ''}`);
-    setProcesses(response.data.processes);
+    setProcesses(response.data);
   }
 
   async function getPriorities() {
@@ -144,8 +145,7 @@ function Processes() {
 
   async function getFlows() {
     const response = await api.get(`/flows/`);
-    console.log('flows=', flows);
-    setFlows(response.data.Flows);
+    setFlows(response.data);
   }
 
   async function editProcess() {
@@ -219,6 +219,8 @@ function Processes() {
       });
     }
   }
+
+  const user = JSON.parse(localStorage.getItem('user'));
 
   return (
     <Container>
@@ -316,13 +318,19 @@ function Processes() {
                           <Visibility className="see-process"></Visibility>
                         </Link>
                       </Tooltip>
-                      <Tooltip title="Editar processo">
+                      <Tooltip
+                        title="Editar processo"
+                        disabled={!hasPermission(user, 'edit-process')}
+                      >
                         <EditIcon
                           className="edit-process"
                           onClick={() => openEditModal(proc)}
                         />
                       </Tooltip>
-                      <Tooltip title="Deletar processo">
+                      <Tooltip
+                        title="Deletar processo"
+                        disabled={!hasPermission(user, 'delete-process')}
+                      >
                         <DeleteForeverIcon
                           className="delete-process"
                           onClick={() => setDeleteProcessModal(idx)}
@@ -465,9 +473,8 @@ function Processes() {
         )}
       </div>
       <AddProcess
-        onClick={() => {
-          openEditModal(false);
-        }}
+        onClick={() => openEditModal(false)}
+        disabled={!hasPermission(user, 'create-process')}
       >
         + Adicionar Processo
       </AddProcess>

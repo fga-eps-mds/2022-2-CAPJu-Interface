@@ -2,7 +2,7 @@ import toast from 'react-hot-toast';
 import React, { useCallback, useEffect, useState } from 'react';
 
 import api from 'services/api';
-import user from 'services/user';
+import userApi from 'services/user';
 import Button from 'components/Button/Button';
 import TextInput from 'components/TextInput/TextInput';
 import DescriptionIcon from '@mui/icons-material/Description';
@@ -15,11 +15,12 @@ import {
   Content,
   ContentHeader,
   CloseModalGeneral,
-  DivFlex,
-  LabelDiv
+  LabelDiv,
+  DivFlex
 } from './styles';
 import FlowViewer from 'components/Flow/FlowViewer';
 import Table from 'components/Tables/Table';
+import hasPermission from 'util/permissionChecker';
 import SelectionList from 'components/Flow/SelectionList';
 
 function Flows() {
@@ -38,6 +39,8 @@ function Flows() {
   const [deleteModal, setDeleteModal] = useState(false);
   const [selectedFlow, setSelectedFlow] = useState(0);
 
+  const user = JSON.parse(localStorage.getItem('user'));
+
   useEffect(() => {
     updateStages();
     updateFlows();
@@ -45,18 +48,18 @@ function Flows() {
   }, []);
 
   async function updateFlows() {
-    const response = await api.get('/flowsForFrontend');
-    setFlowList(response.data.Flows);
+    const response = await api.get('/flows');
+    setFlowList(response.data);
   }
 
   async function updateUsers() {
-    const response = await user.get('/allUser');
-    setUsers(response.data.user);
+    const response = await userApi.get('/allUser');
+    setUsers(response.data);
   }
 
   async function updateStages() {
     const response = await api.get('/stages');
-    setStages(response.data.Stages);
+    setStages(response.data);
   }
 
   const responseHandler = useCallback((response, successMsg, errorMsg) => {
@@ -196,7 +199,8 @@ function Flows() {
       tooltip: 'Visualizar processos',
       linkTo: '/processes',
       linkIcon: <DescriptionIcon htmlColor="black" />,
-      type: 'link'
+      type: 'link',
+      disabled: !hasPermission(user, 'view-flow')
     },
     {
       tooltip: 'Editar fluxo',
@@ -204,7 +208,8 @@ function Flows() {
         buildFlow(flow);
         setShowFlow(!showFlow);
       },
-      type: 'edit'
+      type: 'edit',
+      disabled: !hasPermission(user, 'edit-flow')
     },
     {
       tooltip: 'Deletar fluxo',
@@ -212,7 +217,8 @@ function Flows() {
         setDeleteModal(!deleteModal);
         setSelectedFlow(flow.idFlow);
       },
-      type: 'delete'
+      type: 'delete',
+      disabled: !hasPermission(user, 'delete-flow')
     }
     /*,
     {
@@ -264,7 +270,10 @@ function Flows() {
             actionList={actionList}
           />
         </Area>
-        <AddFlowButton onClick={handleNewFlowModal}>
+        <AddFlowButton
+          onClick={handleNewFlowModal}
+          disabled={!hasPermission(user, 'create-flow')}
+        >
           <span>+ Adicionar Fluxo</span>
         </AddFlowButton>
         {/* {Modal para confirmar exclusão do fluxo} */}

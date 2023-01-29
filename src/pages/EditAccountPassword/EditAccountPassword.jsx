@@ -26,7 +26,7 @@ function EditAccountPassword() {
         return;
       } else {
         if (newPassword == newPassword2) {
-          await user.post(`/updateUserPassword/${userPass._id}`, {
+          await user.post(`/updateUserPassword/${userPass.cpf}`, {
             oldPassword,
             newPassword
           });
