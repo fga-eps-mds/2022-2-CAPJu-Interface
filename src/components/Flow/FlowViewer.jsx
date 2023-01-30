@@ -12,7 +12,7 @@ const edgeTypes = {
 
 function FlowViewer(props) {
   const procStages = props.proc?.etapas;
-  const { disabled, openModal } = props;
+  const { flow, disabled, openModal } = props;
 
   function deadlineDate(stage) {
     const stageDate = getStageDate(stage.idStage, props.proc, props.flow);
@@ -43,12 +43,12 @@ function FlowViewer(props) {
     });
 
   let edges = [];
-  if (procStages) {
-    edges = procStages.map((sequence) => {
+  if (flow) {
+    edges = flow.sequences.map((sequence) => {
       return {
         id: 'e' + sequence.from + '-' + sequence.to,
-        source: sequence.from,
-        target: sequence.to,
+        source: `${sequence.from}`,
+        target: `${sequence.to}`,
         label:
           sequence.commentary || (!disabled && '+ Adicionar nova notificação'),
         type: !disabled && 'edgebutton',

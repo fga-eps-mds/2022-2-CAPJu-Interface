@@ -45,7 +45,7 @@ function ShowProcess() {
   const [openNextStageModal, setOpenNextStageModal] = useState(false);
   const [newObservationModal, setNewObservationModal] = useState(false);
   const [editObservationModal, setEditObservationModal] = useState(false);
-  const [observation, setObservation] = useState('');
+  const [commentary, setCommentary] = useState('');
   const [originStage, setOriginStage] = useState('');
   const [destinationStage, setDestinationStage] = useState('');
   const location = useLocation();
@@ -59,12 +59,8 @@ function ShowProcess() {
     fetchFlow();
     fetchStages();
     updateProc();
-    // eslint-disable-next-line
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-
-  function afterOpenModal() {
-    // references are now sync'd and can be accessed.
-  }
 
   function closeModal() {
     setOpenNextStageModal(false);
@@ -125,7 +121,7 @@ function ShowProcess() {
         record: proc?.record,
         to: stageTo,
         from: proc?.idStage,
-        commentary: observation,
+        commentary,
         idFlow: flow?.idFlow
       });
 
@@ -183,14 +179,13 @@ function ShowProcess() {
 
   function handleObservation(observation) {
     if (observation.length <= OBSERVATION_MAX_LENGTH)
-      setObservation(observation);
+      setCommentary(observation);
   }
 
   const renderNextStageModal = () => {
     return (
       <Modal
         isOpen={openNextStageModal}
-        onAfterOpen={afterOpenModal}
         onRequestClose={closeModal}
         style={customStyles}
         contentLabel="avançar etapa"
@@ -201,7 +196,7 @@ function ShowProcess() {
             className="observation-field"
             placeholder="Observações sobre a etapa atual..."
             style={textAreaStyle}
-            value={observation}
+            value={commentary}
             onChange={(e) => handleObservation(e.target.value)}
           />
           <Button
@@ -235,7 +230,6 @@ function ShowProcess() {
     return (
       <Modal
         isOpen={newObservationModal}
-        onAfterOpen={afterOpenModal}
         onRequestClose={() => setNewObservationModal(false)}
         style={customStyles}
         contentLabel="nova anotação"
@@ -249,13 +243,13 @@ function ShowProcess() {
             placeholder="Observações sobre a etapa."
             style={textAreaStyle}
             value={
-              observation === '+ Adicionar nova notificação' ? '' : observation
+              commentary === '+ Adicionar nova notificação' ? '' : commentary
             }
             onChange={(e) => handleObservation(e.target.value)}
           />
           <Button
             buttonType={'showProcess'}
-            onClick={() => newObservation(observation)}
+            onClick={() => newObservation(commentary)}
             text={'Salvar'}
           />
         </ModalBody>
@@ -267,7 +261,6 @@ function ShowProcess() {
     return (
       <Modal
         isOpen={editObservationModal}
-        onAfterOpen={afterOpenModal}
         onRequestClose={() => setEditObservationModal(false)}
         style={customStyles}
         contentLabel="Editar anotação"
@@ -280,7 +273,7 @@ function ShowProcess() {
             className="observation-field"
             placeholder="Observações sobre a etapa."
             style={textAreaStyle}
-            value={observation}
+            value={commentary}
             onChange={(e) => handleObservation(e.target.value)}
           />
           <div>
@@ -291,7 +284,7 @@ function ShowProcess() {
             />
             <Button
               buttonType={'showProcess'}
-              onClick={() => newObservation(observation)}
+              onClick={() => newObservation(commentary)}
               text={'Salvar'}
             />
             <Button
