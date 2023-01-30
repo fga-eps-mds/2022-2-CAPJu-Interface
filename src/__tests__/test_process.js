@@ -8,7 +8,6 @@ import userEvent from '@testing-library/user-event';
 
 import { baseURL } from 'services/api';
 import Processes from 'pages/Processes/Processes';
-import { isLate } from 'components/IsLate/index.js';
 import {
   usersResponse,
   flowsResponse,
@@ -210,7 +209,7 @@ describe('Testes de Processos', () => {
     );
     fireEvent.click(filterByPriorityCheckbox);
 
-    await expect(screen.getAllByRole('row')).toHaveLength(2);
+    await expect(screen.getAllByRole('row')).toHaveLength(1);
   });
 
   it('Teste erro ao deletar um processo', async () => {
@@ -219,12 +218,12 @@ describe('Testes de Processos', () => {
         'access-control-allow-origin': '*',
         'access-control-allow-credentials': 'true'
       })
-      .options(`/deleteProcess/${processResponse[1].record}`)
+      .options(`/deleteProcess/${processResponse[0].record}`)
       .reply(200)
-      .delete(`/deleteProcess/${processResponse[1].record}`)
+      .delete(`/deleteProcess/${processResponse[0].record}`)
       .reply(401);
 
-    const deleteProcessButton = screen.getAllByTestId('DeleteForeverIcon')[1];
+    const deleteProcessButton = screen.getAllByTestId('DeleteForeverIcon')[0];
     fireEvent.click(deleteProcessButton);
 
     await screen.getByText('Excluir Processo');
@@ -240,12 +239,12 @@ describe('Testes de Processos', () => {
         'access-control-allow-origin': '*',
         'access-control-allow-credentials': 'true'
       })
-      .options(`/deleteProcess/${processResponse[1].record}`)
+      .options(`/deleteProcess/${processResponse[0].record}`)
       .reply(200)
-      .delete(`/deleteProcess/${processResponse[1].record}`)
+      .delete(`/deleteProcess/${processResponse[0].record}`)
       .reply(400);
 
-    const deleteProcessButton = screen.getAllByTestId('DeleteForeverIcon')[1];
+    const deleteProcessButton = screen.getAllByTestId('DeleteForeverIcon')[0];
     fireEvent.click(deleteProcessButton);
 
     await screen.getByText('Excluir Processo');

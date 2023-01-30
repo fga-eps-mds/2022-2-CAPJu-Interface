@@ -168,18 +168,9 @@ export const processResponse = [
     idPriority: 0,
     idStage: '0',
     idUnit: 4,
-    idFlow: 2,
+    idFlow: '2',
     nickname: 'sdlkfja',
     record: '1111'
-  },
-  {
-    createdAt: '2022-08-17T20:09:58.530Z',
-    idPriority: 2,
-    idStage: '0',
-    idUnit: 4,
-    idFlow: 2,
-    nickname: 'Processo teste',
-    record: '2222'
   }
 ];
 

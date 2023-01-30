@@ -49,6 +49,7 @@ function Processes() {
     getFlows();
     getStages();
     setPriority(0);
+    getPriorities();
     // eslint-disable-next-line
   }, []);
 
@@ -149,12 +150,6 @@ function Processes() {
 
   async function editProcess() {
     try {
-      console.log({
-        record: registro,
-        nickname: apelido,
-        idFlow: flowId.value,
-        priority: priority ? priority.value : 0
-      });
       await api.put(`/updateProcess`, {
         record: registro,
         nickname: apelido,
