@@ -42,6 +42,7 @@ function Processes() {
     updateProcesses();
     getFlows();
     getStages();
+    setPriority(0);
     // eslint-disable-next-line
   }, []);
 
