@@ -298,3 +298,16 @@ export const loggedUser = [
       'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYzNjZiZThhMzI5NDNkYjZjYjQ3ZmZkMCIsImlhdCI6MTY3MDEwODM0MywiZXhwIjoxNjcwMzY3NTQzfQ.R7lD6IiNQjwNcSSwqufN7DfqnhfENmA69ddM8JqvlUQ'
   }
 ];
+
+export const precessForShowProcess = [
+  {
+    createdAt: '2022-08-17T20:09:58.530Z',
+    effectiveDate: '2023-01-30T04:45:56.480Z',
+    idPriority: 0,
+    idStage: '2',
+    idUnit: 4,
+    nickname: 'sdlkfja',
+    record: '1111',
+    updatedAt: '2023-01-30T04:45:56.480Z'
+  }
+];

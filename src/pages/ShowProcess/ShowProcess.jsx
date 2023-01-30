@@ -45,7 +45,7 @@ function ShowProcess() {
   const [openNextStageModal, setOpenNextStageModal] = useState(false);
   const [newObservationModal, setNewObservationModal] = useState(false);
   const [editObservationModal, setEditObservationModal] = useState(false);
-  const [observation, setObservation] = useState('');
+  const [commentary, setCommentary] = useState('');
   const [originStage, setOriginStage] = useState('');
   const [destinationStage, setDestinationStage] = useState('');
   const location = useLocation();
@@ -59,12 +59,8 @@ function ShowProcess() {
     fetchFlow();
     fetchStages();
     updateProc();
-    // eslint-disable-next-line
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-
-  function afterOpenModal() {
-    // references are now sync'd and can be accessed.
-  }
 
   function closeModal() {
     setOpenNextStageModal(false);
@@ -102,13 +98,9 @@ function ShowProcess() {
   }
 
   async function fetchFlow() {
-    if (location.state.flow) {
-      setFlow(location.state.flow);
-    } else {
-      const processFlows = await api.get(`/flows/process/${proc.record}`);
-      const response = await api.get(`/flow/${processFlows.data[0].idFlow}`);
-      setFlow(response.data);
-    }
+    const processFlows = await api.get(`/flows/process/${proc.record}`);
+    const response = await api.get(`/flow/${processFlows.data[0].idFlow}`);
+    setFlow(response.data);
   }
 
   async function nextStage() {
@@ -125,7 +117,7 @@ function ShowProcess() {
         record: proc?.record,
         to: stageTo,
         from: proc?.idStage,
-        commentary: observation,
+        commentary,
         idFlow: flow?.idFlow
       });
 
@@ -133,6 +125,7 @@ function ShowProcess() {
 
       setProc(response.data);
       proc.idStage = stageTo;
+      updateObservations(commentary);
       closeModal();
 
       toast.success('Etapa avançada!', { duration: 4000 });
@@ -159,10 +152,8 @@ function ShowProcess() {
         commentary: newObservation
       });
 
-      const response = await api.get(`getOneProcess/${proc.record}`);
-      setProc(response.data);
+      updateObservations(newObservation);
       closeModal();
-
       toast.success('Notificação alterada com sucesso!', { duration: 4000 });
     } catch (error) {
       if (error.response.status == 401) {
@@ -181,16 +172,28 @@ function ShowProcess() {
     }
   }
 
+  function updateObservations(newObservation) {
+    const newSequences = flow.sequences.map((sequence) => {
+      if (
+        String(sequence.from) === originStage &&
+        String(sequence.to) === destinationStage
+      ) {
+        sequence.commentary = newObservation;
+      }
+      return sequence;
+    });
+    setFlow({ ...flow, sequences: newSequences });
+  }
+
   function handleObservation(observation) {
     if (observation.length <= OBSERVATION_MAX_LENGTH)
-      setObservation(observation);
+      setCommentary(observation);
   }
 
   const renderNextStageModal = () => {
     return (
       <Modal
         isOpen={openNextStageModal}
-        onAfterOpen={afterOpenModal}
         onRequestClose={closeModal}
         style={customStyles}
         contentLabel="avançar etapa"
@@ -201,7 +204,7 @@ function ShowProcess() {
             className="observation-field"
             placeholder="Observações sobre a etapa atual..."
             style={textAreaStyle}
-            value={observation}
+            value={commentary}
             onChange={(e) => handleObservation(e.target.value)}
           />
           <Button
@@ -235,7 +238,6 @@ function ShowProcess() {
     return (
       <Modal
         isOpen={newObservationModal}
-        onAfterOpen={afterOpenModal}
         onRequestClose={() => setNewObservationModal(false)}
         style={customStyles}
         contentLabel="nova anotação"
@@ -249,13 +251,13 @@ function ShowProcess() {
             placeholder="Observações sobre a etapa."
             style={textAreaStyle}
             value={
-              observation === '+ Adicionar nova notificação' ? '' : observation
+              commentary === '+ Adicionar nova notificação' ? '' : commentary
             }
             onChange={(e) => handleObservation(e.target.value)}
           />
           <Button
             buttonType={'showProcess'}
-            onClick={() => newObservation(observation)}
+            onClick={() => newObservation(commentary)}
             text={'Salvar'}
           />
         </ModalBody>
@@ -267,7 +269,6 @@ function ShowProcess() {
     return (
       <Modal
         isOpen={editObservationModal}
-        onAfterOpen={afterOpenModal}
         onRequestClose={() => setEditObservationModal(false)}
         style={customStyles}
         contentLabel="Editar anotação"
@@ -280,7 +281,7 @@ function ShowProcess() {
             className="observation-field"
             placeholder="Observações sobre a etapa."
             style={textAreaStyle}
-            value={observation}
+            value={commentary}
             onChange={(e) => handleObservation(e.target.value)}
           />
           <div>
@@ -291,7 +292,7 @@ function ShowProcess() {
             />
             <Button
               buttonType={'showProcess'}
-              onClick={() => newObservation(observation)}
+              onClick={() => newObservation(commentary)}
               text={'Salvar'}
             />
             <Button
