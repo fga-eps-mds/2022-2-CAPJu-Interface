@@ -98,13 +98,9 @@ function ShowProcess() {
   }
 
   async function fetchFlow() {
-    if (location.state.flow) {
-      setFlow(location.state.flow);
-    } else {
-      const processFlows = await api.get(`/flows/process/${proc.record}`);
-      const response = await api.get(`/flow/${processFlows.data[0].idFlow}`);
-      setFlow(response.data);
-    }
+    const processFlows = await api.get(`/flows/process/${proc.record}`);
+    const response = await api.get(`/flow/${processFlows.data[0].idFlow}`);
+    setFlow(response.data);
   }
 
   async function nextStage() {
@@ -129,6 +125,7 @@ function ShowProcess() {
 
       setProc(response.data);
       proc.idStage = stageTo;
+      updateObservations(commentary);
       closeModal();
 
       toast.success('Etapa avançada!', { duration: 4000 });
@@ -155,10 +152,8 @@ function ShowProcess() {
         commentary: newObservation
       });
 
-      const response = await api.get(`getOneProcess/${proc.record}`);
-      setProc(response.data);
+      updateObservations(newObservation);
       closeModal();
-
       toast.success('Notificação alterada com sucesso!', { duration: 4000 });
     } catch (error) {
       if (error.response.status == 401) {
@@ -175,6 +170,19 @@ function ShowProcess() {
         );
       }
     }
+  }
+
+  function updateObservations(newObservation) {
+    const newSequences = flow.sequences.map((sequence) => {
+      if (
+        String(sequence.from) === originStage &&
+        String(sequence.to) === destinationStage
+      ) {
+        sequence.commentary = newObservation;
+      }
+      return sequence;
+    });
+    setFlow({ ...flow, sequences: newSequences });
   }
 
   function handleObservation(observation) {

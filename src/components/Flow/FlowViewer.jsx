@@ -11,11 +11,10 @@ const edgeTypes = {
 };
 
 function FlowViewer(props) {
-  const procStages = props.proc?.etapas;
   const { flow, disabled, openModal } = props;
 
   function deadlineDate(stage) {
-    const stageDate = getStageDate(stage.idStage, props.proc, props.flow);
+    const stageDate = getStageDate(stage.idStage, props.proc, flow);
     if (stageDate instanceof Date && !isNaN(stageDate)) {
       stageDate.setDate(stageDate.getDate() + stage.duration);
       return stageDate.toLocaleDateString();
@@ -42,7 +41,7 @@ function FlowViewer(props) {
       };
     });
 
-  let edges = [];
+  let edges;
   if (flow) {
     edges = flow.sequences.map((sequence) => {
       return {
@@ -61,11 +60,8 @@ function FlowViewer(props) {
         style: { stroke: '#1b9454' }
       };
     });
-  }
-
-  edges = [
-    ...edges,
-    ...props.flow.sequences.map((sequence) => {
+  } else {
+    edges = props.flow.sequences.map((sequence) => {
       const id = 'e' + sequence.from + '-' + sequence.to;
       return {
         id: id,
@@ -77,27 +73,13 @@ function FlowViewer(props) {
         data: { onClick: openModal },
         style: { stroke: 'black' }
       };
-    })
-  ];
-
-  let uniqueEdges;
-  uniqueEdges = edges.filter((edgeS) => {
-    if (
-      edges.some((edgeI) => edgeS.id == edgeI.id && edgeS.label !== edgeI.label)
-    ) {
-      if (edgeS.label !== '+ Adicionar nova notificação') return edgeS;
-    } else return edgeS;
-  });
+    });
+  }
 
   return (
-    uniqueEdges && (
+    edges && (
       <FlowContainer onClick={props.onClick}>
-        <ReactFlow
-          nodes={nodes}
-          edges={uniqueEdges}
-          edgeTypes={edgeTypes}
-          fitView
-        />
+        <ReactFlow nodes={nodes} edges={edges} edgeTypes={edgeTypes} fitView />
       </FlowContainer>
     )
   );
