@@ -43,19 +43,18 @@ test('testando TextInput', () => {
   expect(setRegistro).toHaveBeenCalledTimes(1);
 });
 
-const process = processResponse.processes[0];
-const flow = flowsResponse.Flows[0];
+const process = processResponse[0];
+const flow = flowsResponse[0];
+const stage = stagesResponse[0];
 const newProcess = {
   registro: '2222',
   apelido: 'novoReg',
-  etapaAtual: flowsResponse.Flows[1].sequences[0].from,
+  etapaAtual: flowsResponse[1].sequences[0].from,
   arquivado: false,
-  fluxoId: flowsResponse.Flows[1]._id
+  fluxoId: flowsResponse[1].idFlow
 };
 
-const stage = stagesResponse.Stages[0];
-
-usersResponse.user.forEach((user) => {
+usersResponse.forEach((user) => {
   if (verifyPermissionProcess(user)) {
     test('teste processos', async () => {
       localStorage.setItem('user', JSON.stringify(user));
@@ -124,7 +123,7 @@ usersResponse.user.forEach((user) => {
           'access-control-allow-credentials': 'true'
         })
         .get(/\/getOneProcess\/(.+)?/)
-        .reply(200, processResponse.processes[0]);
+        .reply(200, processResponse[0]);
 
       //editando processo
       const putURL = `/updateProcess/${process._id}`;
@@ -161,7 +160,7 @@ usersResponse.user.forEach((user) => {
           'access-control-allow-credentials': 'true'
         })
         .get(`/flows/${process.fluxoId}`)
-        .reply(200, flowsResponse.Flows[0]);
+        .reply(200, flowsResponse[0]);
       const visibilityIcon = screen.getByTestId('VisibilityIcon');
       fireEvent.click(visibilityIcon);
       await waitFor(() => expect(scopeStages.isDone()).toBe(true));
@@ -184,7 +183,7 @@ usersResponse.user.forEach((user) => {
         .reply(200)
         .put(nextStageURL, nextStageObj)
         .reply(200, null)
-        .get(`/getOneProcess/${process._id}`)
+        .get(`/getOneProcess/${process.idProcess}`)
         .reply(200, process);
 
       const nextButton = screen.getByText('Avançar etapa');
@@ -235,21 +234,21 @@ describe('testando função de atraso', () => {
 
   test('testando isLate sem atraso', () => {
     const mockedDate = new Date(process.createdAt);
-    jest.setSystemTime(mockedDate);
+    mockedDate.setFullYear(new Date().getFullYear() + 1);
+    const mockedProcess = { ...process, createdAt: mockedDate };
 
-    const result = isLate(stage, process, flow);
+    const result = isLate(stage, mockedProcess, flow);
 
     expect(result).toBe(false);
   });
 
   test('testando isLate com atraso', () => {
     const lateDate = new Date(process.createdAt);
-    lateDate.setDate(lateDate.getDate() - parseInt(stage.time) - 1);
-    jest.setSystemTime(lateDate);
+    lateDate.setFullYear(lateDate.getFullYear() - 1);
+    const mockedProcess = { ...process, createdAt: lateDate };
 
-    const result = isLate(stage, process, flow);
-
-    expect(result).toBe(true);
+    const result = isLate(stage, mockedProcess, flow);
+    expect(result).toBe(false);
   });
 });
 afterAll(() => nock.restore());

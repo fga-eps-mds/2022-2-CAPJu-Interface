@@ -3,26 +3,16 @@ import axios from 'axios';
 import nock from 'nock';
 import '@testing-library/jest-dom';
 import { MemoryRouter, Route, Routes } from 'react-router-dom';
+import userEvent from '@testing-library/user-event';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 
 import Flows from 'pages/Flows/Flows';
 import { baseURL } from 'services/api';
 import { userURL } from 'services/user';
 import { flowsResponse, stagesResponse, usersResponse } from 'testConstants';
-import { Permissions } from 'util/permissionChecker';
 
 axios.defaults.adapter = require('axios/lib/adapters/http');
 const mockNavigate = jest.fn();
-
-function verifyPermission(user) {
-  if (
-    user.role == Permissions.DIRETOR ||
-    user.role == Permissions.SERVIDOR ||
-    user.role == Permissions.ADMINISTRADOR
-  ) {
-    return true;
-  } else return false;
-}
 
 jest.mock('react-router-dom', () => {
   return {
@@ -53,8 +43,7 @@ const scopeUsers = nock(userURL)
 
 describe('Testes da pagina de fluxos', () => {
   beforeEach(async () => {
-    localStorage.setItem('user', JSON.stringify(usersResponse.user[0]));
-    nock.disableNetConnect();
+    localStorage.setItem('user', JSON.stringify(usersResponse[0]));
     render(
       <MemoryRouter initialEntries={['/']}>
         <Routes>
@@ -94,28 +83,28 @@ describe('Testes da pagina de fluxos', () => {
     });
 
     fireEvent.change(selectBoxes[0], {
-      target: { value: stagesResponse.Stages[3]._id }
+      target: { value: stagesResponse[2].idStage }
     });
     fireEvent.click(addToListButtons[0]);
 
     fireEvent.change(selectBoxes[0], {
-      target: { value: stagesResponse.Stages[2]._id }
+      target: { value: stagesResponse[1].idStage }
     });
     fireEvent.click(addToListButtons[0]);
 
     fireEvent.change(selectBoxes[1], {
-      target: { value: usersResponse.user[2]._id }
+      target: { value: usersResponse[2].cpf }
     });
     fireEvent.click(addToListButtons[1]);
 
     selectBoxes = await screen.findAllByTestId('react-select-mock');
     addToListButtons = screen.getAllByText('Adicionar');
 
-    fireEvent.change(selectBoxes[2], {
-      target: { value: stagesResponse.Stages[3]._id }
+    fireEvent.change(selectBoxes[1], {
+      target: { value: stagesResponse[2].idStage }
     });
-    fireEvent.change(selectBoxes[3], {
-      target: { value: stagesResponse.Stages[2]._id }
+    fireEvent.change(selectBoxes[2], {
+      target: { value: stagesResponse[1].idStage }
     });
 
     fireEvent.click(addToListButtons[2]);
@@ -171,9 +160,9 @@ describe('Testes da pagina de fluxos', () => {
         'access-control-allow-origin': '*',
         'access-control-allow-credentials': 'true'
       })
-      .options('/editFlow')
+      .options('/flow')
       .reply(200)
-      .put('/editFlow')
+      .put('/flow')
       .reply(200, {
         message: 'Fluxo editado com sucesso'
       });
@@ -187,18 +176,18 @@ describe('Testes da pagina de fluxos', () => {
     const removeButtons = screen.getAllByText('x');
 
     fireEvent.change(selectBoxes[1], {
-      target: { value: usersResponse.user[2]._id }
+      target: { value: usersResponse[2].cpf }
     });
     fireEvent.click(addToListButtons[1]);
 
-    selectBoxes = await screen.findAllByTestId('react-select-mock');
-    addToListButtons = screen.getAllByText('Adicionar');
+    selectBoxes = await screen.getAllByRole('combobox');
+    addToListButtons = await screen.getAllByText('Adicionar');
 
-    fireEvent.change(selectBoxes[2], {
-      target: { value: stagesResponse.Stages[3]._id }
-    });
     fireEvent.change(selectBoxes[3], {
-      target: { value: stagesResponse.Stages[2]._id }
+      target: { value: stagesResponse[1].idStage }
+    });
+    fireEvent.change(selectBoxes[2], {
+      target: { value: stagesResponse[0].idStage }
     });
 
     fireEvent.click(addToListButtons[2]);
@@ -216,9 +205,9 @@ describe('Testes da pagina de fluxos', () => {
         'access-control-allow-origin': '*',
         'access-control-allow-credentials': 'true'
       })
-      .options('/editFlow')
+      .options('/flow')
       .reply(200)
-      .put('/editFlow')
+      .put('/flow')
       .reply(400);
 
     const editButtons = await screen.findAllByLabelText('Editar fluxo');
@@ -238,9 +227,9 @@ describe('Testes da pagina de fluxos', () => {
         'access-control-allow-origin': '*',
         'access-control-allow-credentials': 'true'
       })
-      .options('/editFlow')
+      .options('/flow')
       .reply(200)
-      .put('/editFlow')
+      .put('/flow')
       .reply(401, { message: 'Mensgem de erro' });
 
     const editButtons = await screen.findAllByLabelText('Editar fluxo');
@@ -276,7 +265,9 @@ describe('Testes da pagina de fluxos', () => {
         'access-control-allow-origin': '*',
         'access-control-allow-credentials': 'true'
       })
-      .post('/deleteFlow')
+      .options(`/flow/${stagesResponse[1].idStage}`)
+      .reply(200)
+      .delete(`/flow/${stagesResponse[1].idStage}`)
       .reply(200, {
         message: 'Fluxo excluído com sucesso'
       });
@@ -298,7 +289,9 @@ describe('Testes da pagina de fluxos', () => {
         'access-control-allow-origin': '*',
         'access-control-allow-credentials': 'true'
       })
-      .post('/deleteFlow')
+      .options(`/flow/${stagesResponse[1].idStage}`)
+      .reply(200)
+      .delete(`/flow/${stagesResponse[1].idStage}`)
       .reply(400);
 
     const deleteButtons = await screen.findAllByLabelText('Deletar fluxo');
@@ -340,9 +333,9 @@ describe('Testes da pagina de fluxos', () => {
         'access-control-allow-origin': '*',
         'access-control-allow-credentials': 'true'
       })
-      .options('/editFlow')
+      .options('/flow')
       .reply(200)
-      .put('/editFlow')
+      .put('/flow')
       .reply(200, {
         message: 'Fluxo editado com sucesso'
       });
@@ -367,9 +360,9 @@ describe('Testes da pagina de fluxos', () => {
         'access-control-allow-origin': '*',
         'access-control-allow-credentials': 'true'
       })
-      .options('/editFlow')
+      .options('/flow')
       .reply(200)
-      .put('/editFlow')
+      .put('/flow')
       .reply(200, {
         message: 'Fluxo editado com sucesso'
       });
@@ -379,27 +372,24 @@ describe('Testes da pagina de fluxos', () => {
 
     const selectBoxes = await screen.findAllByTestId('react-select-mock');
     const addToListButtons = screen.getAllByText('Adicionar');
+    const addSequenceButton = addToListButtons[2];
 
-    fireEvent.change(selectBoxes[2], {
-      target: { value: stagesResponse.Stages[3]._id }
-    });
-    fireEvent.change(selectBoxes[3], {
-      target: { value: stagesResponse.Stages[3]._id }
-    });
-    fireEvent.click(addToListButtons[2]);
+    userEvent.selectOptions(selectBoxes[2], stagesResponse[0].idStage);
+    userEvent.selectOptions(selectBoxes[3], stagesResponse[0].idStage);
+    fireEvent.click(addSequenceButton);
 
     await waitFor(() => {
       const toastr = screen.findByTestId('toastr');
       expect(toastr).not.toBe(null);
     });
 
-    fireEvent.change(selectBoxes[2], {
-      target: { value: stagesResponse.Stages[0]._id }
-    });
-    fireEvent.change(selectBoxes[3], {
-      target: { value: stagesResponse.Stages[1]._id }
-    });
-    fireEvent.click(addToListButtons[2]);
+    userEvent.selectOptions(selectBoxes[2], stagesResponse[0].idStage);
+    userEvent.selectOptions(selectBoxes[3], stagesResponse[1].idStage);
+    fireEvent.click(addSequenceButton);
+
+    userEvent.selectOptions(selectBoxes[2], stagesResponse[0].idStage);
+    userEvent.selectOptions(selectBoxes[3], stagesResponse[1].idStage);
+    fireEvent.click(addSequenceButton);
 
     await waitFor(() => {
       const toastr = screen.findByTestId('toastr');
@@ -414,22 +404,14 @@ describe('Testes da pagina de fluxos', () => {
   });
 
   it(`Testando criar fluxo no componente Flows`, async () => {
-    localStorage.setItem('user', JSON.stringify(usersResponse.user[0]));
+    localStorage.setItem('user', JSON.stringify(usersResponse[0]));
     const scope = nock(baseURL)
       .defaultReplyHeaders({
         'access-control-allow-origin': '*',
         'access-control-allow-credentials': 'true'
       })
       .post('/newFlow')
-      .reply(200, {
-        _id: 'meuIdAleatório',
-        name: 'perito',
-        stages: ['etpa c', 'etpa c2'],
-        sequences: [],
-        createdAt: '2022-08-17T20:11:43.499+00:00',
-        updatedAt: '2022-08-17T20:11:43.499+00:00',
-        __v: 0
-      });
+      .reply(200, 'Fluxo criado com sucesso');
 
     const buttonFlow = screen.getByText('+ Adicionar Fluxo');
     fireEvent.click(buttonFlow);

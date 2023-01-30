@@ -30,24 +30,25 @@ function Processes() {
   const [editModalIsOpen, setEditModalIsOpen] = useState(false);
   const [registro, setRegistro] = useState('');
   const [apelido, setApelido] = useState('');
-  const [processId, setProcessesId] = useState('');
   const [editOrCreate, setEditOrCreate] = useState('');
   const location = useLocation();
   const flow = location.state;
   const [flows, setFlows] = useState([]);
-  const [flowId, setFlowId] = useState(flow && flow._id);
+  const [flowId, setFlowId] = useState(flow && flow.idFlow);
   const [stages, setStages] = useState([]);
+  const [priority, setPriority] = useState(0);
 
   useEffect(() => {
     updateProcesses();
     getFlows();
     getStages();
+    setPriority(0);
     // eslint-disable-next-line
   }, []);
 
   async function updateProcesses() {
-    const response = await api.get(`/processes/${flow ? flow._id : ''}`);
-    setProcesses(response.data.processes);
+    const response = await api.get(`/processes/${flow ? flow.idFlow : ''}`);
+    setProcesses(response.data);
   }
 
   //Catch the event when the input changes
@@ -55,12 +56,12 @@ function Processes() {
     setSearchTerm(event.target.value);
   };
 
-  //Filter processes by register and nickname
+  //Filter processes by record and nickname
   const filterProcesses = (processList) => {
     return processList.filter((process) => {
       if (
-        process.registro.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        process.apelido.toLowerCase().includes(searchTerm.toLowerCase())
+        process.record.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        process.nickname.toLowerCase().includes(searchTerm.toLowerCase())
       ) {
         return process;
       }
@@ -94,26 +95,31 @@ function Processes() {
   function openEditModal(proc) {
     if (proc) {
       setEditOrCreate('edit');
-      setRegistro(proc.registro);
-      setApelido(proc.apelido);
-      setProcessesId(proc._id);
-      setFlowId(proc.fluxoId);
-    } else setEditOrCreate('create');
+      setRegistro(proc.record);
+      setApelido(proc.nickname);
+      setFlowId(proc.idFlow);
+    } else {
+      setEditOrCreate('create');
+      setRegistro('');
+      setApelido('');
+      setFlowId('');
+    }
     setEditModalIsOpen(true);
   }
 
   async function getFlows() {
     const response = await api.get(`/flows/`);
-    setFlows(response.data.Flows);
+    setFlows(response.data);
   }
 
   async function editProcess() {
     try {
       if (registro)
-        await api.put(`/updateProcess/${processId}`, {
-          registro: registro,
-          apelido: apelido,
-          fluxoId: flowId
+        await api.put(`/updateProcess`, {
+          record: registro,
+          nickname: apelido,
+          idFlow: flowId.value,
+          priority: priority
         });
       else toast.error('Registro vazio', { duration: 3000 });
       toast.success('Processo Alterado com Sucesso', { duration: 4000 });
@@ -134,17 +140,16 @@ function Processes() {
 
   async function createProcess() {
     try {
-      const flow = flows.find((flow) => flow._id === flowId);
+      const flow = flows.find((flow) => flow.idFlow === flowId.value);
       if (registro && flow) {
-        let sequences = flow.sequences;
-
-        await api.post('/newProcess', {
-          registro,
-          apelido,
-          etapaAtual: sequences[0].from,
-          arquivado: false,
-          fluxoId: flowId
-        });
+        const body = {
+          record: registro,
+          nickname: apelido,
+          effectiveDate: new Date(),
+          idFlow: flowId.value,
+          priority: priority
+        };
+        await api.post('/newProcess', body);
       } else {
         toast.error('Registro vazio', { duration: 3000 });
         return;
@@ -152,7 +157,8 @@ function Processes() {
 
       toast.success('Processo Registrado com Sucesso', { duration: 4000 });
     } catch (error) {
-      if (error.response.status == 401) {
+      console.log(error);
+      if (error.response?.status == 401) {
         toast(error.response.data.message, {
           icon: '⚠️',
           duration: 3000
@@ -213,16 +219,18 @@ function Processes() {
           </thead>
           <tbody>
             {filterProcesses(processes)
-              .sort((a, b) => b.etapas.length - a.etapas.length)
+              /*.sort((a, b) => b.etapas.length - a.etapas.length)*/
               .map((proc, idx) => {
                 let CurrentStage, FinalStage, CurrentStagePos, FinalStagePos;
 
                 if (flow && stages) {
                   CurrentStage = stages.find(
-                    (el) => el._id === proc.etapaAtual
+                    (stage) => stage.idStage === proc.idStage
                   );
                   FinalStage = stages.find(
-                    (el) => el._id === flow.sequences[flow.sequences.length - 1]
+                    (stage) =>
+                      stage.idStage ===
+                      flow.sequences[flow.sequences.length - 1]
                   );
 
                   CurrentStagePos = stages.indexOf(CurrentStage) + 1;
@@ -239,8 +247,8 @@ function Processes() {
 
                 return (
                   <tr key={idx} className={className}>
-                    <td>{proc.registro}</td>
-                    <td>{proc.apelido}</td>
+                    <td>{proc.record}</td>
+                    <td>{proc.nickname}</td>
 
                     {flow && stages && (
                       <>
@@ -294,9 +302,9 @@ function Processes() {
               </ContentHeader>
               <Dropdown
                 options={flows.map((flow) => {
-                  return { label: flow.name, value: flow._id };
+                  return { label: flow.name, value: flow.idFlow };
                 })}
-                onChange={(e) => setFlowId(e.value)}
+                onChange={(e) => setFlowId(e)}
                 value={flowId}
                 placeholder="Selecione o fluxo"
                 className="dropdown"
@@ -306,14 +314,15 @@ function Processes() {
                 arrowClassName="dropdown-arrow"
               />
               <div>
-                <p> Registro </p>
                 <TextInput
+                  label="Registro"
                   value={registro}
                   set={setRegistro}
                   placeholder="registro"
+                  disabled={editOrCreate == 'edit'}
                 />
-                <p> Apelido</p>
                 <TextInput
+                  label="Apelido"
                   value={apelido}
                   set={setApelido}
                   placeholder="apelido"
@@ -347,13 +356,13 @@ function Processes() {
                 <span>Excluir Processo</span>
               </ContentHeader>
               <span>Deseja realmente excluir este Processo?</span>
-              {processes[deleteProcessModal].registro} -{' '}
-              {processes[deleteProcessModal].apelido}
+              {processes[deleteProcessModal].record} -{' '}
+              {processes[deleteProcessModal].nickname}
               <div>
                 <Button
                   onClick={async () => {
                     setDeleteProcessModal(-1);
-                    deleteProcess(processes[deleteProcessModal].registro);
+                    deleteProcess(processes[deleteProcessModal].record);
                   }}
                   text={'Confirmar'}
                 />

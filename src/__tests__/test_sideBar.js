@@ -19,7 +19,7 @@ describe('Testando SideBar', () => {
       .get(/allUser/)
       .reply(200, usersResponse);
 
-    localStorage.setItem('user', JSON.stringify(loggedUser.user));
+    localStorage.setItem('user', JSON.stringify(loggedUser[0]));
 
     render(
       <MemoryRouter initialEntries={['/']}>

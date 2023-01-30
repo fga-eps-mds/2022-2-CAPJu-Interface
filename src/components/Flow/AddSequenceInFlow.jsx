@@ -10,8 +10,8 @@ function AddSequenceInFlow({ options, stages, addSequence, removeSequence }) {
   const [destinationStage, setDestinationStage] = useState('');
 
   const stagesInFlow = options.map((option) => {
-    const { name: label, _id: value } = stages.find(
-      (stage) => stage._id === option
+    const { name: label, idStage: value } = stages.find(
+      (stage) => stage.idStage === option
     );
     return { label, value };
   });
@@ -22,7 +22,7 @@ function AddSequenceInFlow({ options, stages, addSequence, removeSequence }) {
         <Dropdown
           className="dropdown"
           options={stagesInFlow}
-          onChange={(e) => setOriginStage(e.value)}
+          onChange={(e) => setOriginStage(e)}
           value={originStage}
           placeholder="Selecione a etapa"
         />
@@ -32,7 +32,7 @@ function AddSequenceInFlow({ options, stages, addSequence, removeSequence }) {
         <Dropdown
           className="dropdown"
           options={stagesInFlow}
-          onChange={(e) => setDestinationStage(e.value)}
+          onChange={(e) => setDestinationStage(e)}
           value={destinationStage}
           placeholder="Selecione a etapa"
         />

@@ -36,7 +36,7 @@ function SideBar() {
     const response = await api.get(`/allUser?accepted=false`, {
       headers: authHeader
     });
-    setUsers(response.data.user);
+    setUsers(response.data);
   }
 
   const userLogout = JSON.parse(localStorage.getItem('user'));
@@ -49,7 +49,7 @@ function SideBar() {
         <hr />
         <MenuItem
           href={'/unidades'}
-          disabled={!hasPermission(user, 'view-unity')}
+          disabled={!hasPermission(user, 'view-unit')}
         >
           <GroupWork size={35} />
           Unidades

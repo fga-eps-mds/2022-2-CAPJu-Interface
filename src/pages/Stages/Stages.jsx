@@ -17,10 +17,12 @@ import TextInput from 'components/TextInput/TextInput';
 import hasPermission from 'util/permissionChecker';
 
 function Stages() {
-  const [stages, setStages] = useState([{ name: '', time: '', _id: '' }]);
+  const [stages, setStages] = useState([
+    { name: '', duration: '', idStage: '' }
+  ]);
   const [stageName, setStageName] = useState('');
   const [stageTime, setStageTime] = useState('');
-  const [currentStage, setCurrentStage] = useState({ name: '', _id: '' });
+  const [currentStage, setCurrentStage] = useState({ name: '', idStage: '' });
   const [isModalOpen, setModalOpen] = useState(false);
   const [isModalConfDelete, setModalConfDelete] = useState(false);
 
@@ -33,19 +35,22 @@ function Stages() {
   async function updateStages() {
     const response = await api.get('/stages');
     function compara(a, b) {
-      if (a.time > b.time) return a.name > b.name ? 1 : 0;
+      if (a.duration > b.duration) return a.name > b.name ? 1 : 0;
       return -1;
     }
-    response.data.Stages.sort(compara);
-    setStages(response.data.Stages);
+    response.data.sort(compara);
+    setStages(response.data);
   }
 
   async function addStage() {
     try {
-      const response = await api.post('/newStage', {
+      const user = JSON.parse(localStorage.getItem('user'));
+      const body = {
         name: stageName,
-        time: stageTime
-      });
+        duration: stageTime,
+        idUnit: user.idUnit
+      };
+      const response = await api.post('/newStage', body);
 
       if (response.status == 200) {
         toast.success('Etapa Adicionada com sucesso');
@@ -68,9 +73,7 @@ function Stages() {
 
   async function deleteStage(id) {
     try {
-      const response = await api.post('/deleteStage', {
-        stageId: id
-      });
+      const response = await api.delete(`/deleteStage/${id}`);
       if (response.status == 200) {
         toast.success('Etapa Deletada com sucesso');
         updateStages();
@@ -109,7 +112,7 @@ function Stages() {
             columnList={columnHeaders}
             itemList={stages}
             actionList={actionList}
-            attributeList={(stage) => [stage.name, stage.time]}
+            attributeList={(stage) => [stage.name, stage.duration]}
           />
         </Area>
 
@@ -127,16 +130,14 @@ function Stages() {
               <span>Criar Etapa</span>
             </ContentHeader>
             <div>
-              <p> Nome </p>
-
               <TextInput
+                label="Nome"
                 set={setStageName}
                 value={stageName}
                 placeholder="Nome da etapa"
               />
-              <p> Duração </p>
-
               <TextInput
+                label="Duração"
                 set={setStageTime}
                 value={stageTime}
                 placeholder="Duração (dias)"
@@ -173,7 +174,7 @@ function Stages() {
             <div>
               <Button
                 onClick={() => {
-                  deleteStage(currentStage._id);
+                  deleteStage(currentStage.idStage);
                   setModalConfDelete(false);
                 }}
                 text={'Excluir'}

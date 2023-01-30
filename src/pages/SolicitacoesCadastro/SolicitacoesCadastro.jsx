@@ -27,9 +27,9 @@ function SolicitacoesCadastro() {
       headers: authHeader
     });
     const idUser = JSON.parse(localStorage.getItem('user'));
-    for (let user of allUser.data.user) {
-      if (user._id == idUser._id)
-        localStorage.setItem('unitys', JSON.stringify(user.unity));
+    for (let user of allUser.data) {
+      if (user.cpf == idUser.cpf)
+        localStorage.setItem('unitys', JSON.stringify(user.idUnit));
     }
     const unidade = localStorage.getItem('unitys');
     const trataUnidade = unidade?.replace(/"/g, '');
@@ -38,9 +38,9 @@ function SolicitacoesCadastro() {
     });
 
     const targetUsers = [];
-    const pendingUsers = response.data.user;
+    const pendingUsers = response.data;
     for (let users of pendingUsers) {
-      if (users.unity == trataUnidade) {
+      if (users.idUnit == trataUnidade) {
         targetUsers.push(users);
       }
     }
@@ -126,7 +126,7 @@ function SolicitacoesCadastro() {
           columnList={['Nome']}
           itemList={users}
           actionList={actionList}
-          attributeList={(user) => [user.name]}
+          attributeList={(user) => [user.fullName]}
         />
       </Area>
       {acceptModal && (
@@ -136,11 +136,11 @@ function SolicitacoesCadastro() {
               <span>Aceitar Solicitação</span>
             </ContentHeader>
             <span>Deseja realmente aceitar esta solicitação?</span>
-            {getUser(selectedUser).name}
+            {getUser(selectedUser).fullName}
             <div>
               <Button
                 onClick={async () => {
-                  await acceptRequest(getUser(selectedUser)._id);
+                  await acceptRequest(getUser(selectedUser).cpf);
                   await updateSolicitacoes();
                   setAcceptModal(false);
                 }}
@@ -164,11 +164,11 @@ function SolicitacoesCadastro() {
               <span>Recusar Solicitação</span>
             </ContentHeader>
             <span>Deseja realmente recusar esta solicitação?</span>
-            {getUser(selectedUser).name}
+            {getUser(selectedUser).fullName}
             <div>
               <Button
                 onClick={async () => {
-                  await deleteRequest(getUser(selectedUser)._id);
+                  await deleteRequest(getUser(selectedUser).cpf);
                   await updateSolicitacoes();
                   setDeleteModal(false);
                 }}

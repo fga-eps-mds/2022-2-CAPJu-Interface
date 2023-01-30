@@ -17,12 +17,14 @@ import TextInput from 'components/TextInput/TextInput';
 import hasPermission from 'util/permissionChecker';
 
 function Unidades() {
-  const [unitList, setUnitList] = useState([{ name: '', time: '', _id: '' }]);
+  const [unitList, setUnitList] = useState([
+    { name: '', time: '', idUnit: '' }
+  ]);
   const [UnityName, setUnityName] = useState('');
   const [adminSearchName, setAdminSearchName] = useState('');
   const [currentUnity, setCurrentUnity] = useState({
     name: '',
-    _id: '',
+    idUnit: '',
     admins: []
   });
   const [isModalOpen, setModalOpen] = useState(false);
@@ -38,17 +40,18 @@ function Unidades() {
 
   async function searchUsers(unit) {
     setCurrentUnity({ ...unit, admins: [] });
-    const response = await userApi.get('searchUsers/');
-    setFoundUsers(response.data.user);
+    const response = await userApi.get('/allUser?accepted=true');
+    setFoundUsers(response.data);
     setAddAdminsModalOpen(true);
   }
 
-  async function setAdmin({ _id: userId }) {
+  async function setAdmin(obj) {
     setAddAdminsModalOpen(true);
-    const response = await userApi.post('setUnityAdmin/', {
-      unityId: currentUnity._id,
-      userId
-    });
+    const body = {
+      idUnit: currentUnity.idUnit,
+      cpf: obj.cpf
+    };
+    const response = await userApi.put('setUnitAdmin/', body);
     if (response.status == 200) {
       toast.success('Administrador de unidade adicionado com sucesso');
     }
@@ -56,18 +59,19 @@ function Unidades() {
 
   async function updateUnityAdmins(unit) {
     setCurrentUnity({ ...unit, admins: [] });
-    const response = await api.get('unityAdmins/' + unit._id);
+    const response = await api.get('unitAdmins/' + unit.idUnit);
     let existingUnity = { ...unit };
-    existingUnity.admins = response.data.admins || [];
+    existingUnity.admins = response.data || [];
     setCurrentUnity(existingUnity);
     setSeeAdminsModalOpen(true);
   }
 
-  async function removeAdmin(adminId) {
-    const response = await userApi.post('/removeUnityAdmin', {
-      unityId: currentUnity._id,
-      adminId: adminId
-    });
+  async function removeAdmin(cpf) {
+    const body = {
+      idUnit: currentUnity.idUnit,
+      cpf
+    };
+    const response = await userApi.put('/removeUnitAdmin', body);
     if (response.status == 200) {
       toast.success('Administrador removido com sucesso');
       updateUnityAdmins(currentUnity);
@@ -75,21 +79,23 @@ function Unidades() {
   }
 
   async function updateUnitys() {
-    const response = await api.get('/unitys');
-    setUnitList(response.data.Unitys);
+    const response = await api.get('/units');
+    setUnitList(response.data);
   }
 
   function filterUsers() {
-    return foundUsers.filter(
-      (user) =>
-        user.name.includes(adminSearchName) &&
-        !(user.unityAdmin === currentUnity._id)
-    );
+    return foundUsers.filter((user) => {
+      return (
+        user.fullName.toLowerCase().includes(adminSearchName.toLowerCase()) &&
+        user.idUnit === currentUnity.idUnit &&
+        user.idRole != 5
+      );
+    });
   }
 
   async function addUnity() {
     try {
-      const response = await api.post('/newUnity', {
+      const response = await api.post('/newUnit', {
         name: UnityName
       });
 
@@ -122,7 +128,7 @@ function Unidades() {
   const removeAdminsActions = [
     {
       tooltip: 'Remover Admin',
-      action: (user) => removeAdmin(user._id),
+      action: (user) => removeAdmin(user.cpf),
       type: 'delete'
     }
   ];
@@ -137,7 +143,7 @@ function Unidades() {
       tooltip: 'Adicionar Admins',
       action: searchUsers,
       type: 'addUser',
-      disabled: !hasPermission(user, 'add-admin-in-unity')
+      disabled: !hasPermission(user, 'add-admin-in-unit')
     }
   ];
 
@@ -155,7 +161,7 @@ function Unidades() {
           onClick={() => {
             setModalOpen(true);
           }}
-          disabled={!hasPermission(user, 'create-unity')}
+          disabled={!hasPermission(user, 'create-unit')}
         >
           + Adicionar Unidade
         </AddUnityButton>
@@ -167,9 +173,10 @@ function Unidades() {
               <span>Criar Unidade</span>
             </ContentHeader>
             <div>
-              <p> Nome </p>
+              {/* <p> Nome </p> */}
 
               <TextInput
+                label="Nome"
                 set={setUnityName}
                 value={UnityName}
                 placeholder="Nome da unidade"
@@ -206,7 +213,7 @@ function Unidades() {
               <Table
                 itemList={currentUnity.admins}
                 columnList={['Nome']}
-                attributeList={(admin) => [admin.name]}
+                attributeList={(admin) => [admin.fullName]}
                 actionList={removeAdminsActions}
               />
             </div>
@@ -239,7 +246,7 @@ function Unidades() {
               <Table
                 itemList={filterUsers()}
                 columnList={['Nome']}
-                attributeList={(admin) => [admin.name]}
+                attributeList={(admin) => [admin.fullName]}
                 actionList={newAdminActions}
               />
             </div>

@@ -16,7 +16,7 @@ jest.mock('react-router-dom', () => {
   return {
     ...jest.requireActual('react-router-dom'),
     useLocation: () => {
-      return { state: mockFlowsResponse.Flows[0] };
+      return { state: mockFlowsResponse[0] };
     }
   };
 });
@@ -28,7 +28,7 @@ test('Testando busca por registro ou apelido', async () => {
       'access-control-allow-credentials': 'true'
     })
     .persist()
-    .get(/\/processes\/(.+)?/)
+    .get(/\/processes/)
     .reply(200, processResponse)
     .get('/flows/')
     .reply(200, flowsResponse)

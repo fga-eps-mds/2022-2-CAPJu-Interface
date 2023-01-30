@@ -31,36 +31,34 @@ function AccessProfile() {
       { label: 'Diretor', value: 1 },
       { label: 'Juiz', value: 2 },
       { label: 'Servidor', value: 3 },
-      { label: 'Estagiario', value: 4 }
+      { label: 'Estagiario', value: 4 },
+      { label: 'Administrador', value: 5 }
     ],
     []
   );
 
   const getUserRole = useCallback(
     (user) => {
-      return roles.find((role) => role.value == user.role).label;
+      return roles.find((role) => role.value == user.idRole).label;
     },
     [roles]
   );
 
   const getSelectedUser = useCallback(() => {
-    return users.find((user) => user._id == selectedUser);
+    return users.find((user) => user.cpf == selectedUser);
   }, [users, selectedUser]);
 
   const updateUser = useCallback(async () => {
     const response = await api.get('/allUser', {
       headers: authHeader
     });
-    setUsers(response.data.user);
+    setUsers(response.data);
   }, [authHeader]);
 
   const editRole = useCallback(async () => {
     try {
-      const response = await api.put(
-        '/updateRole',
-        { _id: selectedUser, role: newRole },
-        { headers: authHeader }
-      );
+      const body = { cpf: selectedUser, idRole: newRole, headers: authHeader };
+      const response = await api.put('/updateUserRole', body);
 
       if (response.status == 200) {
         toast.success('Perfil alterado com sucesso');
@@ -105,11 +103,10 @@ function AccessProfile() {
   }, []);
 
   const deleteUser = useCallback(
-    async (userId) => {
+    async (cpf) => {
       try {
-        const response = await api.delete(`/deleteRequest/${userId}`, {
-          headers: authHeader
-        });
+        const body = { headers: authHeader };
+        const response = await api.delete(`/deleteUser/${cpf}`, body);
         if (response.status == 200) {
           toast.success('Usuário deletado com sucesso!', { duration: 3000 });
         } else {
@@ -135,20 +132,19 @@ function AccessProfile() {
   );
 
   const handleDeleteUser = useCallback(async () => {
-    await deleteUser(getSelectedUser()._id);
+    await deleteUser(getSelectedUser().cpf);
     await updateUser();
     setDeleteModal(false);
   }, [deleteUser, updateUser, setDeleteModal, getSelectedUser]);
 
-  const filterUser = (arr) => {
-    const user = JSON.parse(localStorage.getItem('user'));
-    return arr.filter((users) => {
+  const filterUser = (userList) => {
+    const loggedUser = JSON.parse(localStorage.getItem('user'));
+    return userList.filter((user) => {
       if (
-        (users.name.toLowerCase().includes(searchUser.toLocaleLowerCase()) ||
-          users.name.includes(searchUser)) &&
-        users.email !== user.email
+        user.fullName.toLowerCase().includes(searchUser.toLowerCase()) &&
+        user.email !== loggedUser.email
       )
-        return users;
+        return user;
     });
   };
 
@@ -157,16 +153,16 @@ function AccessProfile() {
       tooltip: 'Editar perfil',
       action: (user) => {
         setRoleModal(true);
-        setSelectedUser(user._id);
+        setSelectedUser(user.cpf);
       },
       type: 'edit',
       disabled: !hasPermission(user, 'edit-user')
     },
     {
-      tooltip: 'Deletar Perfil',
+      tooltip: 'Deletar Usuário',
       action: (user) => {
         setDeleteModal(true);
-        setSelectedUser(user._id);
+        setSelectedUser(user.cpf);
       },
       type: 'delete',
       disabled: !hasPermission(user, 'delete-user')
@@ -176,7 +172,7 @@ function AccessProfile() {
   const getAttributesForDisplay = useCallback(
     (user) => {
       return [
-        user.name,
+        user.fullName,
         getUserRole(user),
         user.accepted ? 'Aceito' : 'Pendente'
       ];
