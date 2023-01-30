@@ -9,10 +9,14 @@ const buttonTypeToComponent = {
   showProcess: BtnStyle
 };
 
-function Button({ background, onClick, children, buttonType, text }) {
+function Button({ background, onClick, children, buttonType, text, disabled }) {
   const ButtonComponent = buttonTypeToComponent[buttonType] || Container;
   return (
-    <ButtonComponent background={background} onClick={onClick}>
+    <ButtonComponent
+      background={background}
+      onClick={onClick}
+      disabled={disabled}
+    >
       {text}
       {children}
     </ButtonComponent>
@@ -25,7 +29,8 @@ Button.propTypes = {
   onClick: PropTypes.func,
   background: PropTypes.string,
   children: PropTypes.any,
-  text: PropTypes.string
+  text: PropTypes.string,
+  disabled: PropTypes.bool
 };
 
 export default Button;

@@ -2,7 +2,7 @@ import toast from 'react-hot-toast';
 import React, { useCallback, useEffect, useState } from 'react';
 
 import api from 'services/api';
-import user from 'services/user';
+import userApi from 'services/user';
 import Button from 'components/Button/Button';
 import TextInput from 'components/TextInput/TextInput';
 import DescriptionIcon from '@mui/icons-material/Description';
@@ -15,11 +15,12 @@ import {
   Content,
   ContentHeader,
   CloseModalGeneral,
-  DivFlex,
-  LabelDiv
+  LabelDiv,
+  DivFlex
 } from './styles';
 import FlowViewer from 'components/Flow/FlowViewer';
 import Table from 'components/Tables/Table';
+import hasPermission from 'util/permissionChecker';
 import SelectionList from 'components/Flow/SelectionList';
 
 function Flows() {
@@ -38,6 +39,8 @@ function Flows() {
   const [deleteModal, setDeleteModal] = useState(false);
   const [selectedFlow, setSelectedFlow] = useState(0);
 
+  const user = JSON.parse(localStorage.getItem('user'));
+
   useEffect(() => {
     updateStages();
     updateFlows();
@@ -46,17 +49,17 @@ function Flows() {
 
   async function updateFlows() {
     const response = await api.get('/flows');
-    setFlowList(response.data.Flows);
+    setFlowList(response.data);
   }
 
   async function updateUsers() {
-    const response = await user.get('/allUser');
-    setUsers(response.data.user);
+    const response = await userApi.get('/allUser');
+    setUsers(response.data);
   }
 
   async function updateStages() {
     const response = await api.get('/stages');
-    setStages(response.data.Stages);
+    setStages(response.data);
   }
 
   const responseHandler = useCallback((response, successMsg, errorMsg) => {
@@ -80,13 +83,15 @@ function Flows() {
   }
 
   const addFlow = useCallback(async () => {
+    const { idUnit } = JSON.parse(localStorage.getItem('user'));
     setModalOpen(!isModalOpen);
     try {
       const response = await api.post('/newFlow', {
         name: flowName,
         stages: flowStages,
         sequences: flowSequences,
-        users: flowUsers
+        idUsersToNotify: flowUsers,
+        idUnit
       });
       responseHandler(
         response,
@@ -114,15 +119,14 @@ function Flows() {
           ? true
           : false;
       });
-
       setFlowSequences(newSequences);
 
-      const response = await api.put('/editFlow', {
-        _id: flowId,
+      const response = await api.put('/flow', {
+        idFlow: flowId,
         name: flowName,
         stages: flowStages,
         sequences: flowSequences,
-        users: flowUsers
+        idUsersToNotify: flowUsers
       });
       responseHandler(
         response,
@@ -145,9 +149,7 @@ function Flows() {
   const deleteFlow = useCallback(
     async (id) => {
       try {
-        const response = await api.post('/deleteFlow', {
-          flowId: id
-        });
+        const response = await api.delete(`/flow/${id}`);
         responseHandler(
           response,
           'Fluxo Deletada com sucesso',
@@ -161,7 +163,7 @@ function Flows() {
   );
 
   const addSequence = useCallback(
-    (from, to) => {
+    ({ value: from }, { value: to }) => {
       if (
         flowSequences.find(
           (sequence) => sequence.from == from && sequence.to == to
@@ -181,11 +183,11 @@ function Flows() {
   }, [flowSequences]);
 
   function getFlow(flowId) {
-    return flowList.find((flow) => flow._id == flowId);
+    return flowList.find((flow) => flow.idFlow == flowId);
   }
 
-  function buildFlow({ _id, name, stages, sequences, users }) {
-    setFlowId(_id || '');
+  function buildFlow({ idFlow, name, stages, sequences, users }) {
+    setFlowId(idFlow || '');
     setFlowName(name || '');
     setFlowStages(stages || []);
     setFlowSequences(sequences || []);
@@ -197,7 +199,8 @@ function Flows() {
       tooltip: 'Visualizar processos',
       linkTo: '/processes',
       linkIcon: <DescriptionIcon htmlColor="black" />,
-      type: 'link'
+      type: 'link',
+      disabled: !hasPermission(user, 'view-flow')
     },
     {
       tooltip: 'Editar fluxo',
@@ -205,15 +208,17 @@ function Flows() {
         buildFlow(flow);
         setShowFlow(!showFlow);
       },
-      type: 'edit'
+      type: 'edit',
+      disabled: !hasPermission(user, 'edit-flow')
     },
     {
       tooltip: 'Deletar fluxo',
       action: (flow) => {
         setDeleteModal(!deleteModal);
-        setSelectedFlow(flow._id);
+        setSelectedFlow(flow.idFlow);
       },
-      type: 'delete'
+      type: 'delete',
+      disabled: !hasPermission(user, 'delete-flow')
     }
     /*,
     {
@@ -265,7 +270,10 @@ function Flows() {
             actionList={actionList}
           />
         </Area>
-        <AddFlowButton onClick={handleNewFlowModal}>
+        <AddFlowButton
+          onClick={handleNewFlowModal}
+          disabled={!hasPermission(user, 'create-flow')}
+        >
           <span>+ Adicionar Fluxo</span>
         </AddFlowButton>
         {/* {Modal para confirmar exclusão do fluxo} */}
@@ -315,6 +323,8 @@ function Flows() {
                   placeholder="Selecione uma etapa"
                   options={stages}
                   selectedOptions={flowStages}
+                  selectedOptionsId={'idStage'}
+                  selectedOptionsName={'name'}
                   addSelectedOption={setFlowStages}
                   hintText="Etapas presentes em um fluxo"
                 />
@@ -323,6 +333,8 @@ function Flows() {
                   placeholder="Selecione o usuário"
                   options={users}
                   selectedOptions={flowUsers}
+                  selectedOptionsId={'cpf'}
+                  selectedOptionsName={'fullName'}
                   addSelectedOption={setFlowUsers}
                   hintText="Usuários notificados por email, quando processos deste fluxo estiverem atrasado."
                 />
@@ -381,6 +393,8 @@ function Flows() {
                 placeholder="Selecione uma etapa"
                 options={stages}
                 selectedOptions={flowStages}
+                selectedOptionsId={'idStage'}
+                selectedOptionsName={'name'}
                 addSelectedOption={setFlowStages}
                 hintText="Etapas presentes em um fluxo"
               />
@@ -389,6 +403,8 @@ function Flows() {
                 placeholder="Selecione o usuário"
                 options={users}
                 selectedOptions={flowUsers}
+                selectedOptionsId={'cpf'}
+                selectedOptionsName={'fullName'}
                 addSelectedOption={setFlowUsers}
                 hintText="Usuários notificados por email, quando processos deste fluxo estiverem atrasado."
               />

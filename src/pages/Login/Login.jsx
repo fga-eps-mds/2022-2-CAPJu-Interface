@@ -4,7 +4,7 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import api from 'services/api';
-import user from 'services/user';
+import userApi from 'services/user';
 import {
   Container,
   Menu,
@@ -31,7 +31,7 @@ function Login() {
   const [newEmail, setNewEmail] = useState('');
   const [newPassword, setNewPassword] = useState('');
   const [newPassword2, setNewPassword2] = useState('');
-  const [unitys, setUnitys] = useState([]);
+  const [units, setUnits] = useState([]);
   const [newUnity, setNewUnity] = useState('');
   const [newCpf, setNewCpf] = useState('');
   const [loginCpf, setLoginCpf] = useState('');
@@ -68,12 +68,12 @@ function Login() {
     }
 
     try {
-      const response = await user.post('/newUser', {
-        name: newName,
+      const response = await userApi.post('/newUser', {
+        fullName: newName,
         email: newEmail,
         password: newPassword,
-        role: newRole,
-        unity: newUnity,
+        idRole: newRole.value,
+        idUnit: newUnity.value,
         cpf: newCpf
       });
       response.status = 200;
@@ -93,7 +93,7 @@ function Login() {
 
   async function login() {
     try {
-      const response = await user.post('/login', {
+      const response = await userApi.post('/login', {
         cpf: loginCpf,
         password: password
       });
@@ -132,7 +132,7 @@ function Login() {
   }
 
   async function requestNewPassword() {
-    const response = await user.post('/requestRecovery', {
+    const response = await userApi.post('/requestRecovery', {
       email: email
     });
     if (response.status == 200) {
@@ -142,11 +142,11 @@ function Login() {
     }
   }
   async function updateUnitys() {
-    const response = await api.get('/unitys');
-    setUnitys(response.data.Unitys);
+    const response = await api.get('/units');
+    setUnits(response.data);
   }
-  const allOptions = unitys.map((unitys) => {
-    return { label: <>{unitys.name}</>, value: unitys._id };
+  const allOptions = units.map((units) => {
+    return { label: units.name, value: units.idUnit };
   });
 
   const OptionsRoles = [
@@ -282,9 +282,7 @@ function Login() {
           <EditDrop>
             <Dropdown
               options={OptionsRoles}
-              onChange={(e) => {
-                setNewRole(e.value);
-              }}
+              onChange={(e) => setNewRole(e)}
               value={roles[newRole]}
               placeholder="Selecione o perfil"
               className="dropdown"
@@ -297,9 +295,7 @@ function Login() {
           <EditDrop>
             <Dropdown
               options={allOptions}
-              onChange={(e) => {
-                setNewUnity(e.value);
-              }}
+              onChange={(e) => setNewUnity(e)}
               value={newUnity}
               placeholder="Selecione a unidade"
               className="dropdown"

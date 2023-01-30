@@ -7,6 +7,7 @@ import { render, waitFor, screen, fireEvent } from '@testing-library/react';
 import Login from 'pages/Login/Login';
 import { userURL } from 'services/user';
 import { baseURL } from 'services/api';
+import { units, usersResponse } from 'testConstants';
 
 axios.defaults.adapter = require('axios/lib/adapters/http');
 
@@ -18,33 +19,15 @@ jest.mock('react-router-dom', () => {
     useNavigate: () => mockNavigate
   };
 });
-// jest.setTimeout(8000);
-test('Testando o cadastro', async () => {
-  const registerData = {
-    name: 'João Silva',
-    email: 'test@test.com',
-    password: 'SenhaForte1',
-    cpf: '055.740.430-41',
-    role: '1',
-    unity: '12341234ldlfasdf'
-  };
 
+test('Testando o cadastro', async () => {
   const scopeCadastro = nock(userURL)
     .defaultReplyHeaders({
       'access-control-allow-origin': '*',
       'access-control-allow-credentials': 'true'
     })
-    .persist()
-    .post('/newUser', registerData)
-    .reply(200, {
-      _id: 'askljsf',
-      name: registerData.name,
-      email: registerData.email,
-      password: registerData.password,
-      token: 'Bearer sdlksadkçlfdjalo',
-      unity: '12341234ldlfasdf',
-      role: registerData.role
-    });
+    .post('/newUser')
+    .reply(200);
 
   const scopeUnities = nock(baseURL)
     .defaultReplyHeaders({
@@ -52,21 +35,12 @@ test('Testando o cadastro', async () => {
       'access-control-allow-credentials': 'true'
     })
     .persist()
-    .get('/unitys')
-    .reply(200, {
-      Unitys: [
-        {
-          name: 'Peritos',
-          _id: '12341234ldlfasdf'
-        }
-      ]
-    });
+    .get('/units')
+    .reply(200, units);
 
   render(<Login />);
 
-  await waitFor(() => expect(scopeUnities.isDone()).toBe(true), {
-    timeout: 1000
-  });
+  await waitFor(() => expect(scopeUnities.isDone()).toBe(true));
 
   const button = screen.getByText('Cadastro');
   fireEvent.click(button);
@@ -80,21 +54,22 @@ test('Testando o cadastro', async () => {
   const select = screen.getAllByTestId('react-select-mock');
   const button1 = screen.getByText('Cadastrar');
 
-  fireEvent.change(inputName, { target: { value: registerData.name } });
-  fireEvent.change(inputEmail, { target: { value: registerData.email } });
-  fireEvent.change(inputCpf, { target: { value: registerData.cpf } });
-  fireEvent.change(inputPassword, { target: { value: registerData.password } });
-  fireEvent.change(inputCheckPassword, {
-    target: { value: registerData.password }
+  fireEvent.change(inputName, { target: { value: usersResponse[0].fullName } });
+  fireEvent.change(inputEmail, { target: { value: usersResponse[0].email } });
+  fireEvent.change(inputCpf, { target: { value: usersResponse[0].cpf } });
+  fireEvent.change(inputPassword, {
+    target: { value: '123Teste' }
   });
-  fireEvent.change(select[0], { target: { value: registerData.role } });
-  fireEvent.change(select[1], { target: { value: registerData.unity } });
+  fireEvent.change(inputCheckPassword, {
+    target: { value: '123Teste' }
+  });
+  fireEvent.change(select[0], { target: { value: usersResponse[0].idRole } });
+  fireEvent.change(select[1], { target: { value: usersResponse[0].idUnit } });
 
   expect(title).toHaveTextContent('Cadastre-se');
   fireEvent.click(button1);
-  await waitFor(() => expect(scopeCadastro.isDone()).toBe(true), {
-    timeout: 1000
-  });
+
+  await waitFor(() => expect(scopeCadastro.isDone()).toBe(true));
   expect(screen.queryByText('Cadastre-se')).toBe(null);
 });
 

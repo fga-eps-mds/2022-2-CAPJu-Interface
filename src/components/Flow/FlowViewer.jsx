@@ -11,33 +11,28 @@ const edgeTypes = {
 };
 
 function FlowViewer(props) {
-  const procStages = props.proc?.etapas;
-  const { disabled, openModal } = props;
+  const { flow, disabled, openModal } = props;
 
   function deadlineDate(stage) {
-    const stageDate = getStageDate(stage._id, props.proc, props.flow);
+    const stageDate = getStageDate(stage.idStage, props.proc, flow);
     if (stageDate instanceof Date && !isNaN(stageDate)) {
-      stageDate.setDate(stageDate.getDate() + parseInt(stage.time));
+      stageDate.setDate(stageDate.getDate() + stage.duration);
       return stageDate.toLocaleDateString();
     }
   }
   const nodes = props.stages
     .filter((stage) => {
-      return props.flow.stages.includes(stage._id);
+      return props.flow.stages.includes(stage.idStage);
     })
     .map((stage, idx) => {
-      const deadline = props.proc && deadlineDate(stage);
+      const deadline = props.proc ? deadlineDate(stage) : null;
       return {
-        id: stage._id,
+        id: `${stage.idStage}`,
         data: {
-          label: (
-            <>
-              {stage.name} <br /> {deadline && `Vencimento: ${deadline}`}
-            </>
-          )
+          label: `${stage.name}\n${deadline && `Vencimento: ${deadline}`}`
         },
         position: { x: (idx % 2) * 130, y: 140 * idx },
-        style: props.highlight === stage._id && {
+        style: props.highlight === stage.idStage && {
           backgroundColor: isLate(stage, props.proc, props.flow)
             ? 'rgb(222, 83, 83)'
             : '#1b9454',
@@ -46,15 +41,15 @@ function FlowViewer(props) {
       };
     });
 
-  let edges = [];
-  if (procStages) {
-    edges = procStages.map((sequence) => {
+  let edges;
+  if (flow) {
+    edges = flow.sequences.map((sequence) => {
       return {
-        id: 'e' + sequence.stageIdFrom + '-' + sequence.stageIdTo,
-        source: sequence.stageIdFrom,
-        target: sequence.stageIdTo,
+        id: 'e' + sequence.from + '-' + sequence.to,
+        source: `${sequence.from}`,
+        target: `${sequence.to}`,
         label:
-          sequence.observation || (!disabled && '+ Adicionar nova notificação'),
+          sequence.commentary || (!disabled && '+ Adicionar nova notificação'),
         type: !disabled && 'edgebutton',
         animated: true,
         data: { onClick: openModal },
@@ -65,43 +60,26 @@ function FlowViewer(props) {
         style: { stroke: '#1b9454' }
       };
     });
-  }
-
-  edges = [
-    ...edges,
-    ...props.flow.sequences.map((sequence) => {
+  } else {
+    edges = props.flow.sequences.map((sequence) => {
       const id = 'e' + sequence.from + '-' + sequence.to;
       return {
         id: id,
-        source: sequence.from,
-        target: sequence.to,
+        source: `${sequence.from}`,
+        target: `${sequence.to}`,
         label: !disabled && '+ Adicionar nova notificação',
         type: !disabled && 'edgebutton',
         animated: true,
         data: { onClick: openModal },
         style: { stroke: 'black' }
       };
-    })
-  ];
-
-  let uniqueEdges;
-  uniqueEdges = edges.filter((edgeS) => {
-    if (
-      edges.some((edgeI) => edgeS.id == edgeI.id && edgeS.label !== edgeI.label)
-    ) {
-      if (edgeS.label !== '+ Adicionar nova notificação') return edgeS;
-    } else return edgeS;
-  });
+    });
+  }
 
   return (
-    uniqueEdges && (
+    edges && (
       <FlowContainer onClick={props.onClick}>
-        <ReactFlow
-          nodes={nodes}
-          edges={uniqueEdges}
-          edgeTypes={edgeTypes}
-          fitView
-        />
+        <ReactFlow nodes={nodes} edges={edges} edgeTypes={edgeTypes} fitView />
       </FlowContainer>
     )
   );
@@ -112,7 +90,7 @@ FlowViewer.propTypes = {
   onClick: PropTypes.func,
   flow: PropTypes.any,
   stages: PropTypes.array,
-  highlight: PropTypes.string,
+  highlight: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   proc: PropTypes.object,
   openModal: PropTypes.func
 };

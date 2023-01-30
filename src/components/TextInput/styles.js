@@ -10,9 +10,15 @@ export const Input = styled.input`
   border-radius: 10px;
   font-size: 15px;
   box-sizing: border-box;
+  margin: 20px;
 
   :focus {
     outline: none;
     background-color: rgba(0, 0, 0, 0);
+  }
+
+  :disabled {
+    cursor: not-allowed;
+    color: EBEBE4;
   }
 `;

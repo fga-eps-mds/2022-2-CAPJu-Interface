@@ -19,6 +19,8 @@ function SelectionList({
   label,
   options,
   selectedOptions,
+  selectedOptionsId,
+  selectedOptionsName,
   addSelectedOption,
   placeholder,
   hintText
@@ -26,7 +28,10 @@ function SelectionList({
   const [showTextBox, setShowTextBox] = useState(false);
   const [selectedOption, setSelectedOption] = useState(null);
   const optionList = options.map((option) => {
-    return { label: option.name, value: option._id };
+    return {
+      label: option[selectedOptionsName],
+      value: option[selectedOptionsId]
+    };
   });
 
   function addItem(item) {
@@ -54,15 +59,13 @@ function SelectionList({
           >
             <QuestionCircleFill size={20} />
           </div>
-          {showTextBox && (
-            <>
-              <QuestionBox>{hintText}</QuestionBox>
-            </>
-          )}
+          {showTextBox && <QuestionBox>{hintText}</QuestionBox>}
         </DivFlex>
         {selectedOptions.length > 0 ? (
           selectedOptions.map((option, index) => {
-            const { name } = options.find((item) => item._id === option);
+            const name = options.find(
+              (item) => item[selectedOptionsId] === option
+            )[selectedOptionsName];
             return (
               <Item key={index}>
                 <div className="removeBox" onClick={() => removeItem(index)}>
@@ -99,7 +102,11 @@ SelectionList.propTypes = {
   label: PropTypes.string.isRequired,
   placeholder: PropTypes.string.isRequired,
   options: PropTypes.arrayOf(PropTypes.object).isRequired,
-  selectedOptions: PropTypes.arrayOf(PropTypes.string).isRequired,
+  selectedOptions: PropTypes.arrayOf(
+    PropTypes.oneOfType([PropTypes.number, PropTypes.string])
+  ).isRequired,
+  selectedOptionsId: PropTypes.string.isRequired,
+  selectedOptionsName: PropTypes.string.isRequired,
   addSelectedOption: PropTypes.func.isRequired,
   hintText: PropTypes.string
 };

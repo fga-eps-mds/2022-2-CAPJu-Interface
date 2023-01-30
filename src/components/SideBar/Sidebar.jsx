@@ -11,6 +11,7 @@ import { ClipboardTaskListLtr } from '@styled-icons/fluentui-system-regular/Clip
 import api from 'services/user';
 import Button from 'components/Button/Button';
 import authConfig from 'services/config';
+import hasPermission from 'util/permissionChecker';
 import {
   Container,
   MenuItem,
@@ -24,6 +25,8 @@ function SideBar() {
   const navigate = useNavigate();
   const authHeader = authConfig()?.headers;
 
+  const user = JSON.parse(localStorage.getItem('user'));
+
   useEffect(() => {
     updateNotification();
     // eslint-disable-next-line
@@ -33,7 +36,7 @@ function SideBar() {
     const response = await api.get(`/allUser?accepted=false`, {
       headers: authHeader
     });
-    setUsers(response.data.user);
+    setUsers(response.data);
   }
 
   const userLogout = JSON.parse(localStorage.getItem('user'));
@@ -44,44 +47,61 @@ function SideBar() {
       </a>
       <Menu>
         <hr />
-
-        <MenuItem href={'/unidades'}>
+        <MenuItem
+          href={'/unidades'}
+          disabled={!hasPermission(user, 'view-unit')}
+        >
           <GroupWork size={35} />
           Unidades
         </MenuItem>
         <hr />
 
-        <MenuItem href={'/stages'}>
+        <MenuItem
+          href={'/stages'}
+          disabled={!hasPermission(user, 'view-stage')}
+        >
           <Flow size={35} />
           Etapas
         </MenuItem>
         <hr />
 
-        <MenuItem href={'/'}>
+        <MenuItem href={'/'} disabled={!hasPermission(user, 'view-flow')}>
           <FlowCascade size={35} />
           Fluxos
         </MenuItem>
         <hr />
 
-        <MenuItem href="/processes">
+        <MenuItem
+          href="/processes"
+          disabled={!hasPermission(user, 'view-process')}
+        >
           <ClipboardTaskListLtr size={35} />
           Processos
         </MenuItem>
         <hr />
         <Menu>
-          <MenuItem href={'/solicitacoes'}>
+          <MenuItem
+            href={'/solicitacoes'}
+            disabled={!hasPermission(user, 'accept-user')}
+          >
             <UserPlus size={35} />
             Solicitações
             {users.length >= 1 && <Notification>{users.length}</Notification>}
           </MenuItem>
           <hr />
 
-          <MenuItem href={'/accessProfile'}>
+          <MenuItem
+            href={'/accessProfile'}
+            disabled={!hasPermission(user, 'view-user')}
+          >
             <PersonFill size={35} /> Perfil de Acesso
           </MenuItem>
           <hr />
 
-          <MenuItem href="/editAccount">
+          <MenuItem
+            href="/editAccount"
+            disabled={!hasPermission(user, 'edit-account')}
+          >
             <UserCircle size={35} />
             Editar Conta
           </MenuItem>

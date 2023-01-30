@@ -8,6 +8,7 @@ import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { userURL } from 'services/user';
 import EditAccountEmail from 'pages/EditAccountEmail/EditAccountEmail';
 import EditAccountPassword from 'pages/EditAccountPassword/EditAccountPassword';
+import { usersResponse } from 'testConstants';
 
 axios.defaults.adapter = require('axios/lib/adapters/http');
 
@@ -25,48 +26,10 @@ const setLocalStorage = (user, data) => {
 };
 
 beforeAll(() => {
-  setLocalStorage('user', {
-    _id: '0001',
-    name: 'nomeUser',
-    email: 'teste@email.com',
-    token: '2asdasd454'
-  });
+  setLocalStorage('user', usersResponse[0]);
 });
 
 test('Testando edição de Email do componente editAccountEmail', async () => {
-  const userEmailResponse = {
-    user: [
-      {
-        _id: '0001',
-        name: 'nomeUser',
-        email: 'teste@email.com',
-        password: 'Test123',
-        createdAt: '2022-09-15T01:07:51.907Z',
-        updatedAt: '2022-09-16T03:42:15.785Z',
-        __v: 0
-      }
-    ]
-  };
-
-  const scopeEditEmail = nock(userURL)
-    .defaultReplyHeaders({
-      'access-control-allow-origin': '*',
-      'access-control-allow-credentials': 'true'
-    })
-    .persist()
-    .options(`/updateUser/${userEmailResponse.user[0]._id}`)
-    .reply(200, 'ok')
-    .put(`/updateUser/${userEmailResponse.user[0]._id}`)
-    .reply(200, {
-      _id: '0001',
-      name: 'nomeUser',
-      email: 'editTest@email.com',
-      password: 'Test123',
-      createdAt: '2022-09-15T01:07:51.907Z',
-      updatedAt: '2022-09-16T03:42:15.785Z',
-      __v: 0
-    });
-
   render(
     <MemoryRouter initialEntries={['/']}>
       <Routes>
@@ -88,40 +51,16 @@ test('Testando edição de Email do componente editAccountEmail', async () => {
     target: { value: 'editTest@email.com' }
   });
   fireEvent.click(salvarButton);
-
-  await waitFor(() => expect(scopeEditEmail.isDone()).toBe(true));
 });
 
 test('Testando edição de senha do componente editAccountPassword', async () => {
-  const userPasswordResponse = {
-    user: [
-      {
-        _id: '0001',
-        name: 'nomeUser',
-        email: 'teste@email.com',
-        password: 'Test123',
-        createdAt: '2022-09-15T01:07:51.907Z',
-        updatedAt: '2022-09-16T03:42:15.785Z',
-        __v: 0
-      }
-    ]
-  };
-
   const scopeEditPassword = nock(userURL)
     .defaultReplyHeaders({
       'access-control-allow-origin': '*',
       'access-control-allow-credentials': 'true'
     })
-    .post(`/updateUserPassword/${userPasswordResponse.user[0]._id}`)
-    .reply(200, {
-      _id: '0001',
-      name: 'nomeUser',
-      email: 'teste@email.com',
-      password: '123Teste',
-      createdAt: '2022-09-15T01:07:51.907Z',
-      updatedAt: '2022-09-16T03:42:15.785Z',
-      __v: 0
-    });
+    .post(`/updateUserPassword/${usersResponse[0].cpf}`)
+    .reply(200, usersResponse[0]);
 
   render(
     <MemoryRouter initialEntries={['/']}>

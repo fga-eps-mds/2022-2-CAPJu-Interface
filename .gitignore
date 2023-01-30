@@ -27,3 +27,4 @@ yarn.lock
 
 src/.env
 .env
+*.swp
