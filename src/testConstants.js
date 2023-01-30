@@ -41,6 +41,51 @@ export const adminsList = [
   }
 ];
 
+export const prioritiesResponse = [
+  {
+    idPriority: 1,
+    description: 'Art. 1048, II. Do CPC (ECA)',
+    createdAt: '2023-01-26T18:03:26.842Z',
+    updatedAt: '2023-01-26T18:03:26.842Z'
+  },
+  {
+    idPriority: 2,
+    description: 'Art. 1048, IV do CPC (Licitação)',
+    createdAt: '2023-01-26T18:03:26.842Z',
+    updatedAt: '2023-01-26T18:03:26.842Z'
+  },
+  {
+    idPriority: 3,
+    description: 'Art. 7, parágrafo 4, da Lei n 12.016/2009',
+    createdAt: '2023-01-26T18:03:26.842Z',
+    updatedAt: '2023-01-26T18:03:26.842Z'
+  },
+  {
+    idPriority: 4,
+    description: 'Idosa(a) maior de 80 anos',
+    createdAt: '2023-01-26T18:03:26.842Z',
+    updatedAt: '2023-01-26T18:03:26.842Z'
+  },
+  {
+    idPriority: 5,
+    description: 'Pessoa com deficiencia',
+    createdAt: '2023-01-26T18:03:26.842Z',
+    updatedAt: '2023-01-26T18:03:26.842Z'
+  },
+  {
+    idPriority: 6,
+    description: 'Pessoa em situação de rua',
+    createdAt: '2023-01-26T18:03:26.842Z',
+    updatedAt: '2023-01-26T18:03:26.842Z'
+  },
+  {
+    idPriority: 7,
+    description: 'Portador(a) de doença grave',
+    createdAt: '2023-01-26T18:03:26.842Z',
+    updatedAt: '2023-01-26T18:03:26.842Z'
+  }
+];
+
 export const stagesResponse = [
   {
     createdAt: '2022-08-17T20:08:32.382+00:00',
@@ -78,7 +123,7 @@ export const stagesResponse = [
 
 export const flowsResponse = [
   {
-    idFlow: 1,
+    idFlow: '1',
     idUnit: 4,
     name: 'fluxo 1',
     sequences: [
@@ -97,7 +142,7 @@ export const flowsResponse = [
     users: []
   },
   {
-    idFlow: 2,
+    idFlow: '2',
     idUnit: 4,
     name: 'outro Fluxo',
     sequences: [
@@ -121,11 +166,20 @@ export const processResponse = [
   {
     createdAt: '2022-08-17T20:09:58.530Z',
     idPriority: 0,
-    idStage: '7',
+    idStage: '0',
     idUnit: 4,
+    idFlow: 2,
     nickname: 'sdlkfja',
-    record: '1111',
-    fluxoId: '62fd4b16006730249d33b19d'
+    record: '1111'
+  },
+  {
+    createdAt: '2022-08-17T20:09:58.530Z',
+    idPriority: 2,
+    idStage: '0',
+    idUnit: 4,
+    idFlow: 2,
+    nickname: 'Processo teste',
+    record: '2222'
   }
 ];
 

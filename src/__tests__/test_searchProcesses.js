@@ -7,7 +7,12 @@ import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 
 import { baseURL } from 'services/api';
 import Processes from 'pages/Processes/Processes';
-import { flowsResponse, processResponse } from 'testConstants';
+import {
+  flowsResponse,
+  prioritiesResponse,
+  processResponse,
+  stagesResponse
+} from 'testConstants';
 
 axios.defaults.adapter = require('axios/lib/adapters/http');
 
@@ -30,10 +35,12 @@ test('Testando busca por registro ou apelido', async () => {
     .persist()
     .get(/\/processes/)
     .reply(200, processResponse)
+    .get('/priorities')
+    .reply(200, prioritiesResponse)
     .get('/flows/')
     .reply(200, flowsResponse)
     .get('/stages')
-    .reply(200, { Stages: null });
+    .reply(200, stagesResponse);
 
   render(
     <MemoryRouter initialEntries={['/processes']}>
