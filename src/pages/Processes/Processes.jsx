@@ -14,7 +14,10 @@ import {
   Table,
   Content,
   ContentHeader,
-  Modal
+  Modal,
+  PrioritySelection,
+  ContentBody,
+  PriorityFilter
 } from './styles';
 import BackButton from 'components/BackButton/BackButton';
 import api from 'services/api';
@@ -36,13 +39,17 @@ function Processes() {
   const [flows, setFlows] = useState([]);
   const [flowId, setFlowId] = useState(flow && flow.idFlow);
   const [stages, setStages] = useState([]);
-  const [priority, setPriority] = useState(0);
+  const [priorities, setPriorities] = useState([]);
+  const [priority, setPriority] = useState(null);
+  const [showPriorityPlaceholder, setShowPriorityPlaceholder] = useState(false);
+  const [filterPriorityProcess, setFilterPriorityProcess] = useState(false);
 
   useEffect(() => {
     updateProcesses();
     getFlows();
     getStages();
     setPriority(0);
+    getPriorities();
     // eslint-disable-next-line
   }, []);
 
@@ -51,22 +58,41 @@ function Processes() {
     setProcesses(response.data);
   }
 
+  async function getPriorities() {
+    const response = await api.get(`/priorities`);
+    setPriorities(response.data);
+  }
+
   //Catch the event when the input changes
   const handleChange = (event) => {
     setSearchTerm(event.target.value);
   };
 
+  const handleRadioButton = () => {
+    setShowPriorityPlaceholder(!showPriorityPlaceholder);
+    setPriority(null);
+  };
+
   //Filter processes by record and nickname
-  const filterProcesses = (processList) => {
-    return processList.filter((process) => {
+  function filterProcesses() {
+    return processes.filter((process) => {
       if (
-        process.record.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        process.nickname.toLowerCase().includes(searchTerm.toLowerCase())
+        filterPriorityProcess &&
+        process.idPriority !== 0 &&
+        (process.record.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          process.nickname.toLowerCase().includes(searchTerm.toLowerCase()))
+      ) {
+        return process;
+      }
+      if (
+        !filterPriorityProcess &&
+        (process.record.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          process.nickname.toLowerCase().includes(searchTerm.toLowerCase()))
       ) {
         return process;
       }
     });
-  };
+  }
 
   async function deleteProcess(registro) {
     try {
@@ -91,18 +117,28 @@ function Processes() {
   function closeModal() {
     setEditModalIsOpen(false);
   }
+  function findFlow(idFlow) {
+    return flows.find((flow) => flow.idFlow === idFlow);
+  }
 
   function openEditModal(proc) {
     if (proc) {
+      const flow = findFlow(proc.idFlow[0]);
       setEditOrCreate('edit');
       setRegistro(proc.record);
       setApelido(proc.nickname);
-      setFlowId(proc.idFlow);
+      setFlowId({ value: flow.idFlow, label: flow.name });
+      setPriority({
+        value: proc.idPriority,
+        label: priorities[proc.idPriority].description
+      });
+      setShowPriorityPlaceholder(proc.idPriority != 0);
     } else {
       setEditOrCreate('create');
       setRegistro('');
       setApelido('');
       setFlowId('');
+      setPriority(null);
     }
     setEditModalIsOpen(true);
   }
@@ -114,14 +150,12 @@ function Processes() {
 
   async function editProcess() {
     try {
-      if (registro)
-        await api.put(`/updateProcess`, {
-          record: registro,
-          nickname: apelido,
-          idFlow: flowId.value,
-          priority: priority
-        });
-      else toast.error('Registro vazio', { duration: 3000 });
+      await api.put(`/updateProcess`, {
+        record: registro,
+        nickname: apelido,
+        idFlow: flowId.value,
+        priority: priority ? priority.value : 0
+      });
       toast.success('Processo Alterado com Sucesso', { duration: 4000 });
     } catch (error) {
       if (error.response.status == 401) {
@@ -147,17 +181,15 @@ function Processes() {
           nickname: apelido,
           effectiveDate: new Date(),
           idFlow: flowId.value,
-          priority: priority
+          priority: priority ? priority.value : 0
         };
         await api.post('/newProcess', body);
       } else {
         toast.error('Registro vazio', { duration: 3000 });
         return;
       }
-
       toast.success('Processo Registrado com Sucesso', { duration: 4000 });
     } catch (error) {
-      console.log(error);
       if (error.response?.status == 401) {
         toast(error.response.data.message, {
           icon: '⚠️',
@@ -174,9 +206,9 @@ function Processes() {
 
   async function getStages() {
     try {
-      const Stage = await api.get(`/stages`);
+      const stage = await api.get(`/stages`);
 
-      setStages(Stage.data.Stages);
+      setStages(stage.data);
     } catch (error) {
       toast.error('Erro ao pegar etapa\n ' + error.response.data.message, {
         duration: 3000
@@ -197,6 +229,16 @@ function Processes() {
             placeholder={'Buscar Processo'}
             onChange={handleChange}
           />
+          <PriorityFilter>
+            <label htmlFor="priority-checkbox">
+              Mostrar processos com Prioridade Legal
+            </label>
+            <input
+              type="checkbox"
+              id="priority-checkbox"
+              onClick={() => setFilterPriorityProcess(!filterPriorityProcess)}
+            ></input>
+          </PriorityFilter>
         </div>
         {processes.length == 0 && (
           <>
@@ -218,7 +260,7 @@ function Processes() {
             </tr>
           </thead>
           <tbody>
-            {filterProcesses(processes)
+            {filterProcesses()
               /*.sort((a, b) => b.etapas.length - a.etapas.length)*/
               .map((proc, idx) => {
                 let CurrentStage, FinalStage, CurrentStagePos, FinalStagePos;
@@ -247,9 +289,17 @@ function Processes() {
 
                 return (
                   <tr key={idx} className={className}>
-                    <td>{proc.record}</td>
-                    <td>{proc.nickname}</td>
-
+                    {`${proc.idPriority}` !== '0' ? (
+                      <>
+                        <td> ⬆ {proc.record}</td>
+                        <td> ⬆ {proc.nickname}</td>
+                      </>
+                    ) : (
+                      <>
+                        <td>{proc.record}</td>
+                        <td>{proc.nickname}</td>
+                      </>
+                    )}
                     {flow && stages && (
                       <>
                         <td>
@@ -300,34 +350,77 @@ function Processes() {
                     : 'Criar Processo'}{' '}
                 </span>
               </ContentHeader>
-              <Dropdown
-                options={flows.map((flow) => {
-                  return { label: flow.name, value: flow.idFlow };
-                })}
-                onChange={(e) => setFlowId(e)}
-                value={flowId}
-                placeholder="Selecione o fluxo"
-                className="dropdown"
-                controlClassName="dropdown-control"
-                placeholderClassName="dropdown-placeholder"
-                menuClassName="dropdown-menu"
-                arrowClassName="dropdown-arrow"
-              />
-              <div>
-                <TextInput
-                  label="Registro"
-                  value={registro}
-                  set={setRegistro}
-                  placeholder="registro"
-                  disabled={editOrCreate == 'edit'}
+              <PrioritySelection>
+                <label>Prioridade legal?</label>
+                <div>
+                  <input
+                    type="radio"
+                    name="selection"
+                    value="yes"
+                    id="radio-button-yes"
+                    onClick={() => handleRadioButton()}
+                    defaultChecked={showPriorityPlaceholder}
+                  />
+                  <label htmlFor="radio-button-yes">sim</label>
+                  <input
+                    type="radio"
+                    name="selection"
+                    value="no"
+                    id="radio-button-no"
+                    onClick={() => handleRadioButton()}
+                    defaultChecked={!showPriorityPlaceholder}
+                  />
+                  <label htmlFor="radio-button-no">não</label>
+                </div>
+                {showPriorityPlaceholder && (
+                  <Dropdown
+                    options={priorities.map((priority) => {
+                      return {
+                        label: priority.description,
+                        value: priority.idPriority
+                      };
+                    })}
+                    onChange={(e) => setPriority(e)}
+                    value={priority}
+                    placeholder="Selecione a prioridade"
+                    className="dropdown"
+                    controlClassName="dropdown-control"
+                    placeholderClassName="dropdown-placeholder"
+                    menuClassName="dropdown-menu"
+                    arrowClassName="dropdown-arrow"
+                  />
+                )}
+              </PrioritySelection>
+              <ContentBody>
+                <Dropdown
+                  options={flows.map((flow) => {
+                    return { label: flow.name, value: flow.idFlow };
+                  })}
+                  onChange={(e) => setFlowId(e)}
+                  value={flowId}
+                  placeholder="Selecione o fluxo"
+                  className="dropdown"
+                  controlClassName="dropdown-control"
+                  placeholderClassName="dropdown-placeholder"
+                  menuClassName="dropdown-menu"
+                  arrowClassName="dropdown-arrow"
                 />
-                <TextInput
-                  label="Apelido"
-                  value={apelido}
-                  set={setApelido}
-                  placeholder="apelido"
-                />
-              </div>
+                <div>
+                  <TextInput
+                    label="Registro"
+                    value={registro}
+                    set={setRegistro}
+                    placeholder="registro"
+                    disabled={editOrCreate == 'edit'}
+                  />
+                  <TextInput
+                    label="Apelido"
+                    value={apelido}
+                    set={setApelido}
+                    placeholder="apelido"
+                  />
+                </div>
+              </ContentBody>
               <div>
                 <Button
                   onClick={async () => {
