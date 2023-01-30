@@ -67,12 +67,8 @@ function Processes() {
     setSearchTerm(event.target.value);
   };
 
-  const handleYesClick = () => {
-    setShowPriorityPlaceholder(true);
-  };
-
-  const handleNoClick = () => {
-    setShowPriorityPlaceholder(false);
+  const handleRadioButton = () => {
+    setShowPriorityPlaceholder(!showPriorityPlaceholder);
     setPriority(null);
   };
 
@@ -120,13 +116,17 @@ function Processes() {
   function closeModal() {
     setEditModalIsOpen(false);
   }
+  function findFlow(idFlow) {
+    return flows.find((flow) => flow.idFlow === idFlow);
+  }
 
   function openEditModal(proc) {
     if (proc) {
+      const flow = findFlow(proc.idFlow[0]);
       setEditOrCreate('edit');
       setRegistro(proc.record);
       setApelido(proc.nickname);
-      setFlowId(proc.idFlow);
+      setFlowId({ value: flow.idFlow, label: flow.name });
       setPriority({
         value: proc.idPriority,
         label: priorities[proc.idPriority].description
@@ -149,11 +149,17 @@ function Processes() {
 
   async function editProcess() {
     try {
+      console.log({
+        record: registro,
+        nickname: apelido,
+        idFlow: flowId.value,
+        priority: priority ? priority.value : 0
+      });
       await api.put(`/updateProcess`, {
         record: registro,
         nickname: apelido,
         idFlow: flowId.value,
-        priority: priority
+        priority: priority ? priority.value : 0
       });
       toast.success('Processo Alterado com Sucesso', { duration: 4000 });
     } catch (error) {
@@ -357,7 +363,7 @@ function Processes() {
                     name="selection"
                     value="yes"
                     id="radio-button-yes"
-                    onClick={() => handleYesClick()}
+                    onClick={() => handleRadioButton()}
                     defaultChecked={showPriorityPlaceholder}
                   />
                   <label htmlFor="radio-button-yes">sim</label>
@@ -366,7 +372,7 @@ function Processes() {
                     name="selection"
                     value="no"
                     id="radio-button-no"
-                    onClick={() => handleNoClick()}
+                    onClick={() => handleRadioButton()}
                     defaultChecked={!showPriorityPlaceholder}
                   />
                   <label htmlFor="radio-button-no">não</label>
