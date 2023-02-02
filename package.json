@@ -40,9 +40,10 @@
     ]
   },
   "jestSonar": {
-    "reportPath": "coverage",
+    "reportPath": "reports-test"
+    // "reportPath": "coverage",
     "reportFile": "sonar-report.xml",
-    "indent": 4
+    "indent": 4,
   },
   "browserslist": {
     "production": [
