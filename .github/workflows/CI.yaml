@@ -26,8 +26,6 @@ jobs:
         run: cd src && yarn
       - name: Test and coverage
         run: cd src && yarn test
-      - name: Check ls
-        run: cd coverage && ls && cat -n 220 report.xml
       - name: SonarCloud Scan
         uses: SonarSource/sonarcloud-github-action@master
         env:
