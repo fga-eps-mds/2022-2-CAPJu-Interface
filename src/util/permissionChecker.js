@@ -64,7 +64,7 @@ const permissionsArray = [
   },
   {
     actions: 'view-user',
-    users: [Permissions.DIRETOR, Permissions.JUIZ, Permissions.ADMINISTRADOR]
+    users: [Permissions.DIRETOR, Permissions.ADMINISTRADOR]
   },
   {
     actions: [
