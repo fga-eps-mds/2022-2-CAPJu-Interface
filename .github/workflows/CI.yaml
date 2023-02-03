@@ -27,7 +27,7 @@ jobs:
       - name: Test and coverage
         run: cd src && yarn test
       - name: Ajuste
-        run: sudo apt-get install gawk -y && cd coverage && awk 'NR > 1' report.xml > temp.xml && mv temp.xml report.xml
+        run: sudo apt-get install gawk -y && cd coverage && awk 'NR > 1' report.xml > temp.xml && mv temp.xml report.xml && cat report.xml
       # - name: Delete frist line
       #   run:  cd coverge && awk 'NR > 1' report.xml > temp.xml && mv temp.xml report.xml
       - name: SonarCloud Scan
