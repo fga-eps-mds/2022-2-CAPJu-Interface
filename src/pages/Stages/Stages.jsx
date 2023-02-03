@@ -1,5 +1,5 @@
 import toast from 'react-hot-toast';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import AxiosError from 'axios/lib/core/AxiosError';
 
 import {
@@ -102,6 +102,12 @@ function Stages() {
     }
   ];
 
+  const clearStagesModal = useCallback(() => {
+    setModalOpen(!isModalOpen);
+    setStageName('');
+    setStageTime('');
+  }, [setModalOpen, isModalOpen]);
+
   const columnHeaders = ['Nome', 'Duração'];
   return (
     <>
@@ -117,7 +123,7 @@ function Stages() {
         </Area>
 
         <AddStageButton
-          onClick={() => setModalOpen(true)}
+          onClick={clearStagesModal}
           disabled={!hasPermission(user, 'create-stage')}
         >
           + Adicionar Etapa
@@ -126,7 +132,7 @@ function Stages() {
       {isModalOpen && (
         <Modal>
           <Content>
-            <ContentHeader>
+            <ContentHeader onClick={clearStagesModal}>
               <span>Criar Etapa</span>
             </ContentHeader>
             <div>

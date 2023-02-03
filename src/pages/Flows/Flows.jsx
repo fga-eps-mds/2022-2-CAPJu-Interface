@@ -271,7 +271,8 @@ function Flows() {
           />
         </Area>
         <AddFlowButton
-          onClick={handleNewFlowModal}
+          onClick={clearFlowModal}
+          data-testid="close"
           disabled={!hasPermission(user, 'create-flow')}
         >
           <span>+ Adicionar Fluxo</span>
