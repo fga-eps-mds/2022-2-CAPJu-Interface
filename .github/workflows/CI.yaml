@@ -24,10 +24,10 @@ jobs:
           fetch-depth: 0 # Shallow clones should be disabled for a better relevancy of analysis
       - name: Install dependencies
         run: cd src && yarn
-      - name: Check ls
-        run: ls && cd src/coverage && ls && cat -n 20
       - name: Test and coverage
         run: cd src && yarn test
+      - name: Check ls
+        run: ls && cd src/coverage && ls && cat -n 20
       - name: SonarCloud Scan
         uses: SonarSource/sonarcloud-github-action@master
         env:
