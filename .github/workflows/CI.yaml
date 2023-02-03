@@ -25,7 +25,7 @@ jobs:
       - name: Install dependencies
         run: cd src && yarn
       - name: Check ls
-        run: cd coverage && ls && cat -n 20
+        run: ls && cd src/coverage && ls && cat -n 20
       - name: Test and coverage
         run: cd src && yarn test
       - name: SonarCloud Scan
