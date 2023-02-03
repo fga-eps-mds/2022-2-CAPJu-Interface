@@ -26,6 +26,8 @@ jobs:
         run: cd src && yarn
       - name: Test and coverage
         run: cd src && yarn test
+      - name: Delete frist line
+        run:  awk 'NR > 1' report.xml > temp.xml && mv temp.xml report.xml
       - name: SonarCloud Scan
         uses: SonarSource/sonarcloud-github-action@master
         env:
