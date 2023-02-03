@@ -232,7 +232,7 @@ describe('Testando Unidades', () => {
     await waitFor(() => expect(getAdmins.isDone()).toBe(true));
     await screen.findByText('Administradores -');
 
-    const makeAdminButton = screen.getAllByLabelText('Remover Admin')[0];
+    const makeAdminButton = screen.getAllByLabelText('Deletar')[0];
     expect(makeAdminButton).toBeInTheDocument();
     userEvent.click(makeAdminButton);
 
