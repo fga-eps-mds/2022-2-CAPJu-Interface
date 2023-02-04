@@ -323,4 +323,12 @@ describe('Testando Unidades', () => {
       });
     }
   });
+
+  it('Pesquisando usuários', async () => {
+    localStorage.setItem('user', JSON.stringify(usersResponse[0]));
+    const button = await screen.getByLabelText('Adicionar Admins');
+    act(() => fireEvent.click(button));
+    const unitNameInput = await screen.findByPlaceholderText('Nome do usuário');
+    fireEvent.change(unitNameInput, { target: { value: 'Unidade 1' } });
+  });
 });
