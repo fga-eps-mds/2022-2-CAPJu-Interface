@@ -39,9 +39,9 @@ test('Testando criar Login no componente Login', async () => {
     .reply(200, units);
 
   render(
-    <MemoryRouter initialEntries={['/login']}>
+    <MemoryRouter initialEntries={['/Login']}>
       <Routes>
-        <Route path="/login" element={<Login />} />
+        <Route path="/Login" element={<Login />} />
         <Route path="/Stages" element={<Stages />} />
       </Routes>
     </MemoryRouter>
@@ -65,9 +65,9 @@ test('Testando criar Login no componente Login', async () => {
 
 test('Testando recuperação de senha', async () => {
   render(
-    <MemoryRouter initialEntries={['/login']}>
+    <MemoryRouter initialEntries={['/Login']}>
       <Routes>
-        <Route path="/login" element={<Login />} />
+        <Route path="/Login" element={<Login />} />
         <Route path="/Stages" element={<Stages />} />
       </Routes>
     </MemoryRouter>

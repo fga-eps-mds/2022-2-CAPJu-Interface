@@ -92,10 +92,10 @@ test('Testando deletar etapa', async () => {
       'access-control-allow-origin': '*',
       'access-control-allow-credentials': 'true'
     })
-    .options('/deleteStage')
-    .reply(200, null)
-    .delete('/deleteStage')
-    .reply(200, null);
+    .options('/deleteStage/')
+    .reply(200)
+    .delete('/deleteStage/')
+    .reply(200);
   render(<Stages />);
 
   const deleteIcon = screen.getByTestId('DeleteForeverIcon');
