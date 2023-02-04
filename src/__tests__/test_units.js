@@ -160,6 +160,13 @@ describe('Testando Unidades', () => {
     act(() => userEvent.click(searchButton));
   });
 
+  it('Buscando usuarios', async () => {
+    localStorage.setItem('user', JSON.stringify(usersResponse[0]));
+
+    const button = await screen.getByLabelText('Adicionar Admins');
+    fireEvent.click(button);
+  });
+
   it('Teste adicionar unidade', async () => {
     localStorage.setItem('user', JSON.stringify(usersResponse[0]));
 
@@ -322,13 +329,5 @@ describe('Testando Unidades', () => {
         await waitFor(() => expect(postUnit.isDone()).toBe(false));
       });
     }
-  });
-
-  it('Pesquisando usuários', async () => {
-    localStorage.setItem('user', JSON.stringify(usersResponse[0]));
-    const button = await screen.getByLabelText('Adicionar Admins');
-    act(() => fireEvent.click(button));
-    const unitNameInput = await screen.findByPlaceholderText('Nome do usuário');
-    fireEvent.change(unitNameInput, { target: { value: 'Unidade 1' } });
   });
 });
