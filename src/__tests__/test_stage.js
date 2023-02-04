@@ -92,7 +92,9 @@ test('Testando deletar etapa', async () => {
       'access-control-allow-origin': '*',
       'access-control-allow-credentials': 'true'
     })
-    .options(`/deleteStage/${stagesResponse[0].idStage}`)
+    .options('/deleteStage')
+    .reply(200, null)
+    .delete('/deleteStage')
     .reply(200, null);
   render(<Stages />);
 
