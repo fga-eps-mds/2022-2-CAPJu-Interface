@@ -75,4 +75,34 @@ usersResponse.forEach((user) => {
   }
 });
 
+test('Testando deletar etapa', async () => {
+  localStorage.setItem('user', JSON.stringify(usersResponse[0]));
+
+  const scopeGetStage = nock(baseURL)
+    .defaultReplyHeaders({
+      'access-control-allow-origin': '*',
+      'access-control-allow-credentials': 'true'
+    })
+
+    .get('/stages')
+    .reply(200, stagesResponse);
+
+  const scopeDelete = nock(baseURL)
+    .defaultReplyHeaders({
+      'access-control-allow-origin': '*',
+      'access-control-allow-credentials': 'true'
+    })
+    .options(`/deleteStage/${stagesResponse[0].idStage}`)
+    .reply(200, null);
+  render(<Stages />);
+
+  const deleteIcon = screen.getByTestId('DeleteForeverIcon');
+  fireEvent.click(deleteIcon);
+
+  const deleteButton = screen.getByText('Excluir');
+  fireEvent.click(deleteButton);
+  await expect(scopeDelete.isDone()).toBe(false);
+  await waitFor(() => expect(scopeGetStage.isDone()).toBe(true));
+});
+
 afterAll(() => nock.restore());
