@@ -39,9 +39,9 @@ test('Testando criar Login no componente Login', async () => {
     .reply(200, units);
 
   render(
-    <MemoryRouter initialEntries={['/login']}>
+    <MemoryRouter initialEntries={['/Login']}>
       <Routes>
-        <Route path="/login" element={<Login />} />
+        <Route path="/Login" element={<Login />} />
         <Route path="/Stages" element={<Stages />} />
       </Routes>
     </MemoryRouter>
@@ -61,6 +61,30 @@ test('Testando criar Login no componente Login', async () => {
     expect(scopeUnits.isDone()).toBe(true);
   });
   expect(screen.queryByText('Login')).toBe(null);
+});
+
+test('Testando recuperação de senha', async () => {
+  render(
+    <MemoryRouter initialEntries={['/Login']}>
+      <Routes>
+        <Route path="/Login" element={<Login />} />
+        <Route path="/Stages" element={<Stages />} />
+      </Routes>
+    </MemoryRouter>
+  );
+  const forgotPasswordButton = await screen.getByText('Esqueceu a senha?');
+  fireEvent.click(forgotPasswordButton);
+
+  const inputEmail = screen.getByPlaceholderText('Digite seu email');
+  fireEvent.change(inputEmail, { target: { value: 'n@email.com' } });
+
+  const modalName = await screen.getByText('Recuperação de senha');
+  expect(modalName).toBeInTheDocument();
+
+  const resetPasswordButton = await screen.getByText('Soliciar recuperação');
+  fireEvent.click(resetPasswordButton);
+
+  expect(modalName).not.toBeInTheDocument();
 });
 
 afterAll(() => nock.restore());
