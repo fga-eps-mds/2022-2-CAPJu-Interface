@@ -1,5 +1,5 @@
 import toast from 'react-hot-toast';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import AxiosError from 'axios/lib/core/AxiosError';
 
 import {
@@ -56,6 +56,11 @@ function Unidades() {
       toast.success('Administrador de unidade adicionado com sucesso');
     }
   }
+
+  const clearUnityModal = useCallback(() => {
+    setModalOpen(!isModalOpen);
+    setUnityName('');
+  }, [setModalOpen, isModalOpen]);
 
   async function updateUnityAdmins(unit) {
     setCurrentUnity({ ...unit, admins: [] });
@@ -153,6 +158,7 @@ function Unidades() {
         <h1>Unidades</h1>
         <AddUnityButton
           onClick={() => {
+            clearUnityModal();
             setModalOpen(true);
           }}
           disabled={!hasPermission(user, 'create-unit')}

@@ -264,6 +264,7 @@ function Flows() {
         <h1>Fluxos</h1>
         <AddFlowButton
           onClick={handleNewFlowModal}
+          data-testid="closeAddModal"
           disabled={!hasPermission(user, 'create-flow')}
         >
           <span>+ Adicionar Fluxo</span>
@@ -304,7 +305,7 @@ function Flows() {
                 <span>Editar fluxo</span>
                 <CloseModalGeneral
                   onClick={handleAddFlow}
-                  data-testid="close"
+                  data-testid="closeEditModal"
                 />
               </ContentHeader>
               <LabelDiv>
@@ -375,7 +376,7 @@ function Flows() {
           <Content>
             <ContentHeader>
               <span>Novo Fluxo</span>
-              <CloseModalGeneral onClick={clearFlowModal} data-testid="close" />
+              <CloseModalGeneral onClick={clearFlowModal} />
             </ContentHeader>
 
             <LabelDiv>

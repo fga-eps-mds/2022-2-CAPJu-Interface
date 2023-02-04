@@ -50,8 +50,10 @@ describe('Testes de Processos', () => {
       </MemoryRouter>
     );
 
-    await waitFor(() => expect(scope.isDone()).toBe(true));
-    await waitFor(() => expect(scopeGetProcesses.isDone()).toBe(true));
+    await waitFor(() => {
+      expect(scope.isDone()).toBe(true);
+      expect(scopeGetProcesses.isDone()).toBe(true);
+    });
   });
 
   it('Teste criação de processo', async () => {
