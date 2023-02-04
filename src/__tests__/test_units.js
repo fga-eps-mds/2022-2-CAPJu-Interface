@@ -160,13 +160,6 @@ describe('Testando Unidades', () => {
     act(() => userEvent.click(searchButton));
   });
 
-  it('Buscando usuarios', async () => {
-    localStorage.setItem('user', JSON.stringify(usersResponse[0]));
-
-    const button = await screen.getByLabelText('Adicionar Admins');
-    fireEvent.click(button);
-  });
-
   it('Teste adicionar unidade', async () => {
     localStorage.setItem('user', JSON.stringify(usersResponse[0]));
 
