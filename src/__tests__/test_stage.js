@@ -105,4 +105,18 @@ test('Testando deletar etapa', async () => {
   await waitFor(() => expect(scopeGetStage.isDone()).toBe(true));
 });
 
+test('Testando erro ao deletar etapa', async () => {
+  localStorage.setItem('user', JSON.stringify(usersResponse[2]));
+
+  const scopeGetStage = nock(baseURL)
+    .defaultReplyHeaders({
+      'access-control-allow-origin': '*',
+      'access-control-allow-credentials': 'true'
+    })
+    .get('/stages')
+    .reply(401, stagesResponse);
+
+  await waitFor(() => expect(scopeGetStage.isDone()).toBe(false));
+});
+
 afterAll(() => nock.restore());
