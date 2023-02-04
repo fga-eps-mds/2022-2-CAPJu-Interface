@@ -2,10 +2,12 @@ import React from 'react';
 import nock from 'nock';
 import '@testing-library/jest-dom';
 import { MemoryRouter, Route, Routes } from 'react-router-dom';
-import { render, waitFor, screen } from '@testing-library/react';
+import { render, waitFor, screen, fireEvent } from '@testing-library/react';
 
+import Login from 'pages/Login/Login';
 import { userURL } from 'services/user';
-import { loggedUser, usersResponse } from 'testConstants';
+import { baseURL } from 'services/api';
+import { units, loggedUser, usersResponse } from 'testConstants';
 import SideBar from 'components/SideBar/Sidebar';
 
 describe('Testando SideBar', () => {
@@ -15,7 +17,6 @@ describe('Testando SideBar', () => {
         'access-control-allow-origin': '*',
         'access-control-allow-credentials': 'true'
       })
-      .persist()
       .get(/allUser/)
       .reply(200, usersResponse);
 
@@ -66,5 +67,42 @@ describe('Testando SideBar', () => {
       '/editAccount'
     );
     expect(processesButton.closest('a')).toHaveAttribute('href', '/processes');
+  });
+
+  it('Testando logout do sistema', async () => {
+    localStorage.setItem('user', JSON.stringify(usersResponse[0]));
+    const getUsers = nock(userURL)
+      .defaultReplyHeaders({
+        'access-control-allow-origin': '*',
+        'access-control-allow-credentials': 'true'
+      })
+      .get(/allUser/)
+      .reply(200, usersResponse);
+
+    const scopeUnits = nock(baseURL)
+      .defaultReplyHeaders({
+        'access-control-allow-origin': '*',
+        'access-control-allow-credentials': 'true'
+      })
+      .get('/units')
+      .reply(200, units);
+
+    render(
+      <MemoryRouter initialEntries={['/']}>
+        <Routes>
+          <Route path="/" element={<SideBar />} />
+          <Route path="/Login" element={<Login />} />
+        </Routes>
+      </MemoryRouter>
+    );
+
+    const logoutButton = await screen.getByText('Sair');
+    fireEvent.click(logoutButton);
+    expect(localStorage.getItem('user')).toBe(null);
+
+    await waitFor(() => {
+      expect(getUsers.isDone()).toBe(true);
+      expect(scopeUnits.isDone()).toBe(true);
+    });
   });
 });

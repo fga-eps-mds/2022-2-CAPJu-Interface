@@ -127,7 +127,7 @@ function Unidades() {
   ];
   const removeAdminsActions = [
     {
-      tooltip: 'Remover Admin',
+      tooltip: 'Deletar',
       action: (user) => removeAdmin(user.cpf),
       type: 'delete'
     }

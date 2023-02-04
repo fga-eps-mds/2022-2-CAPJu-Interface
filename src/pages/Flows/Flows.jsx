@@ -5,7 +5,7 @@ import api from 'services/api';
 import userApi from 'services/user';
 import Button from 'components/Button/Button';
 import TextInput from 'components/TextInput/TextInput';
-import DescriptionIcon from '@mui/icons-material/Description';
+import EyeIcon from '@mui/icons-material/Visibility';
 import AddSequenceInFlow from 'components/Flow/AddSequenceInFlow';
 import {
   Container,
@@ -198,7 +198,7 @@ function Flows() {
     {
       tooltip: 'Visualizar processos',
       linkTo: '/processes',
-      linkIcon: <DescriptionIcon htmlColor="black" />,
+      linkIcon: <EyeIcon htmlColor="black" />,
       type: 'link',
       disabled: !hasPermission(user, 'view-flow')
     },

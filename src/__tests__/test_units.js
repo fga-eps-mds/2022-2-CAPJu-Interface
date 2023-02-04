@@ -160,6 +160,32 @@ describe('Testando Unidades', () => {
     act(() => userEvent.click(searchButton));
   });
 
+  it('Buscando usuarios', async () => {
+    const getUsers = nock(userURL)
+      .defaultReplyHeaders({
+        'access-control-allow-origin': '*',
+        'access-control-allow-credentials': 'true'
+      })
+      .options('/allUser?accepted=true')
+      .reply(200)
+      .get('/allUser?accepted=true')
+      .reply(200, usersResponse);
+
+    localStorage.setItem('user', JSON.stringify(usersResponse[0]));
+    const postAdmin = nock(userURL)
+      .defaultReplyHeaders({
+        'access-control-allow-origin': '*',
+        'access-control-allow-credentials': 'true'
+      })
+      .persist()
+      .post(/setUnityAdmin/)
+      .reply(200, 'ok');
+    localStorage.setItem('user', JSON.stringify(usersResponse[0]));
+
+    const button = await screen.getByLabelText('Adicionar Admins');
+    fireEvent.click(button);
+  });
+
   it('Teste adicionar unidade', async () => {
     localStorage.setItem('user', JSON.stringify(usersResponse[0]));
 
@@ -232,7 +258,7 @@ describe('Testando Unidades', () => {
     await waitFor(() => expect(getAdmins.isDone()).toBe(true));
     await screen.findByText('Administradores -');
 
-    const makeAdminButton = screen.getAllByLabelText('Remover Admin')[0];
+    const makeAdminButton = screen.getAllByLabelText('Deletar')[0];
     expect(makeAdminButton).toBeInTheDocument();
     userEvent.click(makeAdminButton);
 
