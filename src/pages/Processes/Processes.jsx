@@ -130,7 +130,7 @@ function Processes() {
       setFlowId({ value: flow.idFlow, label: flow.name });
       setPriority({
         value: proc.idPriority,
-        label: priorities[proc.idPriority].description
+        label: priorities[proc.idPriority - 1].description
       });
       setShowPriorityPlaceholder(proc.idPriority != 0);
     } else {
