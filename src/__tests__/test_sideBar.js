@@ -2,7 +2,7 @@ import React from 'react';
 import nock from 'nock';
 import '@testing-library/jest-dom';
 import { MemoryRouter, Route, Routes } from 'react-router-dom';
-import { render, waitFor, screen } from '@testing-library/react';
+import { render, waitFor, screen, fireEvent } from '@testing-library/react';
 
 import { userURL } from 'services/user';
 import { loggedUser, usersResponse } from 'testConstants';
@@ -15,7 +15,6 @@ describe('Testando SideBar', () => {
         'access-control-allow-origin': '*',
         'access-control-allow-credentials': 'true'
       })
-      .persist()
       .get(/allUser/)
       .reply(200, usersResponse);
 
@@ -66,5 +65,29 @@ describe('Testando SideBar', () => {
       '/editAccount'
     );
     expect(processesButton.closest('a')).toHaveAttribute('href', '/processes');
+  });
+
+  it('Testando logout do sistema', async () => {
+    localStorage.setItem('user', JSON.stringify(usersResponse[0]));
+    const getUsers = nock(userURL)
+      .defaultReplyHeaders({
+        'access-control-allow-origin': '*',
+        'access-control-allow-credentials': 'true'
+      })
+      .get(/allUser/)
+      .reply(200, usersResponse);
+
+    render(
+      <MemoryRouter initialEntries={['/']}>
+        <Routes>
+          <Route path="/" element={<SideBar />} />
+        </Routes>
+      </MemoryRouter>
+    );
+
+    const logoutButton = await screen.getByText('Sair');
+    fireEvent.click(logoutButton);
+    expect(localStorage.getItem('user')).toBe(null);
+    await waitFor(() => expect(getUsers.isDone()).toBe(true));
   });
 });
