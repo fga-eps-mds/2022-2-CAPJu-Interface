@@ -262,6 +262,12 @@ function Flows() {
     <>
       <Container>
         <h1>Fluxos</h1>
+        <AddFlowButton
+          onClick={handleNewFlowModal}
+          disabled={!hasPermission(user, 'create-flow')}
+        >
+          <span>+ Adicionar Fluxo</span>
+        </AddFlowButton>
         <Area>
           <Table
             columnList={['Nome']}
@@ -270,12 +276,6 @@ function Flows() {
             actionList={actionList}
           />
         </Area>
-        <AddFlowButton
-          onClick={handleNewFlowModal}
-          disabled={!hasPermission(user, 'create-flow')}
-        >
-          <span>+ Adicionar Fluxo</span>
-        </AddFlowButton>
         {/* {Modal para confirmar exclusão do fluxo} */}
         {deleteModal && (
           <Modal>

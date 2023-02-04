@@ -18,9 +18,7 @@ export const Container = styled.div`
 
 export const AddUnityButton = styled.button`
   cursor: pointer;
-  bottom: 30px;
-  left: 30px;
-  position: absolute;
+  position: relative;
   padding: 10px 15px;
   background-color: #304974;
   color: white;

@@ -151,12 +151,6 @@ function Unidades() {
     <>
       <Container>
         <h1>Unidades</h1>
-        <Table
-          itemList={unitList}
-          actionList={unitListActions}
-          columnList={['Nome']}
-          attributeList={(unit) => [unit.name]}
-        />
         <AddUnityButton
           onClick={() => {
             setModalOpen(true);
@@ -165,6 +159,12 @@ function Unidades() {
         >
           + Adicionar Unidade
         </AddUnityButton>
+        <Table
+          itemList={unitList}
+          actionList={unitListActions}
+          columnList={['Nome']}
+          attributeList={(unit) => [unit.name]}
+        />
       </Container>
       {isModalOpen && (
         <Modal>
