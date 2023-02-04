@@ -113,6 +113,12 @@ function Stages() {
     <>
       <Container>
         <h1>Etapas</h1>
+        <AddStageButton
+          onClick={clearStagesModal}
+          disabled={!hasPermission(user, 'create-stage')}
+        >
+          + Adicionar Etapa
+        </AddStageButton>
         <Area>
           <Table
             columnList={columnHeaders}
@@ -121,13 +127,6 @@ function Stages() {
             attributeList={(stage) => [stage.name, stage.duration]}
           />
         </Area>
-
-        <AddStageButton
-          onClick={clearStagesModal}
-          disabled={!hasPermission(user, 'create-stage')}
-        >
-          + Adicionar Etapa
-        </AddStageButton>
       </Container>
       {isModalOpen && (
         <Modal>

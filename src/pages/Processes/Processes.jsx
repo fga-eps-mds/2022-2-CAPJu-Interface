@@ -224,6 +224,12 @@ function Processes() {
       <div className="processes">
         {flow && <BackButton />}
         <h1>Processos {flow && '- ' + flow.name}</h1>
+        <AddProcess
+          onClick={() => openEditModal(false)}
+          disabled={!hasPermission(user, 'create-process')}
+        >
+          + Adicionar Processo
+        </AddProcess>
         <div className="processSearch">
           <InputSearch
             value={searchTerm}
@@ -472,12 +478,6 @@ function Processes() {
           </Modal>
         )}
       </div>
-      <AddProcess
-        onClick={() => openEditModal(false)}
-        disabled={!hasPermission(user, 'create-process')}
-      >
-        + Adicionar Processo
-      </AddProcess>
     </Container>
   );
 }
