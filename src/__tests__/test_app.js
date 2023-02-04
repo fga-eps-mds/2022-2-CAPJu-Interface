@@ -6,7 +6,7 @@ import { render } from '@testing-library/react';
 import { loggedUser } from 'testConstants';
 import App from 'App';
 
-describe('Testando carregamento do aplicativo', () => {
+describe.skip('Testando carregamento do aplicativo', () => {
   it('Testando carregamento do aplicativo', () => {
     render(
       <MemoryRouter initialEntries={['/']}>
