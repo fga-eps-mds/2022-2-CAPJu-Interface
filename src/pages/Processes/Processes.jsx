@@ -123,6 +123,7 @@ function Processes() {
 
   function openEditModal(proc) {
     if (proc) {
+      const priorityIdx = proc.idPriority > 0 ? proc.idPriority - 1 : 0;
       const flow = findFlow(proc.idFlow[0]);
       setEditOrCreate('edit');
       setRegistro(proc.record);
@@ -130,7 +131,7 @@ function Processes() {
       setFlowId({ value: flow.idFlow, label: flow.name });
       setPriority({
         value: proc.idPriority,
-        label: priorities[proc.idPriority - 1].description
+        label: priorities[priorityIdx].description
       });
       setShowPriorityPlaceholder(proc.idPriority != 0);
     } else {
