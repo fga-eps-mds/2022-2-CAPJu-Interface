@@ -150,7 +150,7 @@ describe('Testes da pagina de fluxos', () => {
     const newFlowButton = await screen.findByText('+ Adicionar Fluxo');
     fireEvent.click(newFlowButton);
 
-    const closeButton = await screen.findByTestId('close');
+    const closeButton = await screen.findByTestId('closeAddModal');
     fireEvent.click(closeButton);
   });
 
@@ -255,7 +255,7 @@ describe('Testes da pagina de fluxos', () => {
     const editButtons = await screen.findAllByLabelText('Editar fluxo');
     fireEvent.click(editButtons[0]);
 
-    const closeButton = await screen.findByTestId('close');
+    const closeButton = await screen.findByTestId('closeEditModal');
     fireEvent.click(closeButton);
   });
 
