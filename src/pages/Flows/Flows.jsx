@@ -439,7 +439,7 @@ function Flows() {
                 text={'Salvar'}
               />
               <Button
-                onClick={handleNewFlowModal}
+                onClick={clearFlowModal}
                 background="#DE5353"
                 text={'Cancelar'}
               />
