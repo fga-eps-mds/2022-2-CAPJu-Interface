@@ -8,9 +8,10 @@ import SkipNextIcon from '@mui/icons-material/SkipNext';
 
 import { Container, FlowWrapper } from './styles';
 import Button from 'components/Button/Button';
-import FlowViewer from 'components/FlowViewer/FlowViewer';
+import FlowViewer from 'components/Flow/FlowViewer';
 import ModalHeader from 'components/ModalHeader/ModalHeader';
 import ModalBody from 'components/ModalBody/ModalBody';
+import hasPermission from 'util/permissionChecker';
 
 Modal.setAppElement('body');
 
@@ -44,24 +45,22 @@ function ShowProcess() {
   const [openNextStageModal, setOpenNextStageModal] = useState(false);
   const [newObservationModal, setNewObservationModal] = useState(false);
   const [editObservationModal, setEditObservationModal] = useState(false);
-  const [observation, setObservation] = useState('');
+  const [commentary, setCommentary] = useState('');
   const [originStage, setOriginStage] = useState('');
   const [destinationStage, setDestinationStage] = useState('');
   const location = useLocation();
   const [stages, setStages] = useState([]);
   const [proc, setProc] = useState(location.state?.proc);
-  const [flow, setFlow] = useState(null);
+  const [flow, setFlow] = useState(location.state?.flow);
+
+  const user = JSON.parse(localStorage.getItem('user'));
 
   useEffect(() => {
     fetchFlow();
     fetchStages();
     updateProc();
-    // eslint-disable-next-line
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-
-  function afterOpenModal() {
-    // references are now sync'd and can be accessed.
-  }
 
   function closeModal() {
     setOpenNextStageModal(false);
@@ -70,57 +69,63 @@ function ShowProcess() {
   }
 
   function checkExistAnnotation() {
-    const foundStage = proc.etapas.find(
-      (etapa) =>
-        etapa.stageIdFrom === proc.etapaAtual && etapa.observation.length > 0
-    );
-    if (foundStage) handleObservation(foundStage.observation);
-    else handleObservation('');
+    const foundSequence = flow.sequences.find((sequence) => {
+      return (
+        sequence.from === proc.idStage &&
+        sequence.commentary != null &&
+        sequence.commentary.length > 0
+      );
+    });
+    if (foundSequence) {
+      handleObservation(foundSequence.commentary);
+    } else {
+      handleObservation('');
+    }
 
     setOpenNextStageModal(true);
   }
 
   async function updateProc() {
     const response = await api.get(
-      `/getOneProcess/${location.state?.proc._id}`
+      `/getOneProcess/${location.state?.proc.record}`
     );
     setProc(response.data);
   }
 
   async function fetchStages() {
     let response = await api.get('/stages');
-    setStages(response.data.Stages);
+    setStages(response.data);
   }
 
   async function fetchFlow() {
-    if (location.state.flow) setFlow(location.state.flow);
-    else {
-      let response = await api.get(`/flows/${proc?.fluxoId}`);
-      setFlow(response.data);
-    }
+    const processFlows = await api.get(`/flows/process/${proc.record}`);
+    const response = await api.get(`/flow/${processFlows.data[0].idFlow}`);
+    setFlow(response.data);
   }
 
   async function nextStage() {
     try {
       let stageTo = '';
-      for (let proc_iterator of flow.sequences) {
-        if (proc_iterator.from == proc?.etapaAtual) {
-          stageTo = proc_iterator.to;
+      for (const sequence of flow.sequences) {
+        if (sequence.from == proc?.idStage) {
+          stageTo = sequence.to;
           break;
         }
       }
 
       await api.put('/processNextStage/', {
-        processId: proc?._id,
-        stageIdTo: stageTo,
-        stageIdFrom: proc?.etapaAtual,
-        observation: observation
+        record: proc?.record,
+        to: stageTo,
+        from: proc?.idStage,
+        commentary,
+        idFlow: flow?.idFlow
       });
 
-      const response = await api.get(`getOneProcess/${proc?._id}`);
+      const response = await api.get(`getOneProcess/${proc?.record}`);
 
       setProc(response.data);
-      proc.etapaAtual = stageTo;
+      proc.idStage = stageTo;
+      updateObservations(commentary);
       closeModal();
 
       toast.success('Etapa avançada!', { duration: 4000 });
@@ -141,16 +146,14 @@ function ShowProcess() {
   async function newObservation(newObservation) {
     try {
       await api.put('/processNewObservation/', {
-        processId: proc?._id,
+        record: proc.record,
         originStage,
         destinationStage,
-        observation: newObservation
+        commentary: newObservation
       });
 
-      const response = await api.get(`getOneProcess/${proc?._id}`);
-      setProc(response.data);
+      updateObservations(newObservation);
       closeModal();
-
       toast.success('Notificação alterada com sucesso!', { duration: 4000 });
     } catch (error) {
       if (error.response.status == 401) {
@@ -169,16 +172,28 @@ function ShowProcess() {
     }
   }
 
+  function updateObservations(newObservation) {
+    const newSequences = flow.sequences.map((sequence) => {
+      if (
+        String(sequence.from) === originStage &&
+        String(sequence.to) === destinationStage
+      ) {
+        sequence.commentary = newObservation;
+      }
+      return sequence;
+    });
+    setFlow({ ...flow, sequences: newSequences });
+  }
+
   function handleObservation(observation) {
     if (observation.length <= OBSERVATION_MAX_LENGTH)
-      setObservation(observation);
+      setCommentary(observation);
   }
 
   const renderNextStageModal = () => {
     return (
       <Modal
         isOpen={openNextStageModal}
-        onAfterOpen={afterOpenModal}
         onRequestClose={closeModal}
         style={customStyles}
         contentLabel="avançar etapa"
@@ -189,7 +204,7 @@ function ShowProcess() {
             className="observation-field"
             placeholder="Observações sobre a etapa atual..."
             style={textAreaStyle}
-            value={observation}
+            value={commentary}
             onChange={(e) => handleObservation(e.target.value)}
           />
           <Button
@@ -223,7 +238,6 @@ function ShowProcess() {
     return (
       <Modal
         isOpen={newObservationModal}
-        onAfterOpen={afterOpenModal}
         onRequestClose={() => setNewObservationModal(false)}
         style={customStyles}
         contentLabel="nova anotação"
@@ -237,13 +251,13 @@ function ShowProcess() {
             placeholder="Observações sobre a etapa."
             style={textAreaStyle}
             value={
-              observation === '+ Adicionar nova notificação' ? '' : observation
+              commentary === '+ Adicionar nova notificação' ? '' : commentary
             }
             onChange={(e) => handleObservation(e.target.value)}
           />
           <Button
             buttonType={'showProcess'}
-            onClick={() => newObservation(observation)}
+            onClick={() => newObservation(commentary)}
             text={'Salvar'}
           />
         </ModalBody>
@@ -255,7 +269,6 @@ function ShowProcess() {
     return (
       <Modal
         isOpen={editObservationModal}
-        onAfterOpen={afterOpenModal}
         onRequestClose={() => setEditObservationModal(false)}
         style={customStyles}
         contentLabel="Editar anotação"
@@ -268,7 +281,7 @@ function ShowProcess() {
             className="observation-field"
             placeholder="Observações sobre a etapa."
             style={textAreaStyle}
-            value={observation}
+            value={commentary}
             onChange={(e) => handleObservation(e.target.value)}
           />
           <div>
@@ -279,7 +292,7 @@ function ShowProcess() {
             />
             <Button
               buttonType={'showProcess'}
-              onClick={() => newObservation(observation)}
+              onClick={() => newObservation(commentary)}
               text={'Salvar'}
             />
             <Button
@@ -301,14 +314,14 @@ function ShowProcess() {
         </Link>
         <div className="processInfo">
           <h1>
-            {proc.apelido.length > 0
-              ? proc.apelido
-              : `Processo ${proc.registro}`}
+            {proc.nickname.length > 0
+              ? proc.nickname
+              : `Processo ${proc.record}`}
           </h1>
           <div className="process">
-            {proc?.apelido.length > 0
-              ? `${proc?.registro} - ${proc?.apelido}`
-              : `${proc?.registro}`}
+            {proc?.nickname.length > 0
+              ? `${proc?.record} - ${proc?.nickname}`
+              : `${proc?.record}`}
           </div>
         </div>
         {flow ? (
@@ -317,7 +330,7 @@ function ShowProcess() {
               openModal={observationModal}
               stages={stages}
               flow={flow}
-              highlight={proc?.etapaAtual}
+              highlight={proc?.idStage}
               proc={proc}
             />
           </FlowWrapper>
@@ -327,7 +340,10 @@ function ShowProcess() {
         {renderNextStageModal()}
         {renderNewObservationModal()}
         {renderEditObservationModal()}
-        <Button onClick={() => checkExistAnnotation()}>
+        <Button
+          onClick={() => checkExistAnnotation()}
+          disabled={!hasPermission(user, 'advance-stage')}
+        >
           <SkipNextIcon />
           <span>Avançar etapa</span>
         </Button>

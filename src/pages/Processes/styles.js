@@ -109,7 +109,6 @@ export const Content = styled.div`
   max-height: 90vh;
   min-height: 60vh;
   justify-content: space-between;
-  align-items: center;
   flex-direction: column;
   gap: 10px;
   font-size: 20px;
@@ -119,9 +118,7 @@ export const Content = styled.div`
 
 export const AddProcess = styled.button`
   cursor: pointer;
-  bottom: 30px;
-  left: 30px;
-  position: absolute;
+  position: relative;
   padding: 10px 15px;
   background-color: #304974;
   color: white;
@@ -190,5 +187,30 @@ export const InputSearch = styled.input`
   :focus {
     outline: none;
     background-color: rgba(0, 0, 0, 0);
+  }
+`;
+export const PrioritySelection = styled.div`
+  display: flex;
+  justify-content: space-evenly;
+  flex-direction: row;
+`;
+
+export const ContentBody = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-direction: column;
+`;
+
+export const PriorityFilter = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  font-size: 17px;
+  padding: 15px;
+  #priority-checkbox {
+    width: 20px;
+    height: 20px;
   }
 `;

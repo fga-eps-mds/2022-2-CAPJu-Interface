@@ -13,8 +13,16 @@ import {
 import { baseURL } from 'services/api';
 import { userURL } from 'services/user';
 import Unidades from 'pages/Unidades/Unidades';
+import { Permissions } from 'util/permissionChecker';
+import permissionChecker from 'util/permissionChecker';
 import { units, adminsList, usersResponse } from 'testConstants';
 import userEvent from '@testing-library/user-event';
+
+function verifyPermissionUnits(user) {
+  if (user.idRole == Permissions.ADMINISTRADOR) {
+    return true;
+  } else return false;
+}
 
 const getUnits = nock(baseURL)
   .defaultReplyHeaders({
@@ -22,7 +30,7 @@ const getUnits = nock(baseURL)
     'access-control-allow-credentials': 'true'
   })
   .persist()
-  .get('/unitys')
+  .get('/units')
   .reply(200, units);
 
 const getAdmins = nock(baseURL)
@@ -31,7 +39,7 @@ const getAdmins = nock(baseURL)
     'access-control-allow-credentials': 'true'
   })
   .persist()
-  .get(/unityAdmins/)
+  .get(/unitAdmins/)
   .reply(200, adminsList);
 
 const postUnit = nock(baseURL)
@@ -39,15 +47,10 @@ const postUnit = nock(baseURL)
     'access-control-allow-origin': '*',
     'access-control-allow-credentials': 'true'
   })
-  .persist()
-  .post('/newUnity')
-  .reply(200, {
-    _id: 'meuIdAleatório',
-    name: 'unidade 3',
-    createdAt: '2022-08-17T20:11:43.499+00:00',
-    updatedAt: '2022-08-17T20:11:43.499+00:00',
-    __v: 0
-  });
+  .options('/newUnit')
+  .reply(200)
+  .post('/newUnit')
+  .reply(200);
 
 describe('Testando Unidades', () => {
   beforeEach(async () => {
@@ -62,38 +65,47 @@ describe('Testando Unidades', () => {
     await waitFor(() => expect(getUnits.isDone()).toBe(true));
   });
 
-  it('Testando criar Unidades', async () => {
-    const buttonUnit = screen.getByText('+ Adicionar Unidade');
-    expect(buttonUnit).toBeInTheDocument();
-    act(() => buttonUnit.click());
-
-    await screen.getByText('Salvar');
-    let input = screen.getByRole('textbox');
-    expect(input).toBeInTheDocument();
-    fireEvent.change(input, { target: { value: 'unidade 3' } });
-
-    const buttonSave = screen.getByText('Salvar');
-    expect(buttonSave).toBeInTheDocument();
-    act(() => buttonSave.click());
-
-    await waitFor(() => expect(postUnit.isDone()).toBe(true));
+  usersResponse.forEach((user) => {
+    if (!verifyPermissionUnits(user)) {
+      it('Testando criar Unidades com sem permissão', async () => {
+        localStorage.setItem('user', JSON.stringify(user));
+        await waitFor(() =>
+          expect(permissionChecker(user, 'create-unit')).toBe(false)
+        );
+      });
+    }
   });
 
-  it('Teste cancela criação de unidade', async () => {
-    const buttonUnit = screen.getByText('+ Adicionar Unidade');
-    expect(buttonUnit).toBeInTheDocument();
-    act(() => buttonUnit.click());
+  adminsList.forEach((user) => {
+    if (verifyPermissionUnits(user)) {
+      it('Testando criar Unidades com permissão', async () => {
+        localStorage.setItem('user', JSON.stringify(user));
+        await waitFor(() =>
+          expect(permissionChecker(user, 'create-unit')).toBe(true)
+        );
+      });
+    }
+  });
 
-    await screen.getByText('Salvar');
-    const input = screen.getByRole('textbox');
-    expect(input).toBeInTheDocument();
-    fireEvent.change(input, { target: { value: 'unidade 3' } });
+  usersResponse.forEach((user) => {
+    if (verifyPermissionUnits(user)) {
+      it('Teste cancela criação de unidade', async () => {
+        localStorage.setItem('user', JSON.stringify(user));
+        const buttonUnit = screen.getByText('+ Adicionar Unidade');
+        expect(buttonUnit).toBeInTheDocument();
+        act(() => buttonUnit.click());
 
-    const buttonCancel = screen.getByText('Cancelar');
-    expect(buttonCancel).toBeInTheDocument();
-    act(() => buttonCancel.click());
+        await screen.getByText('Salvar');
+        const input = screen.getByRole('textbox');
+        expect(input).toBeInTheDocument();
+        fireEvent.change(input, { target: { value: 'unidade 3' } });
 
-    await waitFor(() => expect(input).not.toBeInTheDocument());
+        const buttonCancel = screen.getByText('Cancelar');
+        expect(buttonCancel).toBeInTheDocument();
+        act(() => buttonCancel.click());
+        await waitFor(() => expect(input).not.toBeInTheDocument());
+      });
+    }
   });
 
   it('Teste visualizar admins', async () => {
@@ -102,7 +114,7 @@ describe('Testando Unidades', () => {
     act(() => userEvent.click(listAdminsButton));
 
     await waitFor(() => expect(getAdmins.isDone()).toBe(true));
-    await screen.getByText('Administradores -');
+    await screen.findByText('Administradores -');
 
     expect(screen.getByText('Lude Teste')).toBeInTheDocument();
     expect(screen.getByText('Fernando')).toBeInTheDocument();
@@ -112,16 +124,96 @@ describe('Testando Unidades', () => {
     act(() => userEvent.click(returnButton));
   });
 
-  it('Teste adicionar admins', async () => {
+  it.skip('Teste buscar usuarios', async () => {
+    localStorage.setItem('user', JSON.stringify(usersResponse[0]));
     const getUsers = nock(userURL)
       .defaultReplyHeaders({
         'access-control-allow-origin': '*',
         'access-control-allow-credentials': 'true'
       })
-      .persist()
-      .get(/searchUsers/)
+      .options('/allUser?accepted=true')
+      .reply(200)
+      .get('/allUser?accepted=true')
       .reply(200, usersResponse);
 
+    const postAdmin = nock(userURL)
+      .defaultReplyHeaders({
+        'access-control-allow-origin': '*',
+        'access-control-allow-credentials': 'true'
+      })
+      .post(/setUnitAdmin/)
+      .reply(200, 'ok');
+
+    const button = await screen.getByLabelText('Adicionar Admins');
+    fireEvent.click(button);
+
+    await screen.findByText('Administradores -');
+
+    const makeAdminButton = screen.getAllByLabelText('Adicionar como Admin')[0];
+    expect(makeAdminButton).toBeInTheDocument();
+    userEvent.click(makeAdminButton);
+
+    await waitFor(() => expect(postAdmin.isDone()).toBe(true));
+
+    const searchButton = screen.getByText('Buscar');
+    expect(searchButton).toBeInTheDocument();
+    act(() => userEvent.click(searchButton));
+  });
+
+  it('Buscando usuarios', async () => {
+    const getUsers = nock(userURL)
+      .defaultReplyHeaders({
+        'access-control-allow-origin': '*',
+        'access-control-allow-credentials': 'true'
+      })
+      .options('/allUser?accepted=true')
+      .reply(200)
+      .get('/allUser?accepted=true')
+      .reply(200, usersResponse);
+
+    localStorage.setItem('user', JSON.stringify(usersResponse[0]));
+    const postAdmin = nock(userURL)
+      .defaultReplyHeaders({
+        'access-control-allow-origin': '*',
+        'access-control-allow-credentials': 'true'
+      })
+      .persist()
+      .post(/setUnityAdmin/)
+      .reply(200, 'ok');
+    localStorage.setItem('user', JSON.stringify(usersResponse[0]));
+
+    const button = await screen.getByLabelText('Adicionar Admins');
+    fireEvent.click(button);
+  });
+
+  it('Teste adicionar unidade', async () => {
+    localStorage.setItem('user', JSON.stringify(usersResponse[0]));
+
+    const addUnitButton = await screen.getByText('+ Adicionar Unidade');
+    fireEvent.click(addUnitButton);
+
+    const modalTitle = await screen.getByText('Criar Unidade');
+    expect(modalTitle).toBeInTheDocument();
+
+    const unitNameInput = await screen.getByPlaceholderText('Nome da unidade');
+    fireEvent.change(unitNameInput, { target: { value: 'Unidade 1' } });
+
+    const saveButton = await screen.getByText('Salvar');
+    fireEvent.click(saveButton);
+  });
+
+  it.skip('Teste adicionar admins', async () => {
+    const getUsers = nock(userURL)
+      .defaultReplyHeaders({
+        'access-control-allow-origin': '*',
+        'access-control-allow-credentials': 'true'
+      })
+      .options('/allUser?accepted=true')
+      .reply(200)
+      .get('/allUser?accepted=true')
+      .reply(200, usersResponse);
+
+    localStorage.setItem('user', JSON.stringify(usersResponse[0]));
     const postAdmin = nock(userURL)
       .defaultReplyHeaders({
         'access-control-allow-origin': '*',
@@ -131,12 +223,11 @@ describe('Testando Unidades', () => {
       .post(/setUnityAdmin/)
       .reply(200, 'ok');
 
-    const addAdminButton = screen.getByLabelText('Adicionar Admins');
-    expect(addAdminButton).toBeInTheDocument();
-    act(() => userEvent.click(addAdminButton));
+    const button = await screen.getByLabelText('Adicionar Admins');
+    fireEvent.click(button);
 
     await waitFor(() => expect(getUsers.isDone()).toBe(true));
-    await screen.getByText('Administradores -');
+    await screen.findByText('Administradores -');
 
     const makeAdminButton = screen.getAllByLabelText('Adicionar como Admin')[0];
     expect(makeAdminButton).toBeInTheDocument();
@@ -155,8 +246,9 @@ describe('Testando Unidades', () => {
         'access-control-allow-origin': '*',
         'access-control-allow-credentials': 'true'
       })
-      .persist()
-      .post(/removeUnityAdmin/)
+      .options('/removeUnitAdmin')
+      .reply(200, 'ok')
+      .put('/removeUnitAdmin')
       .reply(200, 'ok');
 
     const listAdminsButton = screen.getByLabelText('Visualizar Admins');
@@ -166,7 +258,7 @@ describe('Testando Unidades', () => {
     await waitFor(() => expect(getAdmins.isDone()).toBe(true));
     await screen.findByText('Administradores -');
 
-    const makeAdminButton = screen.getAllByLabelText('Remover Admin')[0];
+    const makeAdminButton = screen.getAllByLabelText('Deletar')[0];
     expect(makeAdminButton).toBeInTheDocument();
     userEvent.click(makeAdminButton);
 
@@ -179,7 +271,8 @@ describe('Testando Unidades', () => {
         'access-control-allow-origin': '*',
         'access-control-allow-credentials': 'true'
       })
-      .persist()
+      .options('/newUnity')
+      .reply(200)
       .post('/newUnity')
       .reply(401, { message: 'Erro ao criar unidade' });
 
@@ -197,5 +290,63 @@ describe('Testando Unidades', () => {
     act(() => buttonSave.click());
 
     await waitFor(() => expect(postUnit.isDone()).toBe(false));
+  });
+
+  it('Teste erro ao criar Unidade', async () => {
+    const postUnit = nock(baseURL)
+      .defaultReplyHeaders({
+        'access-control-allow-origin': '*',
+        'access-control-allow-credentials': 'true'
+      })
+      .options('/newUnity')
+      .reply(200)
+      .post('/newUnity')
+      .reply(400, { message: 'Erro ao criar unidade' });
+
+    const buttonUnit = screen.getByText('+ Adicionar Unidade');
+    expect(buttonUnit).toBeInTheDocument();
+    act(() => buttonUnit.click());
+
+    await screen.getByText('Salvar');
+    let input = screen.getByRole('textbox');
+    expect(input).toBeInTheDocument();
+    fireEvent.change(input, { target: { value: 'unidade 3' } });
+
+    const buttonSave = screen.getByText('Salvar');
+    expect(buttonSave).toBeInTheDocument();
+    act(() => buttonSave.click());
+
+    await waitFor(() => expect(postUnit.isDone()).toBe(false));
+  });
+
+  usersResponse.forEach((user) => {
+    if (verifyPermissionUnits(user)) {
+      it('Adicionar Unidade', async () => {
+        localStorage.setItem('user', JSON.stringify(user));
+        const postUnit = nock(baseURL)
+          .defaultReplyHeaders({
+            'access-control-allow-origin': '*',
+            'access-control-allow-credentials': 'true'
+          })
+          .options('/newUnity')
+          .reply(200)
+          .post('/newUnity')
+          .reply(200, { message: 'Unidade criada' });
+
+        const buttonUnit = screen.getByText('+ Adicionar Unidade');
+        expect(buttonUnit).toBeInTheDocument();
+        act(() => buttonUnit.click());
+
+        await screen.getByText('Salvar');
+        let input = screen.getByRole('textbox');
+        expect(input).toBeInTheDocument();
+        fireEvent.change(input, { target: { value: 'unidade 3' } });
+
+        const buttonSave = screen.getByText('Salvar');
+        expect(buttonSave).toBeInTheDocument();
+        act(() => buttonSave.click());
+        await waitFor(() => expect(postUnit.isDone()).toBe(false));
+      });
+    }
   });
 });

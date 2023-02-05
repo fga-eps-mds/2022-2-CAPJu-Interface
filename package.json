@@ -29,7 +29,7 @@
   "scripts": {
     "start": "HTTPS=true SSL_CRT_FILE=./.cert/cert.pem SSL_KEY_FILE=./.cert/key.pem react-scripts start",
     "build": "react-scripts build",
-    "test": "react-scripts test --coverage --watchAll",
+    "test": "react-scripts test --coverage --watchAll --testResultsProcessor jest-sonar-reporter",
     "testGActions": "CI=true react-scripts test --coverage --testResultsProcessor jest-sonar-reporter",
     "eject": "react-scripts eject",
     "lint": "eslint src --ext .js"

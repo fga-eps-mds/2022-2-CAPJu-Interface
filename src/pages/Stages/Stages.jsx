@@ -1,5 +1,5 @@
 import toast from 'react-hot-toast';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import AxiosError from 'axios/lib/core/AxiosError';
 
 import {
@@ -14,14 +14,19 @@ import api from 'services/api';
 import Table from 'components/Tables/Table';
 import Button from 'components/Button/Button';
 import TextInput from 'components/TextInput/TextInput';
+import hasPermission from 'util/permissionChecker';
 
 function Stages() {
-  const [stages, setStages] = useState([{ name: '', time: '', _id: '' }]);
+  const [stages, setStages] = useState([
+    { name: '', duration: '', idStage: '' }
+  ]);
   const [stageName, setStageName] = useState('');
   const [stageTime, setStageTime] = useState('');
-  const [currentStage, setCurrentStage] = useState({ name: '', _id: '' });
+  const [currentStage, setCurrentStage] = useState({ name: '', idStage: '' });
   const [isModalOpen, setModalOpen] = useState(false);
   const [isModalConfDelete, setModalConfDelete] = useState(false);
+
+  const user = JSON.parse(localStorage.getItem('user'));
 
   useEffect(() => {
     updateStages();
@@ -30,19 +35,22 @@ function Stages() {
   async function updateStages() {
     const response = await api.get('/stages');
     function compara(a, b) {
-      if (a.time > b.time) return a.name > b.name ? 1 : 0;
+      if (a.duration > b.duration) return a.name > b.name ? 1 : 0;
       return -1;
     }
-    response.data.Stages.sort(compara);
-    setStages(response.data.Stages);
+    response.data.sort(compara);
+    setStages(response.data);
   }
 
   async function addStage() {
     try {
-      const response = await api.post('/newStage', {
+      const user = JSON.parse(localStorage.getItem('user'));
+      const body = {
         name: stageName,
-        time: stageTime
-      });
+        duration: stageTime,
+        idUnit: user.idUnit
+      };
+      const response = await api.post('/newStage', body);
 
       if (response.status == 200) {
         toast.success('Etapa Adicionada com sucesso');
@@ -65,9 +73,7 @@ function Stages() {
 
   async function deleteStage(id) {
     try {
-      const response = await api.post('/deleteStage', {
-        stageId: id
-      });
+      const response = await api.delete(`/deleteStage/${id}`);
       if (response.status == 200) {
         toast.success('Etapa Deletada com sucesso');
         updateStages();
@@ -91,44 +97,52 @@ function Stages() {
         setModalConfDelete(true);
         setCurrentStage(stage);
       },
-      type: 'delete'
+      type: 'delete',
+      disabled: !hasPermission(user, 'delete-stage')
     }
   ];
+
+  const clearStagesModal = useCallback(() => {
+    setModalOpen(!isModalOpen);
+    setStageName('');
+    setStageTime('');
+  }, [setModalOpen, isModalOpen]);
 
   const columnHeaders = ['Nome', 'Duração'];
   return (
     <>
       <Container>
         <h1>Etapas</h1>
+        <AddStageButton
+          onClick={clearStagesModal}
+          disabled={!hasPermission(user, 'create-stage')}
+        >
+          + Adicionar Etapa
+        </AddStageButton>
         <Area>
           <Table
             columnList={columnHeaders}
             itemList={stages}
             actionList={actionList}
-            attributeList={(stage) => [stage.name, stage.time]}
+            attributeList={(stage) => [stage.name, stage.duration]}
           />
         </Area>
-        <AddStageButton onClick={() => setModalOpen(true)}>
-          + Adicionar Etapa
-        </AddStageButton>
       </Container>
       {isModalOpen && (
         <Modal>
           <Content>
-            <ContentHeader>
+            <ContentHeader onClick={clearStagesModal}>
               <span>Criar Etapa</span>
             </ContentHeader>
             <div>
-              <p> Nome </p>
-
               <TextInput
+                label="Nome"
                 set={setStageName}
                 value={stageName}
                 placeholder="Nome da etapa"
               />
-              <p> Duração </p>
-
               <TextInput
+                label="Duração"
                 set={setStageTime}
                 value={stageTime}
                 placeholder="Duração (dias)"
@@ -165,7 +179,7 @@ function Stages() {
             <div>
               <Button
                 onClick={() => {
-                  deleteStage(currentStage._id);
+                  deleteStage(currentStage.idStage);
                   setModalConfDelete(false);
                 }}
                 text={'Excluir'}

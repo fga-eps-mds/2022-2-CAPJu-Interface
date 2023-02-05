@@ -9,6 +9,7 @@ import Login from 'pages/Login/Login';
 import Stages from 'pages/Stages/Stages';
 import { userURL } from 'services/user';
 import { baseURL } from 'services/api';
+import { units } from 'testConstants';
 
 axios.defaults.adapter = require('axios/lib/adapters/http');
 
@@ -26,33 +27,21 @@ test('Testando criar Login no componente Login', async () => {
     })
     .persist()
     .post('/login', loginData)
-    .reply(200, {
-      _id: 'askljsf',
-      name: 'test',
-      cpf: loginData.email,
-      token: 'Bearer sdlksadkçlfdjalo'
-    });
+    .reply(200);
 
-  const scopeUnities = nock(baseURL)
+  const scopeUnits = nock(baseURL)
     .defaultReplyHeaders({
       'access-control-allow-origin': '*',
       'access-control-allow-credentials': 'true'
     })
     .persist()
-    .get('/unitys')
-    .reply(200, {
-      Unitys: [
-        {
-          name: 'Peritos',
-          _id: '12341234ldlfasdf'
-        }
-      ]
-    });
+    .get('/units')
+    .reply(200, units);
 
   render(
-    <MemoryRouter initialEntries={['/login']}>
+    <MemoryRouter initialEntries={['/Login']}>
       <Routes>
-        <Route path="/login" element={<Login />} />
+        <Route path="/Login" element={<Login />} />
         <Route path="/Stages" element={<Stages />} />
       </Routes>
     </MemoryRouter>
@@ -67,10 +56,35 @@ test('Testando criar Login no componente Login', async () => {
   fireEvent.change(inputPassword, { target: { value: 'Senha@123456789' } });
   expect(title).toHaveTextContent('Login');
   fireEvent.click(button1);
-  await waitFor(() => expect(scopeLogin.isDone()).toBe(true), {
-    timeout: 1000
+  await waitFor(() => {
+    expect(scopeLogin.isDone()).toBe(true);
+    expect(scopeUnits.isDone()).toBe(true);
   });
   expect(screen.queryByText('Login')).toBe(null);
+});
+
+test('Testando recuperação de senha', async () => {
+  render(
+    <MemoryRouter initialEntries={['/Login']}>
+      <Routes>
+        <Route path="/Login" element={<Login />} />
+        <Route path="/Stages" element={<Stages />} />
+      </Routes>
+    </MemoryRouter>
+  );
+  const forgotPasswordButton = await screen.getByText('Esqueceu a senha?');
+  fireEvent.click(forgotPasswordButton);
+
+  const inputEmail = screen.getByPlaceholderText('Digite seu email');
+  fireEvent.change(inputEmail, { target: { value: 'n@email.com' } });
+
+  const modalName = await screen.getByText('Recuperação de senha');
+  expect(modalName).toBeInTheDocument();
+
+  const resetPasswordButton = await screen.getByText('Soliciar recuperação');
+  fireEvent.click(resetPasswordButton);
+
+  expect(modalName).not.toBeInTheDocument();
 });
 
 afterAll(() => nock.restore());

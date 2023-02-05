@@ -11,7 +11,7 @@ import Recovery from 'pages/Recovery/Login';
 import { Container, Content } from './styles';
 import Unidades from 'pages/Unidades/Unidades';
 import Processes from 'pages/Processes/Processes';
-import SideBar from 'components/SideBar/ModalHeader';
+import SideBar from 'components/SideBar/Sidebar';
 import ShowProcess from 'pages/ShowProcess/ShowProcess';
 import EditAccount from 'pages/EditAccount/EditAccount';
 import AccessProfile from 'pages/AccessProfile/AccessProfile';
@@ -28,22 +28,22 @@ function App() {
     const currentDate = new Date();
     const localStorageUser = localStorage.getItem('user');
 
-    if (
-      !localStorageUser &&
-      location.pathname != '/Login' &&
-      !location.pathname.startsWith('/recovery/')
-    ) {
-      navigate('Login');
-      return;
-    }
+    if (!localStorageUser) {
+      if (
+        location.pathname != '/Login' &&
+        !location.pathname.startsWith('/recovery/')
+      ) {
+        navigate('Login');
+        return;
+      }
 
-    if (
-      !localStorageUser ||
-      !JSON.parse(localStorageUser)?.expiresIn ||
-      new Date(JSON.parse(localStorageUser)?.expiresIn) < currentDate
-    ) {
-      navigate('Login');
-      return;
+      if (
+        !JSON.parse(localStorageUser)?.expiresIn ||
+        new Date(JSON.parse(localStorageUser)?.expiresIn) < currentDate
+      ) {
+        navigate('Login');
+        return;
+      }
     }
 
     setUser(localStorageUser);

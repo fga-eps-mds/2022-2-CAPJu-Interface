@@ -2,9 +2,8 @@ import axios from 'axios';
 
 import authConfig from './config';
 
-export const userURL = process.env.REACT_APP_DEV
-  ? 'https://localhost:3334'
-  : 'https://capju-user.herokuapp.com/';
+// TODO: replace with localhost:3334 after User-NEW merges
+export const userURL = 'https://caju-service.herokuapp.com/';
 
 const api = axios.create({
   baseURL: userURL,

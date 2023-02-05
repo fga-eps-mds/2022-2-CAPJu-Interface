@@ -3,18 +3,19 @@ import PropTypes from 'prop-types';
 
 import { Input } from './styles';
 
-function TextInput(props) {
+function TextInput({ placeholder, value, type, maxLength, set, disabled }) {
   function handleUpdateElem(event) {
-    props.set(event.target.value);
+    set(event.target.value);
   }
 
   return (
     <Input
-      placeholder={props.placeholder}
+      placeholder={placeholder}
       onChange={handleUpdateElem}
-      value={props.value}
-      type={props.type}
-      maxLength={props.maxLength}
+      value={value}
+      type={type}
+      maxLength={maxLength}
+      disabled={disabled}
     />
   );
 }
@@ -24,7 +25,9 @@ TextInput.propTypes = {
   placeholder: PropTypes.string,
   set: PropTypes.func,
   type: PropTypes.string,
-  maxLength: PropTypes.number
+  maxLength: PropTypes.number,
+  label: PropTypes.string,
+  disabled: PropTypes.bool
 };
 
 export default TextInput;
