@@ -47,7 +47,7 @@ yarn start
 ```
 ## Testes
 
-Para rodar os testes execulte:
+Para rodar os testes execute:
 
 ```bash
 yarn test
