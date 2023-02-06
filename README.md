@@ -1,4 +1,4 @@
-# CAPJu - Service
+# CAPJu - Interface
 
 <div align="center">
   <img src="https://i.imgur.com/0KsqIUe.png" alt="logo">
@@ -8,7 +8,7 @@
 
 O CAPJu é abreviação para _"Controle e Acompanhamento de Processos da Justiça"_, no qual trata-se de uma projeto de código aberto que tem como objetivo ajudar os usuários da 4ª vara cível da Justiça Federal na realização de gerenciar os processos.
 
-Este repositório, em especial, é totalmente dedicado à manutenção dos detalhes do Microserviço Service do projeto. Sinta-se livre para contribuir, mas antes leia o guia de contribuição.
+Este repositório, em especial, é totalmente dedicado à manutenção dos detalhes do Microserviço Interface do projeto. Sinta-se livre para contribuir, mas antes leia o guia de contribuição.
 
 O CAPJu é uma aplicação _Web_ compatível com qualquer navegador.
 
@@ -16,18 +16,9 @@ O CAPJu é uma aplicação _Web_ compatível com qualquer navegador.
 
 ![NodeJS](https://img.shields.io/badge/node.js-6DA55F?style=for-the-badge&logo=node.js&logoColor=white)
 ![JavaScript](https://img.shields.io/badge/javascript-%23323330.svg?style=for-the-badge&logo=javascript&logoColor=%23F7DF1E)
-![Express.js](https://img.shields.io/badge/express.js-%23404d59.svg?style=for-the-badge&logo=express&logoColor=%2361DAFB)
 ![Yarn](https://img.shields.io/badge/yarn-%232C8EBB.svg?style=for-the-badge&logo=yarn&logoColor=white)
 ![React](https://img.shields.io/badge/react-%2320232a.svg?style=for-the-badge&logo=react&logoColor=%2361DAFB)
-<!-- ![Postgres](https://img.shields.io/badge/postgres-%23316192.svg?style=for-the-badge&logo=postgresql&logoColor=white) -->
-<!-- ![Sequelize](https://img.shields.io/badge/Sequelize-52B0E7?style=for-the-badge&logo=Sequelize&logoColor=white) -->
 
-Este é o repositório foi utilizado o seguinte para seu desenvolvimento:
-
-- [Node.js](https://nodejs.org/en/) (Versão 14 ou superior) Como ambiente de execução de JavaScript.
-- [Express.js](https://expressjs.com/) Como framework de servidor e camada de controller.
-<!-- - [Postgres](https://www.postgresql.org/) (Versão 14 ou superior) Como camada de banco de dados
-- [Sequelize](https://sequelize.org/) Como camada "ODM" / model -->
 
 ## Instalação
 ### Configurando .env
@@ -38,6 +29,8 @@ Configure o arquivo .env dos repositório igual abaixo:
 JWT_SECRET=
 ```
 
+Obs: é necessário ser igual ao back-end.
+
 ### Instalado bibliotecas do node
 
 Para instalar as bibliotecas de cada repositorio basta apenas dar o seguinte comando
@@ -45,7 +38,7 @@ Para instalar as bibliotecas de cada repositorio basta apenas dar o seguinte com
 ```
 yarn install
 ```
-## Executando o projeto
+## Execute o projeto
 
 Para executar o projeto é recomendar executar os comandos na ordem de repositórios de back-end primeiro e front-end ao final. E cada um em um terminal diferente
 
